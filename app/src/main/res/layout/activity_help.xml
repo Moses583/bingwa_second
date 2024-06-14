@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".HelpActivity"
+    android:orientation="vertical">
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="How to make an offer"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:textColor="@color/green"
+                android:textAlignment="center"
+                android:padding="8dp"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start"
+                android:text="The following image shows a package of offers offered by an agent X."
+                android:textAlignment="viewStart"
+                android:padding="8dp"
+                android:textColor="@color/green"/>
+            <ImageView
+                android:layout_width="200dp"
+                android:layout_height="200dp"
+                android:src="@drawable/offer_example"
+                android:layout_gravity="center"
+                android:layout_margin="10dp"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start"
+                android:text="You can create your offers available in your package by following the steps below: "
+                android:textAlignment="viewStart"
+                android:padding="8dp"
+                android:textColor="@color/green"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start"
+                android:text="1. Enter the price of the offer."
+                android:textAlignment="viewStart"
+                android:padding="8dp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start"
+                android:text="2. Enter the USSD for the price defined above."
+                android:textAlignment="viewStart"
+                android:padding="8dp"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start"
+                android:text="In your USSD code, use the letters 'pppp' to show where the recipients number will be inserted in the code. For example: *180*4*1*pppp*6*7# "
+                android:textAlignment="viewStart"
+                android:padding="8dp"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start"
+                android:text="3. Select the sim card that you use to dial your offers."
+                android:textAlignment="viewStart"
+                android:padding="8dp"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="PLEASE NOTE."
+                android:textAlignment="center"
+                android:padding="8dp"
+                android:fontFamily="@font/oxygen_bold"
+                android:textColor="@color/red"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start"
+                android:text="1. If you have two sim cards for recommendations, make sure to select the right sim card you want to use to dial an offer if you have offers that have the same amount but offer different services."
+                android:textAlignment="viewStart"
+                android:padding="8dp"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start"
+                android:text="2. DO NOT create offers of the same price but offering different service on the same sim card."
+                android:textAlignment="viewStart"
+                android:padding="8dp"/>
+        </LinearLayout>
+    </ScrollView>
+
+</LinearLayout>

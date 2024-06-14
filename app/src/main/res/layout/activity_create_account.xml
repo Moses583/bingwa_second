@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".CreateAccountActivity"
+    android:orientation="vertical">
+    <androidx.appcompat.widget.Toolbar
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:title="Create new account"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="Already have an account? Log in..."
+        android:textColor="@color/green"
+        android:layout_margin="10dp"
+        android:id="@+id/txtGoToLogin"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+<!--        <com.google.android.material.textfield.TextInputLayout-->
+<!--            android:id="@+id/enterName1"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_margin="10dp"-->
+<!--            app:endIconMode="clear_text"-->
+<!--            app:helperTextEnabled="true"-->
+<!--            app:helperText="Enter official names only"-->
+<!--            app:errorEnabled="true"-->
+<!--            app:startIconDrawable="@drawable/profile_svgrepo_com">-->
+<!--            <com.google.android.material.textfield.TextInputEditText-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:hint="Enter your name"-->
+<!--                android:inputType="textPersonName"/>-->
+
+<!--        </com.google.android.material.textfield.TextInputLayout>-->
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/enterPhoneNumber1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            app:endIconMode="clear_text"
+            app:helperTextEnabled="true"
+            app:helperText="This will be used as contact info"
+            app:counterEnabled="true"
+            app:counterMaxLength="10"
+            app:errorEnabled="true"
+            app:startIconDrawable="@drawable/phone_number">
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="07 *** or 01 ***"
+                android:inputType="phone"/>
+
+        </com.google.android.material.textfield.TextInputLayout>
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/enterTillNumber1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            app:endIconMode="clear_text"
+            app:helperTextEnabled="true"
+            app:helperText="Till number for payment transactions"
+            app:counterEnabled="true"
+            app:counterMaxLength="7"
+            app:errorEnabled="true"
+            app:startIconDrawable="@drawable/till_number">
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Enter your till number"
+                android:inputType="number"/>
+
+        </com.google.android.material.textfield.TextInputLayout>
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/enterStoreNumber1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            app:endIconMode="clear_text"
+            app:helperTextEnabled="true"
+            app:helperText="This is the name of your store"
+            app:errorEnabled="true"
+            app:startIconDrawable="@drawable/store_name">
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Enter your store name"
+                android:inputType="text"/>
+
+        </com.google.android.material.textfield.TextInputLayout>
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/enterWebsiteUrl1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            app:endIconMode="clear_text"
+            app:helperTextEnabled="true"
+            app:helperText="https://liy.ke/store_name"
+            app:errorEnabled="true"
+            app:startIconDrawable="@drawable/web_url">
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Enter website extension"
+                android:inputType="textUri"/>
+
+        </com.google.android.material.textfield.TextInputLayout>
+        <Button
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:layout_margin="10dp"
+            android:text="Next"
+            android:id="@+id/btnCreatePersona1"/>
+    </LinearLayout>
+
+
+</LinearLayout>

@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/transactionCardView"
+    android:layout_margin="5dp"
+    app:cardCornerRadius="10dp"
+    android:orientation="vertical">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="3dp"
+                android:text="Transaction details:"
+                android:fontFamily="@font/oxygen_bold"
+                android:layout_marginStart="5dp"
+                android:id="@+id/dummyOne"
+                android:textAlignment="viewStart"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="3dp"
+                android:text="USSD response"
+                android:textAlignment="viewStart"
+                android:layout_marginStart="5dp"
+                android:id="@+id/txtUssdResponse"/>
+
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="3dp"
+                android:text="Transaction amount:"
+                android:fontFamily="@font/oxygen_bold"
+                android:layout_alignParentStart="true"
+                android:layout_marginStart="5dp"
+                android:id="@+id/dummyTwo"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="3dp"
+                android:text="Transaction amount"
+                android:textAlignment="viewStart"
+                android:layout_marginStart="5dp"
+                android:id="@+id/txtTransactionAmount"/>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="3dp"
+                android:text="Time of transaction:"
+                android:fontFamily="@font/oxygen_bold"
+                android:layout_alignParentStart="true"
+                android:layout_marginStart="5dp"
+                android:id="@+id/dummyThree"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="3dp"
+                android:text="Transaction amount"
+                android:textAlignment="viewStart"
+                android:layout_marginStart="5dp"
+                android:id="@+id/txtTransactionTimeStamp"/>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="3dp"
+                android:text="Recepient:"
+                android:fontFamily="@font/oxygen_bold"
+                android:layout_alignParentStart="true"
+                android:layout_marginStart="5dp"
+                android:id="@+id/dummyFour"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="3dp"
+                android:text="Transaction amount"
+                android:textAlignment="viewStart"
+                android:layout_marginStart="5dp"
+                android:id="@+id/txtTransactionRecepient"/>
+        </LinearLayout>
+
+
+    </LinearLayout>
+    <com.google.android.material.divider.MaterialDivider
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"/>
+
+</LinearLayout>
