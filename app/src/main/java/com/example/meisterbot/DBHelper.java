@@ -13,14 +13,14 @@ import com.google.gson.Gson;
 public class DBHelper extends SQLiteOpenHelper {
 
     public DBHelper( Context context) {
-        super(context, "DatabasefIVE.db",null,1);
+        super(context, "DatabaseSix.db",null,1);
     }
 
     @Override
     public void onCreate(SQLiteDatabase db) {
         db.execSQL("create Table InboxTable(id INTEGER PRIMARY KEY AUTOINCREMENT,message TEXT, timeStamp TEXT,sender TEXT)");
         db.execSQL("create table Offers(id INTEGER PRIMARY KEY AUTOINCREMENT,amount TEXT, ussdCode TEXT, dialSim TEXT, dialSimId TEXT,paymentSim TEXT, paymentSimId TEXT, offerTill TEXT)");
-        db.execSQL("create Table Transactions(id INTEGER PRIMARY KEY AUTOINCREMENT,ussdResponse TEXT,amount TEXT,timeStamp TEXT,recipient TEXT)");
+        db.execSQL("create Table Transactions(id INTEGER PRIMARY KEY AUTOINCREMENT,ussdResponse TEXT,amount TEXT,timeStamp TEXT,recipient TEXT, status TEXT, subId INTEGER,ussd TEXT, till INTEGER, messageFull TEXT)");
     }
 
     @Override
@@ -28,7 +28,9 @@ public class DBHelper extends SQLiteOpenHelper {
         db.execSQL("drop Table if exists InboxTable");
         db.execSQL("drop table if exists Offers");
         db.execSQL("drop table if exists Transactions");
+
     }
+
     public Boolean insertData( String message, String time, String sender){
         SQLiteDatabase database = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
@@ -39,13 +41,18 @@ public class DBHelper extends SQLiteOpenHelper {
         return result != -1;
 
     }
-    public Boolean insertTransaction(String ussdResponse, String amount,String timeStamp, String recipient){
+    public Boolean insertTransaction(String ussdResponse, String amount,String timeStamp, String recipient,String status, int subId, String ussd, int till, String messageFull){
         SQLiteDatabase database = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put("ussdResponse",ussdResponse);
         contentValues.put("amount",amount);
         contentValues.put("timeStamp",timeStamp);
         contentValues.put("recipient",recipient);
+        contentValues.put("status",status);
+        contentValues.put("subId",subId);
+        contentValues.put("ussd",ussd);
+        contentValues.put("till",till);
+        contentValues.put("messageFull",messageFull);
         long result = database.insert("Transactions",null,contentValues);
         return result != -1;
     }
@@ -79,6 +86,17 @@ public class DBHelper extends SQLiteOpenHelper {
     public Cursor getSpecificOffer(String amount, String simId){
         SQLiteDatabase database = this.getReadableDatabase();
         return database.rawQuery("Select ussdCode from Offers where amount=? and paymentSimId =?", new String[]{amount,simId});
+    }
+    public Cursor getFailedResponses(){
+        SQLiteDatabase database = this.getWritableDatabase();
+        String pattern = "0";
+        return database.rawQuery("SELECT * FROM Transactions WHERE status=?", new String[]{pattern});
+    }
+    public Boolean deleteTransaction () {
+        SQLiteDatabase DB = this.getWritableDatabase();
+        String pattern = "0";
+        long result = DB.delete("Transactions", "status=?", new String[]{pattern});
+        return result != -1;
     }
 
 

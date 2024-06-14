@@ -1,4 +1,4 @@
-package com.example.meisterbot;
+package com.example.meisterbot.services;
 
 import android.app.Notification;
 import android.app.NotificationChannel;
@@ -11,6 +11,8 @@ import android.provider.Telephony;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
+
+import com.example.meisterbot.SmsReceiver;
 
 public class MyService extends Service {
 
@@ -27,7 +29,7 @@ public class MyService extends Service {
 
         final String CHANNEL_ID = "Foreground service";
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-            NotificationChannel channel = new NotificationChannel(CHANNEL_ID,CHANNEL_ID, NotificationManager.IMPORTANCE_LOW);
+            NotificationChannel channel = new NotificationChannel(CHANNEL_ID,CHANNEL_ID, NotificationManager.IMPORTANCE_HIGH);
             getSystemService(NotificationManager.class).createNotificationChannel(channel);
             Notification.Builder notification = new Notification.Builder(this,CHANNEL_ID)
                     .setContentText("Foreground service is running")

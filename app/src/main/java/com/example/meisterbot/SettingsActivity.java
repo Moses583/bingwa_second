@@ -16,6 +16,8 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.example.meisterbot.services.MyService;
+
 public class SettingsActivity extends AppCompatActivity {
 
     private ConstraintLayout settingPaymentPlan,settingToken,settingAboutApp,settingPauseApp,settingProfile;

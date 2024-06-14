@@ -53,14 +53,11 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionViewHold
                 Toast.makeText(context, "Long click on a transaction to resend it.", Toast.LENGTH_LONG).show();
             }
         });
-        if (pojoList.get(position).getUssdResponse().equals("-1")){
-            holder.txtUssdResponse.setText("Invalid MMI code");
-        }else{
-            holder.txtUssdResponse.setText(pojoList.get(position).getUssdResponse());
-        }
+        holder.txtUssdResponse.setText(pojoList.get(position).getUssdResponse());
         holder.txtTransactionAmount.setText(pojoList.get(position).getTransactionAmount());
         holder.txtTransactionTimeStamp.setText(pojoList.get(position).getTimeStamp());
         holder.txtTransactionRecipient.setText(pojoList.get(position).getRecipient());
+        holder.txtTransactionStatus.setText(pojoList.get(position).getStatus());
     }
 
     @Override
@@ -70,7 +67,7 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionViewHold
 }
 class TransactionViewHolder extends RecyclerView.ViewHolder {
     LinearLayout transactionCardView;
-    TextView txtUssdResponse, txtTransactionAmount, txtTransactionTimeStamp, txtTransactionRecipient;
+    TextView txtUssdResponse, txtTransactionAmount, txtTransactionTimeStamp, txtTransactionRecipient,txtTransactionStatus;
     public TransactionViewHolder(@NonNull View itemView) {
         super(itemView);
         transactionCardView = itemView.findViewById(R.id.transactionCardView);
@@ -78,5 +75,6 @@ class TransactionViewHolder extends RecyclerView.ViewHolder {
         txtTransactionAmount = itemView.findViewById(R.id.txtTransactionAmount);
         txtTransactionTimeStamp = itemView.findViewById(R.id.txtTransactionTimeStamp);
         txtTransactionRecipient = itemView.findViewById(R.id.txtTransactionRecepient);
+        txtTransactionStatus = itemView.findViewById(R.id.txtTransactionStatus);
     }
 }

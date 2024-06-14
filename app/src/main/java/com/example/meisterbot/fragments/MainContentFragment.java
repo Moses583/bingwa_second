@@ -1,7 +1,9 @@
 package com.example.meisterbot.fragments;
 
+
 import android.Manifest;
 import android.app.Activity;
+import android.app.ActivityManager;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.job.JobParameters;
@@ -34,6 +36,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -45,6 +48,7 @@ import com.example.meisterbot.CreatePasswordActivity;
 import com.example.meisterbot.DBHelper;
 import com.example.meisterbot.R;
 import com.example.meisterbot.models.TransactionPOJO;
+import com.example.meisterbot.services.RetryService;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -81,6 +85,8 @@ public class MainContentFragment extends Fragment {
     private TextView airtimeBalance, totalTransactions;
     private RelativeLayout cancel, okay;
     Spinner spinner;
+
+    private Button button;
 
     private Map<Integer, Integer> simMap;
     private ArrayList<String> simNames;
@@ -149,6 +155,23 @@ public class MainContentFragment extends Fragment {
             }
         });
 
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (myService(getActivity())) {
+                    // If the service is running, stop it
+                    Intent intent = new Intent(getActivity(), RetryService.class);
+                    getActivity().stopService(intent);
+                } else {
+                    // If the service is not running, start it
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                        Intent intent = new Intent(getActivity(), RetryService.class);
+                        getActivity().startForegroundService(intent);
+                    }
+                }
+            }
+        });
+
         return view;
     }
 
@@ -195,7 +218,12 @@ public class MainContentFragment extends Fragment {
                 String amount = cursor.getString(2);
                 String timeStamp = cursor.getString(3);
                 String recipient = cursor.getString(4);
-                pojoList.add(new TransactionPOJO(ussdResponse,amount,timeStamp,recipient));
+                String status = cursor.getString(5);
+                int subId = cursor.getInt(6);
+                String ussd = cursor.getString(7);
+                int till = cursor.getInt(8);
+                String messageFull = cursor.getString(9);
+                pojoList.add(new TransactionPOJO(ussdResponse,amount,timeStamp,recipient,status,subId,ussd,till,messageFull));
             }
             swipeRefreshLayout.setRefreshing(false);
         }
@@ -295,10 +323,22 @@ public class MainContentFragment extends Fragment {
         showData();
     }
 
+    public boolean myService(Context context){
+        ActivityManager manager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
+        for (ActivityManager.RunningServiceInfo info :
+                manager.getRunningServices(Integer.MAX_VALUE)) {
+            if (RetryService.class.getName().equalsIgnoreCase(info.service.getClassName())){
+                return true;
+            }
+        }
+        return false;
+    }
+
     private void initViews(View view) {
         recyclerView = view.findViewById(R.id.transactionsRecycler);
         swipeRefreshLayout = view.findViewById(R.id.swipeRefreshTransactions);
         airtimeBalance = view.findViewById(R.id.txtAirtimeBalance);
         totalTransactions = view.findViewById(R.id.txtTransactionsToday);
+        button = view.findViewById(R.id.executeFailedTransactions);
     }
 }

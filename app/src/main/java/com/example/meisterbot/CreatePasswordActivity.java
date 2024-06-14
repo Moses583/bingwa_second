@@ -1,5 +1,6 @@
 package com.example.meisterbot;
 
+import android.app.ActivityManager;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
@@ -24,6 +25,7 @@ import androidx.core.view.WindowInsetsCompat;
 import com.example.meisterbot.listeners.PostPersonaListener;
 import com.example.meisterbot.models.PostPersonaApiResponse;
 import com.example.meisterbot.models.Persona;
+import com.example.meisterbot.services.RetryService;
 import com.google.android.material.textfield.TextInputLayout;
 
 public class CreatePasswordActivity extends AppCompatActivity {
@@ -184,6 +186,8 @@ public class CreatePasswordActivity extends AppCompatActivity {
     private void goToEnableServiceActivity(){
         startActivity(new Intent(CreatePasswordActivity.this, EnableServiceActivity.class));
     }
+
+
 
     private void initViews() {
         edtTxtEnterPassword = findViewById(R.id.edtTxtEnterPassword);
