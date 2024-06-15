@@ -84,12 +84,11 @@ public class RetryService extends Service {
                             int till = pojo.getTill();
                             String message = pojo.getMessageFull();
                             dialUssdCode(getApplicationContext(),subId,ussd,till,amount,number,message);
-                            deleteData();
-                            Log.d(TAG,response);
+                            Log.d(TAG,"Testing");
                         }
                     }
                 }).start();
-                handler.postDelayed(this, 1000);
+                handler.postDelayed(this, 2000);
             }
         };
 
@@ -121,7 +120,7 @@ public class RetryService extends Service {
         Cursor cursor = dbHelper.getFailedResponses();
         Queue<TransactionPOJO> queue1 = new LinkedList<>();
         if (cursor.getCount() == 0){
-            Toast.makeText(this, "There are no failed tranactions", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "There are no failed transactions", Toast.LENGTH_SHORT).show();
         }else{
             while (cursor.moveToNext()){
                 String ussdResponse = cursor.getString(1);
@@ -167,8 +166,8 @@ public class RetryService extends Service {
                     } else if (response1.contains("You have successfully purchased")) {
                         insertTransaction(context,dbHelper,response1,matchedAmount,transactionTimeStamp,phoneNumber,till,"1",subscriptionId,ussdCode,messageFull);
                     }
-                    else{
-                        insertTransaction(context,dbHelper,response1,matchedAmount,transactionTimeStamp,phoneNumber,till,"0",subscriptionId,ussdCode,messageFull);
+                    else if(response1.contains("Failed. 254797688843 has already been recommended today.")){
+                        insertTransaction(context,dbHelper,response1,matchedAmount,transactionTimeStamp,phoneNumber,till,"1",subscriptionId,ussdCode,messageFull);
                     }
 
                     Toast.makeText(context, response, Toast.LENGTH_SHORT).show();
@@ -182,12 +181,11 @@ public class RetryService extends Service {
                     long currentTimeMillis = System.currentTimeMillis();
                     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
                     transactionTimeStamp = sdf.format(currentTimeMillis);
-                    insertTransaction(context,dbHelper,response1,matchedAmount,transactionTimeStamp,phoneNumber,till,"0",subscriptionId,ussdCode,messageFull);
                     Toast.makeText(context, String.valueOf(failureCode), Toast.LENGTH_SHORT).show();
                 }
             };
         }
-        handler = new Handler(Looper.getMainLooper()) {
+        handler2 = new Handler(Looper.getMainLooper()) {
             @Override
             public void handleMessage(@NonNull Message msg) {
                 super.handleMessage(msg);
@@ -198,7 +196,7 @@ public class RetryService extends Service {
             return;
         }
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            manager.createForSubscriptionId(subscriptionId).sendUssdRequest(ussdCode, callback, handler);
+            manager.createForSubscriptionId(subscriptionId).sendUssdRequest(ussdCode, callback, handler2);
         }
 
     }

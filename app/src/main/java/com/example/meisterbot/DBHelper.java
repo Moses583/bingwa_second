@@ -13,7 +13,7 @@ import com.google.gson.Gson;
 public class DBHelper extends SQLiteOpenHelper {
 
     public DBHelper( Context context) {
-        super(context, "DatabaseSix.db",null,1);
+        super(context, "DatabaseSeven.db",null,1);
     }
 
     @Override

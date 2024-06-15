@@ -53,9 +53,11 @@ import com.example.meisterbot.services.RetryService;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Queue;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -78,11 +80,12 @@ public class MainContentFragment extends Fragment {
     private String mParam2;
     private DBHelper helper;
     List<TransactionPOJO> pojoList = new ArrayList<>();
+    List<TransactionPOJO> failList = new ArrayList<>();
     TransactionAdapter adapter;
     private RecyclerView recyclerView;
     private SwipeRefreshLayout swipeRefreshLayout;
 
-    private TextView airtimeBalance, totalTransactions;
+    private TextView airtimeBalance, totalTransactions,failedTransactions;
     private RelativeLayout cancel, okay;
     Spinner spinner;
 
@@ -136,6 +139,7 @@ public class MainContentFragment extends Fragment {
         initViews(view);
         helper = new DBHelper(getActivity());
         showData();
+        getFailedTransactions();
         simMap = new HashMap<>();
         simNames = new ArrayList<>();
         slotIndex = new ArrayList<>();
@@ -202,9 +206,31 @@ public class MainContentFragment extends Fragment {
 
 
     }
+    private void getFailedTransactions(){
+        Cursor cursor = helper.getFailedResponses();
+        List<TransactionPOJO> queue1 = new ArrayList<>();
+        if (cursor.getCount() == 0){
+            Toast.makeText(getActivity(), "There are no failed transactions", Toast.LENGTH_SHORT).show();
+        }else{
+            while (cursor.moveToNext()){
+                String ussdResponse = cursor.getString(1);
+                String amount = cursor.getString(2);
+                String timeStamp = cursor.getString(3);
+                String recipient = cursor.getString(4);
+                String status = cursor.getString(5);
+                int subId = cursor.getInt(6);
+                String ussd = cursor.getString(7);
+                int till = cursor.getInt(8);
+                String messageFull = cursor.getString(9);
+                queue1.add(new TransactionPOJO(ussdResponse,amount,timeStamp,recipient,status,subId,ussd,till,messageFull));
+            }
+        }
+        failedTransactions.setText(String.valueOf(queue1.size()));
+    }
 
     public void refresh(){
         showData();
+        getFailedTransactions();
     }
 
     private void showData(){
@@ -340,5 +366,6 @@ public class MainContentFragment extends Fragment {
         airtimeBalance = view.findViewById(R.id.txtAirtimeBalance);
         totalTransactions = view.findViewById(R.id.txtTransactionsToday);
         button = view.findViewById(R.id.executeFailedTransactions);
+        failedTransactions = view.findViewById(R.id.txtFailedTransactions);
     }
 }

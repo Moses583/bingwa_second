@@ -292,7 +292,6 @@ public class SmsReceiver extends BroadcastReceiver {
             String newUssd = code.replace("pppp",phoneNumber);
 //            dialUssdCode(context, Integer.parseInt(sub),newUssd);
         }
-
     }
 
 

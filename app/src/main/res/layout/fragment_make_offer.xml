@@ -20,7 +20,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/swipeRefreshOffers"
-        android:layout_below="@id/textView3">
+        android:layout_below="@id/textView3"
+        android:layout_margin="15dp">
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/offersRecycler"
             android:layout_width="match_parent"
