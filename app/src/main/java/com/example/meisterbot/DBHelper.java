@@ -13,7 +13,7 @@ import com.google.gson.Gson;
 public class DBHelper extends SQLiteOpenHelper {
 
     public DBHelper( Context context) {
-        super(context, "DatabaseSeven.db",null,1);
+        super(context, "One.db",null,1);
     }
 
     @Override
@@ -21,6 +21,7 @@ public class DBHelper extends SQLiteOpenHelper {
         db.execSQL("create Table InboxTable(id INTEGER PRIMARY KEY AUTOINCREMENT,message TEXT, timeStamp TEXT,sender TEXT)");
         db.execSQL("create table Offers(id INTEGER PRIMARY KEY AUTOINCREMENT,amount TEXT, ussdCode TEXT, dialSim TEXT, dialSimId TEXT,paymentSim TEXT, paymentSimId TEXT, offerTill TEXT)");
         db.execSQL("create Table Transactions(id INTEGER PRIMARY KEY AUTOINCREMENT,ussdResponse TEXT,amount TEXT,timeStamp TEXT,recipient TEXT, status TEXT, subId INTEGER,ussd TEXT, till INTEGER, messageFull TEXT)");
+        db.execSQL("create table User(tillNumber TEXT)");
     }
 
     @Override
@@ -28,6 +29,7 @@ public class DBHelper extends SQLiteOpenHelper {
         db.execSQL("drop Table if exists InboxTable");
         db.execSQL("drop table if exists Offers");
         db.execSQL("drop table if exists Transactions");
+        db.execSQL("drop table if exists User");
 
     }
 
@@ -58,7 +60,6 @@ public class DBHelper extends SQLiteOpenHelper {
     }
     public Boolean insertOffer(String amount, String ussdCode, String dialSim, String dialSimId,String paymentSim,String paymentSimId,String offerTill){
         SQLiteDatabase database = this.getWritableDatabase();
-
         ContentValues contentValues = new ContentValues();
         contentValues.put("amount",amount);
         contentValues.put("ussdCode",ussdCode);
@@ -70,6 +71,19 @@ public class DBHelper extends SQLiteOpenHelper {
         long result = database.insert("Offers",null,contentValues);
         return result != -1;
     }
+
+    public Boolean insertUser(String tillNumber){
+        SQLiteDatabase database = this.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put("tillNumber",tillNumber);
+        long result = database.insert("User",null,contentValues);
+        return result != -1;
+    }
+    public Cursor getUser(){
+        SQLiteDatabase database = this.getWritableDatabase();
+        return database.rawQuery("Select * from User",null);
+    }
+
     public Cursor getData(){
         SQLiteDatabase database = this.getWritableDatabase();
         return database.rawQuery("Select * from InboxTable ORDER BY id DESC",null);

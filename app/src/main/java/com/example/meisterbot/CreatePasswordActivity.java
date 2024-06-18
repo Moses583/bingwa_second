@@ -23,8 +23,11 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.meisterbot.listeners.PostPersonaListener;
+import com.example.meisterbot.listeners.STKPushListener;
 import com.example.meisterbot.models.PostPersonaApiResponse;
 import com.example.meisterbot.models.Persona;
+import com.example.meisterbot.models.STKPushPojo;
+import com.example.meisterbot.models.STKPushResponse;
 import com.example.meisterbot.services.RetryService;
 import com.google.android.material.textfield.TextInputLayout;
 
@@ -35,6 +38,7 @@ public class CreatePasswordActivity extends AppCompatActivity {
     private Dialog dialog1;
     private TextView txtLoading;
     ProgressBar progressBar;
+    DBHelper dbHelper;
 
     RequestManager manager;
 
@@ -61,6 +65,8 @@ public class CreatePasswordActivity extends AppCompatActivity {
 
         progressBar = dialog1.findViewById(R.id.myProgressBar);
         txtLoading = dialog1.findViewById(R.id.txtProgress);
+
+        dbHelper = new DBHelper(this);
 
         btnContinue.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -98,10 +104,7 @@ public class CreatePasswordActivity extends AppCompatActivity {
                 edtTxtConfirmPassword.setHelperText("Passwords do not match!!");
             }
         }
-
-
     }
-
     private boolean checkEmpty(String passOne, String passTwo){
         return passOne.isEmpty() || passTwo.isEmpty();
     }
@@ -116,6 +119,12 @@ public class CreatePasswordActivity extends AppCompatActivity {
         String number = intent.getStringExtra("number");
         String deviceId = intent.getStringExtra("deviceId");
         String web = intent.getStringExtra("web");
+        boolean insert = dbHelper.insertUser(till);
+        if (insert){
+            Toast.makeText(this, "user added successfully", Toast.LENGTH_SHORT).show();
+        }else{
+            Toast.makeText(this, "unable to add user to db", Toast.LENGTH_SHORT).show();
+        }
         Persona persona = new Persona(name,storeName,web,deviceId,number,till,password);
         showAlertDialog(persona);
     }
@@ -184,7 +193,7 @@ public class CreatePasswordActivity extends AppCompatActivity {
     }
 
     private void goToEnableServiceActivity(){
-        startActivity(new Intent(CreatePasswordActivity.this, EnableServiceActivity.class));
+        startActivity(new Intent(CreatePasswordActivity.this, PaymentPlanActivity.class));
     }
 
 

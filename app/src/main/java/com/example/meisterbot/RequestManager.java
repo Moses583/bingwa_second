@@ -3,10 +3,13 @@ package com.example.meisterbot;
 import android.content.Context;
 
 import com.example.meisterbot.listeners.GetOffersListener;
+import com.example.meisterbot.listeners.PaymentListener;
 import com.example.meisterbot.listeners.PostLoginListener;
 import com.example.meisterbot.listeners.PostOfferListener;
 import com.example.meisterbot.listeners.PostPersonaListener;
 import com.example.meisterbot.listeners.PostTransactionListener;
+import com.example.meisterbot.listeners.STKPushListener;
+import com.example.meisterbot.models.Payment;
 import com.example.meisterbot.models.PostPersonaApiResponse;
 import com.example.meisterbot.models.GetOfferApiResponse;
 import com.example.meisterbot.models.LoginPojo;
@@ -14,6 +17,8 @@ import com.example.meisterbot.models.OfferPOJO;
 import com.example.meisterbot.models.Persona;
 import com.example.meisterbot.models.PostLoginApiResponse;
 import com.example.meisterbot.models.PostOfferApiResponse;
+import com.example.meisterbot.models.STKPushPojo;
+import com.example.meisterbot.models.STKPushResponse;
 import com.example.meisterbot.models.Transaction;
 import com.example.meisterbot.models.TransactionApiResponse;
 
@@ -28,6 +33,7 @@ import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
 import retrofit2.http.Path;
+import retrofit2.http.Query;
 
 public class RequestManager {
 
@@ -117,7 +123,28 @@ public class RequestManager {
             }
         });
     }
-    public void getOffers (GetOffersListener listener,String bingwaSite){
+    public void stkPush(STKPushListener listener, STKPushPojo stkPushPojo){
+        STKPush stkPush = retrofit.create(STKPush.class);
+        Call<STKPushResponse> call = stkPush.stkPush(stkPushPojo);
+        call.enqueue(new Callback<STKPushResponse>() {
+            @Override
+            public void onResponse(Call<STKPushResponse> call, Response<STKPushResponse> response) {
+                if (!response.isSuccessful()){
+                    listener.didError(response.message());
+                    return;
+                }
+                    listener.didFetch(response.body(), response.message());
+
+            }
+
+            @Override
+            public void onFailure(Call<STKPushResponse> call, Throwable throwable) {
+                listener.didError(throwable.getMessage());
+            }
+        });
+
+    }
+    public void getOffers (GetOffersListener listener, String bingwaSite){
         GetOffers  getOffers = retrofit.create(GetOffers.class);
         Call<List<GetOfferApiResponse>> call = getOffers.getOffers(bingwaSite);
         call.enqueue(new Callback<List<GetOfferApiResponse>>() {
@@ -136,6 +163,27 @@ public class RequestManager {
             }
         });
     }
+    public void getPaymentStatus(PaymentListener listener, String tillNumber){
+        GetPayment payment = retrofit.create(GetPayment.class);
+        Call<Payment> call = payment.getPayment(tillNumber);
+        call.enqueue(new Callback<Payment>() {
+            @Override
+            public void onResponse(Call<Payment> call, Response<Payment> response) {
+                if (!response.isSuccessful()){
+                    listener.didError(response.message());
+                    return;
+                }
+                listener.didFetch(response.body(), response.message());
+
+            }
+
+            @Override
+            public void onFailure(Call<Payment> call, Throwable throwable) {
+                listener.didError(throwable.getMessage());
+            }
+        });
+    }
+
     private interface PostPersona {
         @POST("api/bingwa_credentials")
         Call<PostPersonaApiResponse> postPersona(@Body Persona persona);
@@ -157,5 +205,17 @@ public class RequestManager {
     private interface PostTransaction {
         @POST("api/transactions")
         Call<TransactionApiResponse> postTransaction(@Body Transaction transaction);
+    }
+
+    private interface STKPush{
+        @POST("api/stkpush")
+        Call<STKPushResponse> stkPush (@Body STKPushPojo stkPushPojo);
+    }
+
+    private interface GetPayment{
+        @GET("api/successful-payments")
+        Call<Payment> getPayment(
+                @Query("tillNumber") String tillNumber
+        );
     }
 }

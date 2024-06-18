@@ -1,9 +1,7 @@
 package com.example.meisterbot;
 
 import android.app.Dialog;
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -31,6 +29,7 @@ public class LoginActivity extends AppCompatActivity {
     private Dialog dialog;
     ProgressBar progressBar;
     private TextView txtLoading;
+    DBHelper helper;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,12 +49,10 @@ public class LoginActivity extends AppCompatActivity {
         dialog = new Dialog(LoginActivity.this);
         dialog.setContentView(R.layout.dialog_progress_layout);
 
-
         progressBar = dialog.findViewById(R.id.myProgressBar);
         txtLoading = dialog.findViewById(R.id.txtProgress);
 
-
-
+        helper = new DBHelper(this);
 
         login.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -107,7 +104,9 @@ public class LoginActivity extends AppCompatActivity {
             enterPassword.setHelperTextEnabled(false);
             dialog.dismiss();
             Toast.makeText(this, "login successful", Toast.LENGTH_SHORT).show();
-            goToEnableServiceActivity();
+            String till = pojo.tillNumber;
+            insertTill(till);
+
         }
         else{
             dialog.dismiss();
@@ -115,8 +114,21 @@ public class LoginActivity extends AppCompatActivity {
             enterPassword.setHelperText(pojo.message);
         }
     }
+
+    private void insertTill(String till) {
+        boolean insertTill = helper.insertUser(till);
+        if (insertTill){
+            Toast.makeText(this, "till inserted successfully", Toast.LENGTH_SHORT).show();
+            goToEnableServiceActivity();
+        }
+        else{
+            Toast.makeText(this, "unable to insert till", Toast.LENGTH_SHORT).show();
+        }
+
+    }
+
     private void goToEnableServiceActivity(){
-        startActivity(new Intent(LoginActivity.this, EnableServiceActivity.class));
+        startActivity(new Intent(LoginActivity.this, PaymentPlanActivity.class));
     }
 
     private void initViews() {

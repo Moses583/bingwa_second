@@ -17,7 +17,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/edtTxtLoginName"
-        android:hint="Enter official names"
+        android:hint="Enter store name"
         android:layout_margin="10dp"
         app:startIconDrawable="@drawable/profile_svgrepo_com">
         <com.google.android.material.textfield.TextInputEditText

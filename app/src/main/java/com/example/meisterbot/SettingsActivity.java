@@ -41,8 +41,8 @@ public class SettingsActivity extends AppCompatActivity {
         settingPaymentPlan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                startActivity(new Intent(SettingsActivity.this, PaymentPlanActivity.class));
-                Toast.makeText(SettingsActivity.this, "Feature coming soon", Toast.LENGTH_SHORT).show();
+                startActivity(new Intent(SettingsActivity.this, PaymentPlanActivity.class));
+//                Toast.makeText(SettingsActivity.this, "Feature coming soon", Toast.LENGTH_SHORT).show();
             }
         });
         settingToken.setOnClickListener(new View.OnClickListener() {
