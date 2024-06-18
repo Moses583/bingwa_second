@@ -1,6 +1,8 @@
 package com.example.meisterbot.fragments;
 
 
+import static androidx.core.content.ContextCompat.getSystemService;
+
 import android.Manifest;
 import android.app.Activity;
 import android.app.ActivityManager;
@@ -47,7 +49,9 @@ import com.example.meisterbot.CreateOfferActivity;
 import com.example.meisterbot.CreatePasswordActivity;
 import com.example.meisterbot.DBHelper;
 import com.example.meisterbot.R;
+import com.example.meisterbot.SettingsActivity;
 import com.example.meisterbot.models.TransactionPOJO;
+import com.example.meisterbot.services.MyService;
 import com.example.meisterbot.services.RetryService;
 
 import java.text.SimpleDateFormat;
@@ -145,6 +149,19 @@ public class MainContentFragment extends Fragment {
         slotIndex = new ArrayList<>();
 
 
+        if (myService()) {
+            // If the service is running, stop it
+            Toast.makeText(getActivity(), "Service already started.", Toast.LENGTH_SHORT).show();
+        } else {
+            // If the service is not running, start it
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                Intent intent = new Intent(getActivity(), MyService.class);
+                getActivity().startForegroundService(intent);
+                Toast.makeText(getActivity(), "You have successfully enabled the app, it will now receive messages and make transactions.", Toast.LENGTH_LONG).show();
+            }
+        }
+
+
 
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -226,6 +243,17 @@ public class MainContentFragment extends Fragment {
             }
         }
         failedTransactions.setText(String.valueOf(queue1.size()));
+    }
+
+    public boolean myService(){
+        ActivityManager manager = (ActivityManager) getActivity().getSystemService(Context.ACTIVITY_SERVICE);
+        for (ActivityManager.RunningServiceInfo info :
+                manager.getRunningServices(Integer.MAX_VALUE)) {
+            if (MyService.class.getName().equalsIgnoreCase(info.service.getClassName())){
+                return true;
+            }
+        }
+        return false;
     }
 
     public void refresh(){
