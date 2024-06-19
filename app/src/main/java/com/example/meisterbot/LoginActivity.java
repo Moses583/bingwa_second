@@ -1,8 +1,11 @@
 package com.example.meisterbot;
 
 import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -11,22 +14,30 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.example.meisterbot.listeners.PaymentListener;
 import com.example.meisterbot.listeners.PostLoginListener;
 import com.example.meisterbot.models.LoginPojo;
+import com.example.meisterbot.models.Payment;
 import com.example.meisterbot.models.PostLoginApiResponse;
 import com.google.android.material.textfield.TextInputLayout;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
 
 public class LoginActivity extends AppCompatActivity {
     private Button login;
     private TextInputLayout enterName,enterPassword;
     private EditText one, two;
     RequestManager manager;
-    private Dialog dialog;
+    private AlertDialog dialog;
     ProgressBar progressBar;
     private TextView txtLoading;
     DBHelper helper;
@@ -46,23 +57,29 @@ public class LoginActivity extends AppCompatActivity {
         one = enterName.getEditText();
         two = enterPassword.getEditText();
 
-        dialog = new Dialog(LoginActivity.this);
-        dialog.setContentView(R.layout.dialog_progress_layout);
-
-        progressBar = dialog.findViewById(R.id.myProgressBar);
-        txtLoading = dialog.findViewById(R.id.txtProgress);
+        showDialog3();
 
         helper = new DBHelper(this);
 
         login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                txtLoading.setText("Logging you in...");
                 dialog.show();
                 fetchDetails();
             }
         });
 
+    }
+
+    private void showDialog3() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        LayoutInflater inflater = getLayoutInflater();
+        View dialogView = inflater.inflate(R.layout.dialog_progress_layout,null);
+        txtLoading = dialogView.findViewById(R.id.txtProgress);
+        progressBar = dialogView.findViewById(R.id.myProgressBar);
+        txtLoading.setText("Logging you in...");
+        builder.setView(dialogView);
+        dialog = builder.create();
     }
 
     private void fetchDetails(){
@@ -119,7 +136,7 @@ public class LoginActivity extends AppCompatActivity {
         boolean insertTill = helper.insertUser(till);
         if (insertTill){
             Toast.makeText(this, "till inserted successfully", Toast.LENGTH_SHORT).show();
-            goToEnableServiceActivity();
+            createAccount();
         }
         else{
             Toast.makeText(this, "unable to insert till", Toast.LENGTH_SHORT).show();
@@ -127,9 +144,20 @@ public class LoginActivity extends AppCompatActivity {
 
     }
 
-    private void goToEnableServiceActivity(){
-        startActivity(new Intent(LoginActivity.this, PaymentPlanActivity.class));
+    private void createAccount() {
+        SharedPreferences sharedPreferences = getSharedPreferences("app_name", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putBoolean("hasAccount", true);
+        editor.apply();
+
+        dialog.dismiss();
+        // Navigate to the main screen
+        Intent intent = new Intent(this, HomeActivity.class);
+        startActivity(intent);
+        finish();
     }
+
+
 
     private void initViews() {
         login = findViewById(R.id.btnLogIn);

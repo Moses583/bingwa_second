@@ -48,14 +48,22 @@ import com.example.meisterbot.Adapters.TransactionAdapter;
 import com.example.meisterbot.CreateOfferActivity;
 import com.example.meisterbot.CreatePasswordActivity;
 import com.example.meisterbot.DBHelper;
+import com.example.meisterbot.EnableServiceActivity;
+import com.example.meisterbot.LoginActivity;
+import com.example.meisterbot.PaymentPlanActivity;
 import com.example.meisterbot.R;
+import com.example.meisterbot.RequestManager;
 import com.example.meisterbot.SettingsActivity;
+import com.example.meisterbot.listeners.PaymentListener;
+import com.example.meisterbot.models.Payment;
 import com.example.meisterbot.models.TransactionPOJO;
 import com.example.meisterbot.services.MyService;
 import com.example.meisterbot.services.RetryService;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -104,6 +112,7 @@ public class MainContentFragment extends Fragment {
     private AlertDialog dialog;
 
 
+
     public MainContentFragment() {
         // Required empty public constructor
     }
@@ -148,18 +157,6 @@ public class MainContentFragment extends Fragment {
         simNames = new ArrayList<>();
         slotIndex = new ArrayList<>();
 
-
-        if (myService()) {
-            // If the service is running, stop it
-            Toast.makeText(getActivity(), "Service already started.", Toast.LENGTH_SHORT).show();
-        } else {
-            // If the service is not running, start it
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                Intent intent = new Intent(getActivity(), MyService.class);
-                getActivity().startForegroundService(intent);
-                Toast.makeText(getActivity(), "You have successfully enabled the app, it will now receive messages and make transactions.", Toast.LENGTH_LONG).show();
-            }
-        }
 
 
 
@@ -245,16 +242,7 @@ public class MainContentFragment extends Fragment {
         failedTransactions.setText(String.valueOf(queue1.size()));
     }
 
-    public boolean myService(){
-        ActivityManager manager = (ActivityManager) getActivity().getSystemService(Context.ACTIVITY_SERVICE);
-        for (ActivityManager.RunningServiceInfo info :
-                manager.getRunningServices(Integer.MAX_VALUE)) {
-            if (MyService.class.getName().equalsIgnoreCase(info.service.getClassName())){
-                return true;
-            }
-        }
-        return false;
-    }
+
 
     public void refresh(){
         showData();
@@ -386,6 +374,20 @@ public class MainContentFragment extends Fragment {
             }
         }
         return false;
+    }
+
+    public String tillNumber(){
+        Cursor cursor = helper.getUser();
+        String till = "";
+        if (cursor.getCount() == 0){
+            Toast.makeText(getActivity(), "", Toast.LENGTH_SHORT).show();
+        }else{
+            while (cursor.moveToNext()){
+                till = cursor.getString(0);
+            }
+        }
+        cursor.close();
+        return till;
     }
 
     private void initViews(View view) {

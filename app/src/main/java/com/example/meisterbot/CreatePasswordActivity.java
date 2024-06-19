@@ -1,7 +1,6 @@
 package com.example.meisterbot;
 
 import android.app.ActivityManager;
-import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -17,6 +16,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
@@ -35,7 +35,7 @@ public class CreatePasswordActivity extends AppCompatActivity {
     private TextInputLayout edtTxtEnterPassword, edtTxtConfirmPassword;
     private Button btnContinue,btnBack;
     private EditText one,two;
-    private Dialog dialog1;
+    private AlertDialog dialog1;
     private TextView txtLoading;
     ProgressBar progressBar;
     DBHelper dbHelper;
@@ -59,12 +59,7 @@ public class CreatePasswordActivity extends AppCompatActivity {
         one = edtTxtEnterPassword.getEditText();
         two = edtTxtConfirmPassword.getEditText();
 
-        dialog1 = new Dialog(CreatePasswordActivity.this);
-        dialog1.setContentView(R.layout.dialog_progress_layout);
-
-
-        progressBar = dialog1.findViewById(R.id.myProgressBar);
-        txtLoading = dialog1.findViewById(R.id.txtProgress);
+        showDialog3();
 
         dbHelper = new DBHelper(this);
 
@@ -82,6 +77,16 @@ public class CreatePasswordActivity extends AppCompatActivity {
         });
     }
 
+    private void showDialog3() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        LayoutInflater inflater = getLayoutInflater();
+        View dialogView = inflater.inflate(R.layout.dialog_progress_layout,null);
+        txtLoading = dialogView.findViewById(R.id.txtProgress);
+        progressBar = dialogView.findViewById(R.id.myProgressBar);
+        txtLoading.setText("Creating your account...");
+        builder.setView(dialogView);
+        dialog1 = builder.create();
+    }
 
 
     private void fetchPassword(){
@@ -129,7 +134,7 @@ public class CreatePasswordActivity extends AppCompatActivity {
         showAlertDialog(persona);
     }
     public void showAlertDialog(Persona persona){
-        AlertDialog.Builder builder = new AlertDialog.Builder(CreatePasswordActivity.this);
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
         LayoutInflater inflater = getLayoutInflater();
         View dialogView = inflater.inflate(R.layout.persona_dialog_layout,null);
         TextView one = dialogView.findViewById(R.id.txtPersonaName);
@@ -184,16 +189,23 @@ public class CreatePasswordActivity extends AppCompatActivity {
         if (response.message1.equals("Successful account creation")){
             dialog1.dismiss();
             edtTxtConfirmPassword.setHelperTextEnabled(false);
-            goToEnableServiceActivity();
+            createAccount();
         }else{
             dialog1.dismiss();
             edtTxtConfirmPassword.setHelperTextEnabled(true);
             edtTxtConfirmPassword.setHelperText(response.message1);
         }
     }
+    private void createAccount() {
+        SharedPreferences sharedPreferences = getSharedPreferences("app_name", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putBoolean("hasAccount", true);
+        editor.apply();
 
-    private void goToEnableServiceActivity(){
-        startActivity(new Intent(CreatePasswordActivity.this, PaymentPlanActivity.class));
+        // Navigate to the main screen
+        Intent intent = new Intent(this, HomeActivity.class);
+        startActivity(intent);
+        finish();
     }
 
 

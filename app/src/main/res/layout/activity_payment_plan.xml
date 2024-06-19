@@ -317,13 +317,6 @@
             android:padding="8dp"
             android:text="Choose plan and pay"
             android:id="@+id/btnChoosePlan"/>
-        <Button
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            android:padding="8dp"
-            android:text="Confirm payment"
-            android:id="@+id/btnConfirmPayment"/>
     </LinearLayout>
 
 </ScrollView>

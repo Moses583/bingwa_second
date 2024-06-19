@@ -18,7 +18,8 @@
         <com.google.android.material.textfield.TextInputEditText
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:hint="07... or 01..."/>
+            android:hint="07... or 01..."
+            android:inputType="phone"/>
 
     </com.google.android.material.textfield.TextInputLayout>
     <TextView
