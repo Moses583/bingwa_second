@@ -24,8 +24,8 @@ import com.google.android.material.textfield.TextInputLayout;
 
 public class EditAccountActivity extends AppCompatActivity {
 
-    private TextInputLayout enterName,enterPhoneNumber,enterTillNumber,enterStoreName,enterWebUrl;
-    private EditText one,two,three,four,five;
+    private TextInputLayout enterPhoneNumber,enterTillNumber,enterStoreName;
+    private EditText two,three,four;
     private Button createPersona;
     RequestManager manager;
 
@@ -51,11 +51,9 @@ public class EditAccountActivity extends AppCompatActivity {
         });
     }
     private void initEditTexts(){
-        one = enterName.getEditText();
         two = enterPhoneNumber.getEditText();
         three = enterTillNumber.getEditText();
         four = enterStoreName.getEditText();
-        five = enterWebUrl.getEditText();
     }
 
     public void proceed(){
@@ -69,26 +67,18 @@ public class EditAccountActivity extends AppCompatActivity {
         AlertDialog.Builder builder = new AlertDialog.Builder(EditAccountActivity.this);
         LayoutInflater inflater = getLayoutInflater();
         View dialogView = inflater.inflate(R.layout.persona_dialog_layout,null);
-        TextView one = dialogView.findViewById(R.id.txtPersonaName);
         TextView two = dialogView.findViewById(R.id.personaNumber);
         TextView three = dialogView.findViewById(R.id.txtPersonaTill);
         TextView four = dialogView.findViewById(R.id.txtPersonaStoreName);
-        TextView five = dialogView.findViewById(R.id.txtPersonaWeb);
-        one.setText(fetchDetails().getName());
         two.setText(fetchDetails().getPhoneNumber());
         three.setText(fetchDetails().getTillNumber());
         four.setText(fetchDetails().getStoreName());
-        five.setText(fetchDetails().getBingwaSite());
         builder.setView(dialogView);
 
         builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 manager.postPersona(listener,fetchDetails());
-//                FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
-//                transaction.replace(R.id.myFragmentContainer, new MainContentFragment())
-//                        .addToBackStack(null)
-//                        .commit();
             }
         });
         builder.setNegativeButton("Edit", new DialogInterface.OnClickListener() {
@@ -108,16 +98,10 @@ public class EditAccountActivity extends AppCompatActivity {
         String Device = Build.DEVICE;
         String manufacturer = Build.MANUFACTURER;
         String deviceId = brand+" "+model+" "+product+" "+Device+" "+manufacturer;
-        String name = one.getText().toString();
         String number = two.getText().toString();
         String till = three.getText().toString();
         String storeName = four.getText().toString();
-        String webUrl = five.getText().toString();
 
-        if (name.isEmpty()){
-            one.setError("Name cannot be empty");
-            complete = false;
-        }
         if (number.isEmpty()){
             two.setError("Name cannot be empty");
             complete = false;
@@ -130,12 +114,8 @@ public class EditAccountActivity extends AppCompatActivity {
             four.setError("Name cannot be empty");
             complete = false;
         }
-        if (webUrl.isEmpty()){
-            five.setError("Name cannot be empty");
-            complete = false;
-        }
         if (complete){
-            return new Persona(name,storeName,webUrl,deviceId,number,till,"null");
+            return new Persona(storeName,storeName,deviceId,number,till,"null");
         }
         else {
             return null;
@@ -154,11 +134,9 @@ public class EditAccountActivity extends AppCompatActivity {
     };
 
     private void initViews() {
-        enterName = findViewById(R.id.enterName);
         enterPhoneNumber = findViewById(R.id.enterPhoneNumber);
         enterTillNumber = findViewById(R.id.enterTillNumber);
         enterStoreName = findViewById(R.id.enterStoreNumber);
-        enterWebUrl = findViewById(R.id.enterWebsiteUrl);
         createPersona = findViewById(R.id.btnCreatePersona);
     }
 }

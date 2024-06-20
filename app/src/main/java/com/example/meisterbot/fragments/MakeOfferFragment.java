@@ -26,11 +26,16 @@ import com.example.meisterbot.HomeActivity;
 import com.example.meisterbot.R;
 import com.example.meisterbot.RequestManager;
 import com.example.meisterbot.listeners.GetOffersListener;
+import com.example.meisterbot.listeners.PostOfferListener;
 import com.example.meisterbot.models.GetOfferApiResponse;
 import com.example.meisterbot.models.OfferListResponse;
 import com.example.meisterbot.models.OfferPOJO;
+import com.example.meisterbot.models.PostOfferApiResponse;
+import com.example.meisterbot.models.PostOfferOne;
+import com.example.meisterbot.models.PostOfferTwo;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.gson.Gson;
 
 import java.util.ArrayList;
@@ -61,7 +66,10 @@ public class MakeOfferFragment extends Fragment {
 
     private SwipeRefreshLayout swipeRefreshLayout;
 
-    private ExtendedFloatingActionButton fab;
+    private ExtendedFloatingActionButton fab,fab2;
+    private FloatingActionButton actions;
+    private boolean show = true;
+
 
     public MakeOfferFragment() {
         // Required empty public constructor
@@ -101,16 +109,34 @@ public class MakeOfferFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_make_offer, container, false);
         initViews(view);
 
-//        manager = new RequestManager(getActivity());
+        manager = new RequestManager(getActivity());
         String id = Build.ID;
-//        manager.getOffers(listener,id);
-
         dbHelper = new DBHelper(getActivity());
 
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 getActivity().startActivity(new Intent(getActivity(), CreateOfferActivity.class));
+            }
+        });
+        fab2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                callPostOfferApi();
+            }
+        });
+        actions.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (show){
+                    fab.show();
+                    fab2.show();
+                    show = false;
+                }else{
+                    fab.hide();
+                    fab2.hide();
+                    show = true;
+                }
             }
         });
         showData();
@@ -140,6 +166,33 @@ public class MakeOfferFragment extends Fragment {
         }
     };
 
+    private void callPostOfferApi(){
+        manager.postOffer(listener2, postOffers());
+    }
+
+    private final PostOfferListener listener2 = new PostOfferListener() {
+        @Override
+        public void didFetch(PostOfferApiResponse response, String message) {
+            Toast.makeText(getActivity(), response.message, Toast.LENGTH_SHORT).show();
+        }
+
+        @Override
+        public void didError(String message) {
+            Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
+        }
+    };
+
+    private PostOfferOne postOffers(){
+        String till = tillNumber();
+        List<PostOfferTwo> list = new ArrayList<>();
+        for (OfferPOJO pojo :
+                pojos) {
+            list.add(new PostOfferTwo(pojo.getName(), pojo.getAmount(), pojo.getUssdCode()));
+        }
+
+        return new PostOfferOne(till, list);
+    }
+
 
     private void showData() {
         pojos.clear();
@@ -149,14 +202,15 @@ public class MakeOfferFragment extends Fragment {
         }
         else {
             while (cursor.moveToNext()){
-                String amount = cursor.getString(1);
-                String ussdCode = cursor.getString(2);
-                String dialSim = cursor.getString(3);
-                String dialSimId = cursor.getString(4);
-                String paymentSim = cursor.getString(5);
-                String paymentSimId = cursor.getString(6);
-                String offerTill = cursor.getString(7);
-                OfferPOJO pojo = new OfferPOJO(amount,ussdCode,dialSim,Build.ID,dialSimId,paymentSim,paymentSimId,offerTill);
+                String name = cursor.getString(1);
+                String amount = cursor.getString(2);
+                String ussdCode = cursor.getString(3);
+                String dialSim = cursor.getString(4);
+                String dialSimId = cursor.getString(5);
+                String paymentSim = cursor.getString(6);
+                String paymentSimId = cursor.getString(7);
+                String offerTill = cursor.getString(8);
+                OfferPOJO pojo = new OfferPOJO(name,amount,ussdCode,dialSim,Build.ID,dialSimId,paymentSim,paymentSimId,offerTill);
                 pojos.add(pojo);
             }
             swipeRefreshLayout.setRefreshing(false);
@@ -169,6 +223,20 @@ public class MakeOfferFragment extends Fragment {
         recyclerView.setAdapter(listAdapter);
     }
 
+    public String tillNumber(){
+        Cursor cursor = dbHelper.getUser();
+        String till = "";
+        if (cursor.getCount() == 0){
+            Toast.makeText(getActivity(), "till number absent", Toast.LENGTH_SHORT).show();
+        }else{
+            while (cursor.moveToNext()){
+                till = cursor.getString(0);
+            }
+        }
+        cursor.close();
+        return till;
+    }
+
     @Override
     public void onResume() {
         super.onResume();
@@ -178,6 +246,8 @@ public class MakeOfferFragment extends Fragment {
     private void initViews(View view) {
         recyclerView = view.findViewById(R.id.offersRecycler);
         fab = view.findViewById(R.id.btnCreateOffer);
+        fab2 = view.findViewById(R.id.btnUploadAllOffers);
+        actions = view.findViewById(R.id.btnChoices);
         swipeRefreshLayout = view.findViewById(R.id.swipeRefreshOffers);
     }
 }

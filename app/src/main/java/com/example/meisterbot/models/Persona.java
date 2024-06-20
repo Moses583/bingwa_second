@@ -1,15 +1,14 @@
 package com.example.meisterbot.models;
 
 public class Persona {
-     String name,storeName,bingwaSite,deviceId,phoneNumber,tillNumber,password;
+     String name,storeName,deviceId,phoneNumber,tillNumber,password;
 
-    public Persona(String name, String storeName, String bingwaSite, String deviceId, String phoneNumber, String tillNumber,String password) {
+    public Persona(String name, String phoneNumber, String tillNumber, String storeName, String deviceId,String password) {
         this.name = name;
-        this.storeName = storeName;
-        this.bingwaSite = bingwaSite;
-        this.deviceId = deviceId;
         this.phoneNumber = phoneNumber;
         this.tillNumber = tillNumber;
+        this.storeName = storeName;
+        this.deviceId = deviceId;
         this.password = password;
     }
 
@@ -23,10 +22,6 @@ public class Persona {
 
     public String getStoreName() {
         return storeName;
-    }
-
-    public String getBingwaSite() {
-        return bingwaSite;
     }
 
     public String getDeviceId() {

@@ -187,11 +187,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="60dp"
-        android:layout_margin="5dp"
-        android:id="@+id/settingPauseApp"
-        android:clickable="true"
-        android:focusable="true"
-        android:foreground="?android:attr/selectableItemBackground">
+        android:layout_margin="5dp">
 
         <TextView
             android:id="@+id/txtPauseApp"
@@ -203,10 +199,10 @@
             app:layout_constraintStart_toStartOf="@+id/guideLine11"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <ImageView
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:src="@drawable/power_off"
+        <Switch
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/switchOnOffApp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/guideLine11"
             app:layout_constraintStart_toStartOf="parent"

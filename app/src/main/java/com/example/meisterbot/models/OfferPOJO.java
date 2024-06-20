@@ -8,9 +8,10 @@ import androidx.annotation.NonNull;
 import java.io.Serializable;
 
 public class OfferPOJO implements Serializable {
-    private String amount,UssdCode, dialSim,deviceId,subscriptionId,paymentSim,paymentSimId,offerTill;
+    private String name,amount,UssdCode, dialSim,deviceId,subscriptionId,paymentSim,paymentSimId,offerTill;
 
-    public OfferPOJO(String amount, String ussdCode, String dialSim, String deviceId, String subscriptionId, String paymentSim, String paymentSimId,String offerTill) {
+    public OfferPOJO(String name, String amount, String ussdCode, String dialSim, String deviceId, String subscriptionId, String paymentSim, String paymentSimId,String offerTill) {
+        this.name = name;
         this.amount = amount;
         this.UssdCode = ussdCode;
         this.dialSim = dialSim;
@@ -19,6 +20,10 @@ public class OfferPOJO implements Serializable {
         this.paymentSim = paymentSim;
         this.paymentSimId = paymentSimId;
         this.offerTill = offerTill;
+    }
+
+    public String getName(){
+        return name;
     }
 
     public String getAmount() {
@@ -48,6 +53,7 @@ public class OfferPOJO implements Serializable {
     public String getPaymentSimId() {
         return paymentSimId;
     }
+
     public String getOfferTill() {
         return offerTill;
     }

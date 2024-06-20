@@ -6,11 +6,16 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.os.Build;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.Button;
+import android.widget.CompoundButton;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.graphics.Insets;
@@ -28,12 +33,15 @@ import java.util.Locale;
 
 public class SettingsActivity extends AppCompatActivity {
 
-    private ConstraintLayout settingPaymentPlan,settingToken,settingAboutApp,settingPauseApp,settingProfile;
+    private ConstraintLayout settingPaymentPlan,settingToken,settingAboutApp,settingProfile;
+    private Switch pauseApp;
 
-    private TextView pauseApp;
+    private TextView txtPauseApp;
     private RequestManager manager;
     private String till;
     private DBHelper helper;
+    private AlertDialog firstTimePayDialog;
+    private AlertDialog renewPlanDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,9 +60,25 @@ public class SettingsActivity extends AppCompatActivity {
         helper = new DBHelper(this);
 
         till = tillNumber();
-        Toast.makeText(this, till, Toast.LENGTH_SHORT).show();
 
+        if (pauseApp.isChecked()){
+            txtPauseApp.setText("App paused");
+        }
+        else{
+            txtPauseApp.setText("App resumed");
+        }
 
+        pauseApp.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    checkStatus(till);
+
+                } else {
+                    checkStatus(till);
+                }
+            }
+        });
         settingPaymentPlan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -65,81 +89,133 @@ public class SettingsActivity extends AppCompatActivity {
         settingToken.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                startActivity(new Intent(SettingsActivity.this, TokensActivity.class));
                 Toast.makeText(SettingsActivity.this, "Feature coming soon", Toast.LENGTH_SHORT).show();
             }
         });
         settingAboutApp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                startActivity(new Intent(SettingsActivity.this, AboutAppActivity.class));
                 Toast.makeText(SettingsActivity.this, "Feature coming soon", Toast.LENGTH_SHORT).show();
             }
         });
-        settingPauseApp.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-            }
-        });
+
+
         settingProfile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                startActivity(new Intent(SettingsActivity.this, EditAccountActivity.class));
                 Toast.makeText(SettingsActivity.this, "Feature coming soon", Toast.LENGTH_SHORT).show();
             }
         });
     }
 
-    private void callPaymentApi(String till) {
-        manager.getPaymentStatus(paymentListener,till);
+    private void checkStatus(String till) {
+        manager.getPaymentStatus(listener2,till);
     }
-
-    private final PaymentListener paymentListener = new PaymentListener() {
+    private final PaymentListener listener2 = new PaymentListener() {
         @Override
         public void didFetch(Payment payment, String message) {
-            Toast.makeText(SettingsActivity.this, payment.status, Toast.LENGTH_SHORT).show();
-            compareDates(payment.data.timestamp);
+            confirm2(payment);
         }
 
         @Override
         public void didError(String message) {
-            Toast.makeText(SettingsActivity.this, message, Toast.LENGTH_SHORT).show();
+            stopServiceTwo();
+            if (message.contains("Unable to resolve host")){
+                Toast.makeText(SettingsActivity.this, "Please connect to the internet", Toast.LENGTH_SHORT).show();
+            }
         }
     };
 
-    public void compareDates(String two){
+    private void confirm2(Payment payment) {
+        if (payment.status.equalsIgnoreCase("error")){
+            showFirstTimePayDialog();
+        }else if (payment.status.equals("success")){
+            compareDates2(payment.data.timestamp);
+        }
+    }
+
+    private void showFirstTimePayDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        LayoutInflater inflater = getLayoutInflater();
+        View view = inflater.inflate(R.layout.dialog_first_time_pay,null);
+        Button btn = view.findViewById(R.id.btnCheckAvailablePlans);
+        builder.setView(view);
+        firstTimePayDialog = builder.create();
+        firstTimePayDialog.show();
+        btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                navigateToPlansActivity();
+            }
+        });
+    }
+
+    private void navigateToPlansActivity() {
+        startActivity(new Intent(SettingsActivity.this, PaymentPlanActivity.class));
+        firstTimePayDialog.dismiss();
+    }
+
+    private void compareDates2(String date) {
         long currentTimeMillis = System.currentTimeMillis();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
         String time = sdf.format(currentTimeMillis);
         Date current, expiry;
         try {
             current =  sdf.parse(time);
-            expiry = sdf.parse(two);
+            expiry = sdf.parse(date);
             if (current.compareTo(expiry) > 0) {
-                Toast.makeText(SettingsActivity.this, "Your subscription has expired", Toast.LENGTH_SHORT).show();
-                startActivity(new Intent(SettingsActivity.this, PaymentPlanActivity.class));
+                stopServiceTwo();
+                showRenewPlanDialog();
             } else if (current.compareTo(expiry) < 0) {
-                Toast.makeText(SettingsActivity.this, "You subscription is valid", Toast.LENGTH_SHORT).show();
-                startService();
-            } else {
-                Toast.makeText(SettingsActivity.this, "Your subscription will expire soon", Toast.LENGTH_SHORT).show();
+                serviceStart();
             }
         } catch (ParseException e) {
             throw new RuntimeException(e);
         }
     }
-    public void startService(){
+
+    private void showRenewPlanDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        LayoutInflater inflater = getLayoutInflater();
+        View view = inflater.inflate(R.layout.dialog_subscription_expired,null);
+        Button btn = view.findViewById(R.id.btnRenewPlan);
+        builder.setView(view);
+        renewPlanDialog = builder.create();
+        renewPlanDialog.show();
+        btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                navigateToPlansActivity2();
+            }
+        });
+    }
+
+    private void navigateToPlansActivity2() {
+        startActivity(new Intent(SettingsActivity.this, PaymentPlanActivity.class));
+        renewPlanDialog.dismiss();
+    }
+
+    private void stopServiceTwo() {
+        if (myService()){
+            Intent intent = new Intent(this, MyService.class);
+            stopService(intent);
+            txtPauseApp.setText("App paused");
+        }
+    }
+
+    private void serviceStart() {
         if (myService()) {
-            Toast.makeText(this, "Service already started", Toast.LENGTH_SHORT).show();
+            stopServiceTwo();
         } else {
-            // If the service is not running, start it
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                Intent intent = new Intent(SettingsActivity.this, MyService.class);
+                Intent intent = new Intent(this, MyService.class);
                 startForegroundService(intent);
-                Toast.makeText(SettingsActivity.this, "You have successfully enabled the app, it will now receive messages and make transactions.", Toast.LENGTH_LONG).show();
+                txtPauseApp.setText("App resumed");
             }
         }
     }
+
+
 
     public boolean myService(){
         ActivityManager manager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
@@ -168,8 +244,8 @@ public class SettingsActivity extends AppCompatActivity {
         settingPaymentPlan = findViewById(R.id.settingPaymentPlan);
         settingToken = findViewById(R.id.settingToken);
         settingAboutApp = findViewById(R.id.settingAboutApp);
-        settingPauseApp = findViewById(R.id.settingPauseApp);
         settingProfile = findViewById(R.id.settingEditProfile);
-        pauseApp = findViewById(R.id.txtPauseApp);
+        pauseApp = findViewById(R.id.switchOnOffApp);
+        txtPauseApp = findViewById(R.id.txtPauseApp);
     }
 }

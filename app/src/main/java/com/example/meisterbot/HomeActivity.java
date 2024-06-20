@@ -12,14 +12,18 @@ import android.database.Cursor;
 import android.os.Build;
 import android.os.Bundle;
 
+import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.Toast;
 
 
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
@@ -60,6 +64,7 @@ public class HomeActivity extends AppCompatActivity{
     private RequestManager manager;
     private DBHelper helper;
     private FloatingActionButton button;
+    private AlertDialog offerCreationDialog,firstTimePayDialog,renewPlanDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,17 +83,9 @@ public class HomeActivity extends AppCompatActivity{
         till = tillNumber();
 
         manager = new RequestManager(this);
-        Toast.makeText(this, till, Toast.LENGTH_SHORT).show();
+//        Toast.makeText(this, till, Toast.LENGTH_SHORT).show();
 
-        officialStarter();
-
-
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                checkOffers();
-            }
-        });
+        checkOffersOne();
 
         SharedPreferences prefs = getSharedPreferences("app_name", Context.MODE_PRIVATE);
         boolean hasAccount = prefs.getBoolean("hasAccount", false);
@@ -173,6 +170,35 @@ public class HomeActivity extends AppCompatActivity{
         return true;
     }
 };
+    public void checkOffersOne(){
+        Cursor cursor = helper.getOffers();
+        if(cursor.getCount() == 0){
+            showOfferCreationDialog();
+        }else{
+            callPaymentApi(till);
+        }
+    }
+
+    private void showOfferCreationDialog(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        LayoutInflater inflater = getLayoutInflater();
+        View view = inflater.inflate(R.layout.dialog_create_offer,null);
+        Button btn = view.findViewById(R.id.btnNavigateToCreateOffer);
+        builder.setView(view);
+        offerCreationDialog = builder.create();
+        offerCreationDialog.show();
+        btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                navigateToCreateOfferActivity();
+            }
+        });
+    }
+
+    private void navigateToCreateOfferActivity() {
+        startActivity(new Intent(HomeActivity.this, CreateOfferActivity.class));
+        offerCreationDialog.dismiss();
+    }
 
     private void callPaymentApi(String till) {
         manager.getPaymentStatus(paymentListener,till);
@@ -182,18 +208,49 @@ public class HomeActivity extends AppCompatActivity{
     private final PaymentListener paymentListener = new PaymentListener() {
         @Override
         public void didFetch(Payment payment, String message) {
-            Toast.makeText(HomeActivity.this, payment.status+" from official start", Toast.LENGTH_SHORT).show();
-            compareDates(payment.data.timestamp);
+            confirm1(payment);
         }
 
         @Override
         public void didError(String message) {
-            Toast.makeText(HomeActivity.this, message, Toast.LENGTH_SHORT).show();
+            stopServiceOne();
+            if (message.contains("Unable to resolve host")){
+                Toast.makeText(HomeActivity.this, "Please connect to the internet", Toast.LENGTH_SHORT).show();
+            }
+
         }
     };
 
-    public void
-    compareDates(String two){
+    public void confirm1(Payment payment){
+        if (payment.status.equalsIgnoreCase("error")){
+            showFirstTimePayDialog();
+        }else if (payment.status.equals("success")){
+            compareDates(payment.data.timestamp);
+        }
+    }
+
+    private void showFirstTimePayDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        LayoutInflater inflater = getLayoutInflater();
+        View view = inflater.inflate(R.layout.dialog_first_time_pay,null);
+        Button btn = view.findViewById(R.id.btnCheckAvailablePlans);
+        builder.setView(view);
+        firstTimePayDialog = builder.create();
+        firstTimePayDialog.show();
+        btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                navigateToPlansActivity();
+            }
+        });
+    }
+
+    private void navigateToPlansActivity() {
+        startActivity(new Intent(HomeActivity.this, PaymentPlanActivity.class));
+        firstTimePayDialog.dismiss();
+    }
+
+    public void compareDates(String two){
         long currentTimeMillis = System.currentTimeMillis();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
         String time = sdf.format(currentTimeMillis);
@@ -202,30 +259,55 @@ public class HomeActivity extends AppCompatActivity{
             current =  sdf.parse(time);
             expiry = sdf.parse(two);
             if (current.compareTo(expiry) > 0) {
-                Toast.makeText(HomeActivity.this, "Your subscription has expired", Toast.LENGTH_SHORT).show();
-                startActivity(new Intent(HomeActivity.this, PaymentPlanActivity.class));
+                stopServiceOne();
+                showRenewPlanDialog();
             } else if (current.compareTo(expiry) < 0) {
-                Toast.makeText(HomeActivity.this, "You subscription is valid", Toast.LENGTH_SHORT).show();
                 startService();
-            } else {
-                Toast.makeText(HomeActivity.this, "Your subscription will expire soon", Toast.LENGTH_SHORT).show();
             }
         } catch (ParseException e) {
             throw new RuntimeException(e);
         }
     }
+
+    private void showRenewPlanDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        LayoutInflater inflater = getLayoutInflater();
+        View view = inflater.inflate(R.layout.dialog_subscription_expired,null);
+        Button btn = view.findViewById(R.id.btnRenewPlan);
+        builder.setView(view);
+        renewPlanDialog = builder.create();
+        renewPlanDialog.show();
+        btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                navigateToPlansActivity2();
+            }
+        });
+    }
+
+    private void navigateToPlansActivity2() {
+        startActivity(new Intent(HomeActivity.this, PaymentPlanActivity.class));
+        renewPlanDialog.dismiss();
+    }
+
+    private void stopServiceOne() {
+        if (myService()){
+            Intent intent = new Intent(HomeActivity.this, MyService.class);
+            stopService(intent);
+        }
+    }
+
     public void startService(){
         if (myService()) {
-            Toast.makeText(this, "service already running", Toast.LENGTH_SHORT).show();
+            Log.d("MAIN_SERVICE","Service already running");
         } else {
             // If the service is not running, start it
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 Intent intent = new Intent(HomeActivity.this, MyService.class);startForegroundService(intent);
-                Toast.makeText(HomeActivity.this, "You have successfully enabled the app, it will now receive messages and make transactions.", Toast.LENGTH_LONG).show();
+                Toast.makeText(this, "App services are now available", Toast.LENGTH_SHORT).show();
             }
         }
     }
-
 
     public boolean myService(){
         ActivityManager manager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
@@ -252,85 +334,11 @@ public class HomeActivity extends AppCompatActivity{
         return till;
     }
 
-    private void checkOffers() {
-        Cursor cursor = helper.getOffers();
-        if(cursor.getCount() == 0){
-            Toast.makeText(this, "you need to create an offer first", Toast.LENGTH_SHORT).show();
-        }else{
-            checkStatus(till);
-        }
-    }
-
-    private void checkStatus(String till) {
-        manager.getPaymentStatus(listener2,till);
-    }
-    private final PaymentListener listener2 = new PaymentListener() {
-        @Override
-        public void didFetch(Payment payment, String message) {
-            Toast.makeText(HomeActivity.this, payment.data.timestamp+" from listener2", Toast.LENGTH_SHORT).show();
-            String date = payment.data.timestamp;
-            compareDates2(date);
-        }
-
-        @Override
-        public void didError(String message) {
-            
-        }
-    };
-
-    private void compareDates2(String date) {
-        long currentTimeMillis = System.currentTimeMillis();
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
-        String time = sdf.format(currentTimeMillis);
-        Date current, expiry;
-        try {
-            current =  sdf.parse(time);
-            expiry = sdf.parse(date);
-            if (current.compareTo(expiry) > 0) {
-                Toast.makeText(HomeActivity.this, "Your subscription has expired", Toast.LENGTH_SHORT).show();
-                startActivity(new Intent(HomeActivity.this, PaymentPlanActivity.class));
-            } else if (current.compareTo(expiry) < 0) {
-                Toast.makeText(HomeActivity.this, "You subscription is valid", Toast.LENGTH_SHORT).show();
-                serviceStart();
-            } else {
-                Toast.makeText(HomeActivity.this, "Your subscription will expire soon", Toast.LENGTH_SHORT).show();
-            }
-        } catch (ParseException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    private void serviceStart() {
-        if (myService()) {
-            // If the service is running, stop it
-            Intent intent = new Intent(this, MyService.class);
-            Toast.makeText(this, "app paused", Toast.LENGTH_SHORT).show();
-            stopService(intent);
-        } else {
-            // If the service is not running, start it
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                Intent intent = new Intent(this, MyService.class);
-                startForegroundService(intent);
-                Toast.makeText(this, "app resumed", Toast.LENGTH_SHORT).show();
-            }
-        }
-    }
-
-    public void officialStarter(){
-        Cursor cursor = helper.getOffers();
-        if(cursor.getCount() == 0){
-            Toast.makeText(this, "Unable to start app, you need to create an offer first", Toast.LENGTH_SHORT).show();
-        }else{
-            callPaymentApi(till);
-        }
-    }
-
     private void initViews(){
         bottomNavigationView = findViewById(R.id
                 .bottomNavigationView);
         viewPager2 = findViewById(R.id.myViewPager);
         toolbar = findViewById(R.id.mainToolBar);
-        button = findViewById(R.id.btnStartService);
     }
 
 

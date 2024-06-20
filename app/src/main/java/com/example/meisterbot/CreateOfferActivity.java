@@ -38,16 +38,16 @@ import java.util.Map;
 import java.util.Random;
 
 public class CreateOfferActivity extends AppCompatActivity {
-    private String amount,ussdCode,dialId,paymentId,offerTill;
+    private String name,amount,ussdCode,dialId,paymentId,offerTill;
     private Button txtHelp,txtSave;
-    private TextInputLayout enterAmount,enterUssdCode, enterTill;
+    private TextInputLayout enterName, enterAmount,enterUssdCode, enterTill;
     private Spinner spinner1,spinner2;
     RequestManager manager;
     DBHelper helper;
     private Map<Integer, Integer> simMap;
     private ArrayList<String> simNames;
     private ArrayList<Integer> slotIndex;
-    private EditText one,two,three;
+    private EditText one,two,three,four;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,6 +64,7 @@ public class CreateOfferActivity extends AppCompatActivity {
         one = enterAmount.getEditText();
         two = enterUssdCode.getEditText();
         three = enterTill.getEditText();
+        four = enterName.getEditText();
 
 
         simMap = new HashMap<>();
@@ -106,17 +107,19 @@ public class CreateOfferActivity extends AppCompatActivity {
         TextView four = dialogView.findViewById(R.id.txtDialogDialSim);
         TextView two = dialogView.findViewById(R.id.txtDialogPaySim);
         TextView five = dialogView.findViewById(R.id.txtDialogDialogTill);
+        TextView six = dialogView.findViewById(R.id.txtDialogName);
         one.setText(fetchData().getAmount());
         three.setText(fetchData().getUssdCode());
         four.setText(fetchData().getDialSim());
         two.setText(fetchData().getPaymentSim());
         five.setText(fetchData().getOfferTill());
+        six.setText(fetchData().getName());
         builder.setView(dialogView);
 
         builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                boolean checkInsertData = helper.insertOffer(fetchData().getAmount(),fetchData().getUssdCode(),fetchData().getDialSim(),fetchData().getSubscriptionId(),fetchData().getPaymentSim(), fetchData().getPaymentSimId(),fetchData().getOfferTill());
+                boolean checkInsertData = helper.insertOffer(fetchData().getName(),fetchData().getAmount(),fetchData().getUssdCode(),fetchData().getDialSim(),fetchData().getSubscriptionId(),fetchData().getPaymentSim(), fetchData().getPaymentSimId(),fetchData().getOfferTill());
                 if (checkInsertData){
                     Toast.makeText(CreateOfferActivity.this, "data inserted", Toast.LENGTH_SHORT).show();
                 }else {
@@ -140,6 +143,12 @@ public class CreateOfferActivity extends AppCompatActivity {
         amount = one.getText().toString();
         ussdCode = two.getText().toString();
         offerTill = three.getText().toString();
+        name = four.getText().toString();
+
+        if (name.isEmpty()){
+            four.setError("Field cannot be empty");
+            complete = false;
+        }
 
         if (amount.isEmpty()){
             one.setError("Field cannot be empty");
@@ -151,12 +160,12 @@ public class CreateOfferActivity extends AppCompatActivity {
             complete = false;
         }
         if (offerTill.isEmpty()){
-            two.setError("Field cannot be empty");
+            three.setError("Field cannot be empty");
             complete = false;
         }
         if (complete){
             String deviceId = Build.ID;
-            return new OfferPOJO(amount,ussdCode,getDialSimCard(),deviceId,dialId,getPaymentSimCard(),paymentId,offerTill);
+            return new OfferPOJO(name,amount,ussdCode,getDialSimCard(),deviceId,dialId,getPaymentSimCard(),paymentId,offerTill);
         }else{
             return null;
         }
@@ -223,5 +232,6 @@ public class CreateOfferActivity extends AppCompatActivity {
         spinner1 = findViewById(R.id.spinner1);
         spinner2 = findViewById(R.id.spinner2);
         enterTill = findViewById(R.id.edtLayoutTillOffer);
+        enterName = findViewById(R.id.edtLayoutEnterName);
     }
 }

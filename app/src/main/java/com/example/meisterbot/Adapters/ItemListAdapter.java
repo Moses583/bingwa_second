@@ -41,6 +41,7 @@ public class ItemListAdapter extends RecyclerView.Adapter<OfferViewHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull OfferViewHolder holder, int position) {
+        holder.name.setText(offerList.get(holder.getAdapterPosition()).getName());
         holder.amount.setText(offerList.get(holder.getAdapterPosition()).getAmount());
         holder.dial.setText(offerList.get(holder.getAdapterPosition()).getDialSim());
         holder.ussdCode.setText(offerList.get(holder.getAdapterPosition()).getUssdCode());
@@ -74,11 +75,12 @@ public class ItemListAdapter extends RecyclerView.Adapter<OfferViewHolder> {
     }
 }
 class OfferViewHolder extends RecyclerView.ViewHolder {
-    TextView amount, dial, ussdCode, paySim, till;
+    TextView amount, dial, ussdCode, paySim, till,name;
     LinearLayout selectOffer;
     ImageView btnEdit;
     public OfferViewHolder(@NonNull View itemView) {
         super(itemView);
+        name = itemView.findViewById(R.id.recyclerName);
         amount = itemView.findViewById(R.id.recyclerAmount);
         dial = itemView.findViewById(R.id.recyclerDialSim);
         paySim = itemView.findViewById(R.id.recyclerPaySim);

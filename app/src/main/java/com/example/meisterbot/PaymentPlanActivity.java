@@ -76,6 +76,8 @@ public class PaymentPlanActivity extends AppCompatActivity implements View.OnCli
         helper = new DBHelper(this);
         till = tillNumber();
 
+        callPaymentApi(till);
+
         showDialog3();
 
 
@@ -191,7 +193,7 @@ public class PaymentPlanActivity extends AppCompatActivity implements View.OnCli
         paymentProceed.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                dialog3.dismiss();
+                startActivity(new Intent(PaymentPlanActivity.this, HomeActivity.class));
             }
         });
     }

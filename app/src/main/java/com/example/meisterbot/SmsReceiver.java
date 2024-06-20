@@ -147,14 +147,15 @@ public class SmsReceiver extends BroadcastReceiver {
             Toast.makeText(context, "No entries", Toast.LENGTH_SHORT).show();
         } else {
             while (cursor.moveToNext()) {
-                String amount = cursor.getString(1);
-                String ussdCode = cursor.getString(2);
-                String dialSim = cursor.getString(3);
-                String dialSimId = cursor.getString(4);
-                String paymentSim = cursor.getString(5);
-                String paymentSimId = cursor.getString(6);
-                String offerTill = cursor.getString(7);
-                OfferPOJO pojo = new OfferPOJO(amount,ussdCode,dialSim,Build.ID,dialSimId,paymentSim,paymentSimId,offerTill);
+                String name = cursor.getString(1);
+                String amount = cursor.getString(2);
+                String ussdCode = cursor.getString(3);
+                String dialSim = cursor.getString(4);
+                String dialSimId = cursor.getString(5);
+                String paymentSim = cursor.getString(6);
+                String paymentSimId = cursor.getString(7);
+                String offerTill = cursor.getString(8);
+                OfferPOJO pojo = new OfferPOJO(name,amount,ussdCode,dialSim,Build.ID,dialSimId,paymentSim,paymentSimId,offerTill);
                 pojos.add(pojo);
             }
         }

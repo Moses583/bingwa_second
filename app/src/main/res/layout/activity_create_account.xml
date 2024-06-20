@@ -82,23 +82,6 @@
                 android:inputType="text"/>
 
         </com.google.android.material.textfield.TextInputLayout>
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/enterWebsiteUrl1"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            app:endIconMode="clear_text"
-            app:helperTextEnabled="true"
-            app:helperText="https://liy.ke/store_name"
-            app:errorEnabled="true"
-            app:startIconDrawable="@drawable/web_url">
-            <com.google.android.material.textfield.TextInputEditText
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Enter website extension"
-                android:inputType="textUri"/>
-
-        </com.google.android.material.textfield.TextInputLayout>
         <Button
             android:layout_width="100dp"
             android:layout_height="wrap_content"

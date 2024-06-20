@@ -32,12 +32,35 @@
     <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentStart="true"
-        android:layout_margin="20dp"
+        android:layout_alignParentEnd="true"
+        android:layout_margin="10dp"
+        app:icon="@drawable/ic_upload"
+        android:text="Upload all offers"
+        android:id="@+id/btnUploadAllOffers"
+        android:layout_above="@id/btnCreateOffer"
+        android:visibility="invisible"/>
+
+    <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_margin="10dp"
         app:icon="@drawable/edit_offer"
         android:text="Create an offer"
-        android:id="@+id/btnCreateOffer"/>
+        android:layout_above="@id/btnChoices"
+        android:id="@+id/btnCreateOffer"
+        android:visibility="invisible"/>
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_margin="10dp"
+        app:icon="@drawable/edit_offer"
+        android:text="Create an offer"
+        android:id="@+id/btnChoices"
+        android:src="@drawable/ic_add"/>
 
 
 </RelativeLayout>

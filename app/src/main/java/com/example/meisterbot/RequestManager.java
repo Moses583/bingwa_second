@@ -10,6 +10,7 @@ import com.example.meisterbot.listeners.PostPersonaListener;
 import com.example.meisterbot.listeners.PostTransactionListener;
 import com.example.meisterbot.listeners.STKPushListener;
 import com.example.meisterbot.models.Payment;
+import com.example.meisterbot.models.PostOfferOne;
 import com.example.meisterbot.models.PostPersonaApiResponse;
 import com.example.meisterbot.models.GetOfferApiResponse;
 import com.example.meisterbot.models.LoginPojo;
@@ -66,14 +67,14 @@ public class RequestManager {
             }
         });
     }
-    public void postOffer(PostOfferListener listener, OfferPOJO offerPOJO){
+    public void postOffer(PostOfferListener listener, PostOfferOne offerPOJO){
         PostOffer postOffer = retrofit.create(PostOffer.class);
         Call<PostOfferApiResponse> call = postOffer.postOffer(offerPOJO);
         call.enqueue(new Callback<PostOfferApiResponse>() {
             @Override
             public void onResponse(Call<PostOfferApiResponse> call, Response<PostOfferApiResponse> response) {
                 if (!response.isSuccessful()){
-                    listener.didError(response.message());
+                    listener.didError(response.message()+" failed from on response");
                     return;
                 }
                 listener.didFetch(response.body(), response.message());
@@ -81,7 +82,7 @@ public class RequestManager {
 
             @Override
             public void onFailure(Call<PostOfferApiResponse> call, Throwable throwable) {
-                listener.didError(throwable.getMessage());
+                listener.didError(throwable.getMessage()+" failed from on failure");
             }
         });
     }
@@ -170,7 +171,7 @@ public class RequestManager {
             @Override
             public void onResponse(Call<Payment> call, Response<Payment> response) {
                 if (!response.isSuccessful()){
-                    listener.didError(response.message());
+                    listener.didError(response.message()+" failed from onResponse");
                     return;
                 }
                 listener.didFetch(response.body(), response.message());
@@ -179,7 +180,7 @@ public class RequestManager {
 
             @Override
             public void onFailure(Call<Payment> call, Throwable throwable) {
-                listener.didError(throwable.getMessage());
+                listener.didError(throwable.getMessage()+" failed from onFailure");
             }
         });
     }
@@ -194,7 +195,7 @@ public class RequestManager {
     }
     private interface PostOffer {
         @POST("api/offers")
-        Call<PostOfferApiResponse> postOffer(@Body OfferPOJO offerPOJO);
+        Call<PostOfferApiResponse> postOffer(@Body PostOfferOne postOfferOne);
     }
     private interface GetOffers{
         @GET("api/view-offers/{bingwaSite}")

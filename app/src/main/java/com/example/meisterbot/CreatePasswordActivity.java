@@ -123,31 +123,26 @@ public class CreatePasswordActivity extends AppCompatActivity {
         String storeName = intent.getStringExtra("storeName");
         String number = intent.getStringExtra("number");
         String deviceId = intent.getStringExtra("deviceId");
-        String web = intent.getStringExtra("web");
         boolean insert = dbHelper.insertUser(till);
         if (insert){
             Toast.makeText(this, "user added successfully", Toast.LENGTH_SHORT).show();
         }else{
             Toast.makeText(this, "unable to add user to db", Toast.LENGTH_SHORT).show();
         }
-        Persona persona = new Persona(name,storeName,web,deviceId,number,till,password);
+        Persona persona = new Persona(name,number,till,storeName,deviceId,password);
         showAlertDialog(persona);
     }
     public void showAlertDialog(Persona persona){
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         LayoutInflater inflater = getLayoutInflater();
         View dialogView = inflater.inflate(R.layout.persona_dialog_layout,null);
-        TextView one = dialogView.findViewById(R.id.txtPersonaName);
         TextView two = dialogView.findViewById(R.id.personaNumber);
         TextView three = dialogView.findViewById(R.id.txtPersonaTill);
         TextView four = dialogView.findViewById(R.id.txtPersonaStoreName);
-        TextView five = dialogView.findViewById(R.id.txtPersonaWeb);
         TextView six = dialogView.findViewById(R.id.PersonaPassword);
-        one.setText(persona.getName());
         two.setText(persona.getPhoneNumber());
         three.setText(persona.getTillNumber());
         four.setText(persona.getStoreName());
-        five.setText(persona.getBingwaSite());
         six.setText(persona.getPassWord());
         builder.setView(dialogView);
 
