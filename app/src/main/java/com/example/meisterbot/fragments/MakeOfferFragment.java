@@ -154,18 +154,6 @@ public class MakeOfferFragment extends Fragment {
         showData();
     }
 
-    private final GetOffersListener listener = new GetOffersListener() {
-        @Override
-        public void didFetch(List<GetOfferApiResponse> responseList, String message) {
-
-        }
-
-        @Override
-        public void didError(String message) {
-            Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
-        }
-    };
-
     private void callPostOfferApi(){
         manager.postOffer(listener2, postOffers());
     }
@@ -178,7 +166,9 @@ public class MakeOfferFragment extends Fragment {
 
         @Override
         public void didError(String message) {
-            Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
+            if (message.contains("Unable to resolve host")){
+                Toast.makeText(getActivity(), "Please connect to the internet", Toast.LENGTH_SHORT).show();
+            }
         }
     };
 

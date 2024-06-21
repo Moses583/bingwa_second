@@ -1,12 +1,14 @@
 package com.example.meisterbot;
 
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -23,24 +25,26 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+
+import com.example.meisterbot.listeners.GetTariffsListener;
 import com.example.meisterbot.listeners.PaymentListener;
 import com.example.meisterbot.listeners.STKPushListener;
 import com.example.meisterbot.models.Payment;
 import com.example.meisterbot.models.STKPushPojo;
 import com.example.meisterbot.models.STKPushResponse;
+import com.example.meisterbot.models.TariffApiResponse;
 import com.google.android.material.textfield.TextInputLayout;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class PaymentPlanActivity extends AppCompatActivity implements View.OnClickListener {
     private Button button, paymentProceed;
     private RequestManager manager;
-    private TextView txtPaymentPlan, txtExpiryDate,txtPlanOne,txtPlanTwo,txtPlanThree,txtCheckoutTill;
+    private TextView txtPaymentPlan, txtExpiryDate,txtPlanOne,txtPlanTwo,txtPlanThree,txtCheckoutTill,tariffNameOne,tariffNameTwo,tariffNameThree;
     private CheckBox checkPayment1,checkPayment2,checkPayment3;
-    private List<STKPushPojo> pojos;
     private RelativeLayout cancel,okay;
     private TextInputLayout enterNumber;
+    private int amount1 = 0;
+    private int amount2 = 0;
+    private int amount3 = 0;
     private int amount = 0;
     private EditText editText;
     private String number,till;
@@ -52,6 +56,10 @@ public class PaymentPlanActivity extends AppCompatActivity implements View.OnCli
     private AlertDialog dialog3;
     ProgressBar progressBar;
     private TextView txtLoading;
+
+    private ProgressDialog progressDialog;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,16 +75,21 @@ public class PaymentPlanActivity extends AppCompatActivity implements View.OnCli
 
         manager = new RequestManager(this);
 
-        checkPayment1.setOnClickListener(this);
-        checkPayment2.setOnClickListener(this);
-        checkPayment3.setOnClickListener(this);
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setTitle("Loading...");
+        progressDialog.setMessage("Please wait");
+        progressDialog.show();
 
-        pojos = new ArrayList<>();
 
         helper = new DBHelper(this);
         till = tillNumber();
 
-        callPaymentApi(till);
+        checkPayment1.setOnClickListener(this);
+        checkPayment2.setOnClickListener(this);
+        checkPayment3.setOnClickListener(this);
+
+        callPaymentApi2(till);
+        callTariffsApi();
 
         showDialog3();
 
@@ -102,6 +115,8 @@ public class PaymentPlanActivity extends AppCompatActivity implements View.OnCli
         });
 
     }
+
+
     @Override
     public void onClick(View v) {
         if (v.getId() == R.id.checkSubPlan1){
@@ -111,7 +126,8 @@ public class PaymentPlanActivity extends AppCompatActivity implements View.OnCli
                 txtPlanOne.setTextColor(getResources().getColor(R.color.green));
                 txtPlanTwo.setTextColor(getResources().getColor(R.color.black));
                 txtPlanThree.setTextColor(getResources().getColor(R.color.black));
-                amount = 1;
+                amount = amount1;
+
             }
         } else if (v.getId() == R.id.checkSubPlan2) {
             if (checkPayment2.isChecked()){
@@ -120,7 +136,7 @@ public class PaymentPlanActivity extends AppCompatActivity implements View.OnCli
                 txtPlanTwo.setTextColor(getResources().getColor(R.color.green));
                 txtPlanOne.setTextColor(getResources().getColor(R.color.black));
                 txtPlanThree.setTextColor(getResources().getColor(R.color.black));
-                amount = 95;
+                amount = amount2;
             }
         } else if (v.getId() == R.id.checkSubPlan3) {
             if (checkPayment3.isChecked()){
@@ -129,11 +145,45 @@ public class PaymentPlanActivity extends AppCompatActivity implements View.OnCli
                 txtPlanThree.setTextColor(getResources().getColor(R.color.green));
                 txtPlanOne.setTextColor(getResources().getColor(R.color.black));
                 txtPlanTwo.setTextColor(getResources().getColor(R.color.black));
-                pojos.clear();
-                amount = 360;
+                amount = amount3;
             }
         }
     }
+
+    private void callTariffsApi() {
+        manager.callTariffsApi(tariffsListener);
+    }
+
+    private final GetTariffsListener tariffsListener = new GetTariffsListener() {
+        @Override
+        public void didFetch(TariffApiResponse response, String message) {
+            progressDialog.cancel();
+            showTariffs(response);
+
+        }
+
+        @Override
+        public void didError(String message) {
+            progressDialog.cancel();
+            if (message.contains("Unable to resolve host")){
+                Toast.makeText(PaymentPlanActivity.this, "Please connect to the internet", Toast.LENGTH_SHORT).show();
+            }
+        }
+    };
+
+    private void showTariffs(TariffApiResponse response) {
+        amount1 = response.tariff_1.amount;
+        amount2 = response.tariff_2.amount;
+        amount3 = response.tariff_3.amount;
+        tariffNameOne.setText(response.tariff_1.name);
+        tariffNameTwo.setText(response.tariff_2.name);
+        tariffNameThree.setText(response.tariff_3.name);
+
+        txtPlanOne.setText("KES"+response.tariff_1.amount+" for "+response.tariff_1.days+" days");
+        txtPlanTwo.setText("KES"+response.tariff_2.amount+" for "+response.tariff_2.days+" days");
+        txtPlanThree.setText("KES"+response.tariff_3.amount+" for "+response.tariff_3.days+" days");
+    }
+
 
     private void showAlertDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(PaymentPlanActivity.this);
@@ -160,7 +210,6 @@ public class PaymentPlanActivity extends AppCompatActivity implements View.OnCli
             public void onClick(View v) {
                 number = editText.getText().toString();
                 STKPushPojo pojo = new STKPushPojo(number,amount,till);
-                Toast.makeText(PaymentPlanActivity.this, pojo.getPhone()+ " " + pojo.getAmount()+" "+pojo.getTillNumber(), Toast.LENGTH_SHORT).show();
                 manager.stkPush(listener,pojo);
                 dialog.dismiss();
             }
@@ -172,13 +221,15 @@ public class PaymentPlanActivity extends AppCompatActivity implements View.OnCli
     private final STKPushListener listener = new STKPushListener() {
         @Override
         public void didFetch(STKPushResponse response, String message) {
-            Toast.makeText(PaymentPlanActivity.this, response.message, Toast.LENGTH_SHORT).show();
+            Log.d("TAG","stkpush initiated successfully");
             countDownTimer.start();
         }
 
         @Override
         public void didError(String message) {
-            Toast.makeText(PaymentPlanActivity.this, message, Toast.LENGTH_SHORT).show();
+            if (message.contains("Unable to resolve host")){
+                Toast.makeText(PaymentPlanActivity.this, "Please connect to the internet", Toast.LENGTH_SHORT).show();
+            }
         }
     };
 
@@ -217,14 +268,41 @@ public class PaymentPlanActivity extends AppCompatActivity implements View.OnCli
     private final PaymentListener paymentListener = new PaymentListener() {
         @Override
         public void didFetch(Payment payment, String message) {
-            Toast.makeText(PaymentPlanActivity.this, payment.data.timestamp+" "+payment.data.amount, Toast.LENGTH_SHORT).show();
             showAlertDialog2();
-            setData(payment.data.amount,payment.data.timestamp);
         }
 
         @Override
         public void didError(String message) {
-            Toast.makeText(PaymentPlanActivity.this, message, Toast.LENGTH_SHORT).show();
+            if (message.contains("Unable to resolve host")){
+                Toast.makeText(PaymentPlanActivity.this, "Please connect to the internet", Toast.LENGTH_SHORT).show();
+            }
+        }
+    };
+
+    private void callPaymentApi2(String till) {
+        manager.getPaymentStatus(paymentListener2,till);
+    }
+
+    private final PaymentListener paymentListener2 = new PaymentListener() {
+        @Override
+        public void didFetch(Payment payment, String message) {
+            if (payment.message.contains("Your subscription ended")){
+                txtPaymentPlan.setText(payment.data.amount);
+                txtExpiryDate.setText(payment.data.timestamp+" (expired)");
+            }else if(payment.message.contains("You have never paid")){
+                txtPaymentPlan.setText("N/A");
+                txtExpiryDate.setText("N/A");
+            }else{
+                setData(payment.data.amount,payment.data.timestamp);
+            }
+
+        }
+
+        @Override
+        public void didError(String message) {
+            if (message.contains("Unable to resolve host")){
+                Toast.makeText(PaymentPlanActivity.this, "Please connect to the internet", Toast.LENGTH_SHORT).show();
+            }
 
         }
     };
@@ -248,18 +326,6 @@ public class PaymentPlanActivity extends AppCompatActivity implements View.OnCli
         cursor.close();
         return till;
     }
-    private void createAccount() {
-        SharedPreferences sharedPreferences = getSharedPreferences("app_name", Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putBoolean("hasAccount", true);
-        editor.apply();
-
-        dialog.dismiss();
-        // Navigate to the main screen
-        Intent intent = new Intent(this, HomeActivity.class);
-        startActivity(intent);
-        finish();
-    }
 
     private void initViews() {
         button = findViewById(R.id.btnChoosePlan);
@@ -271,5 +337,9 @@ public class PaymentPlanActivity extends AppCompatActivity implements View.OnCli
         txtPlanOne = findViewById(R.id.txtSubPlanOne);
         txtPlanTwo = findViewById(R.id.txtSubPlanTwo);
         txtPlanThree = findViewById(R.id.txtSubPlanThree);
+        tariffNameOne = findViewById(R.id.tariffNameOne);
+        tariffNameTwo = findViewById(R.id.tariffNameTwo);
+        tariffNameThree = findViewById(R.id.tariffNameThree);
     }
+
 }

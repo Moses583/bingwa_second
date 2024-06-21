@@ -110,9 +110,17 @@ public class LoginActivity extends AppCompatActivity {
 
         @Override
         public void didError(String message) {
-            dialog.dismiss();
-            enterPassword.setHelperTextEnabled(true);
-            enterPassword.setHelperText(message);
+            if (message.contains("Unable to resolve host")){
+                dialog.dismiss();
+                enterPassword.setHelperTextEnabled(true);
+                enterPassword.setHelperText("Please connect to the internet");
+            }
+            else{
+                dialog.dismiss();
+                enterPassword.setHelperTextEnabled(true);
+                enterPassword.setHelperText(message);
+            }
+
         }
     };
 
@@ -135,7 +143,6 @@ public class LoginActivity extends AppCompatActivity {
     private void insertTill(String till) {
         boolean insertTill = helper.insertUser(till);
         if (insertTill){
-            Toast.makeText(this, "till inserted successfully", Toast.LENGTH_SHORT).show();
             createAccount();
         }
         else{

@@ -9,9 +9,11 @@ import android.content.SharedPreferences;
 
 import android.content.pm.PackageManager;
 import android.database.Cursor;
+import android.media.MediaDrm;
 import android.os.Build;
 import android.os.Bundle;
 
+import android.os.CountDownTimer;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -40,6 +42,7 @@ import com.example.meisterbot.models.Payment;
 import com.example.meisterbot.services.MyService;
 import com.example.meisterbot.services.RetryService;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationBarView;
 
@@ -65,6 +68,8 @@ public class HomeActivity extends AppCompatActivity{
     private DBHelper helper;
     private FloatingActionButton button;
     private AlertDialog offerCreationDialog,firstTimePayDialog,renewPlanDialog;
+    private ExtendedFloatingActionButton start,stop;
+    public CountDownTimer countDownTimer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,9 +88,19 @@ public class HomeActivity extends AppCompatActivity{
         till = tillNumber();
 
         manager = new RequestManager(this);
-//        Toast.makeText(this, till, Toast.LENGTH_SHORT).show();
 
         checkOffersOne();
+        countDownTimer = new CountDownTimer(5000,1000) {
+            @Override
+            public void onTick(long millisUntilFinished) {
+                Toast.makeText(HomeActivity.this, "Time remaining: " + millisUntilFinished / 1000, Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onFinish() {
+                stopServiceOne();
+            }
+        };
 
         SharedPreferences prefs = getSharedPreferences("app_name", Context.MODE_PRIVATE);
         boolean hasAccount = prefs.getBoolean("hasAccount", false);
@@ -97,7 +112,6 @@ public class HomeActivity extends AppCompatActivity{
 
 
         if (!hasPermissions(this, permissions)) {
-            // If permissions are not already granted, request them
             requestPermissions(permissions, 101);
         }
 
@@ -114,12 +128,7 @@ public class HomeActivity extends AppCompatActivity{
             }
         });
         bottomNavigationView.setOnItemSelectedListener(listener);
-
-
-
     }
-
-
 
     private boolean hasPermissions(Context context, String... permissions) {
         for (String permission : permissions) {
@@ -290,10 +299,11 @@ public class HomeActivity extends AppCompatActivity{
         renewPlanDialog.dismiss();
     }
 
-    private void stopServiceOne() {
+    public void stopServiceOne() {
         if (myService()){
-            Intent intent = new Intent(HomeActivity.this, MyService.class);
+            Intent intent = new Intent(this, MyService.class);
             stopService(intent);
+            Toast.makeText(this, "App paused, you need to check your subscription", Toast.LENGTH_LONG).show();
         }
     }
 
@@ -301,9 +311,9 @@ public class HomeActivity extends AppCompatActivity{
         if (myService()) {
             Log.d("MAIN_SERVICE","Service already running");
         } else {
-            // If the service is not running, start it
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                Intent intent = new Intent(HomeActivity.this, MyService.class);startForegroundService(intent);
+                Intent intent = new Intent(this, MyService.class);
+                startForegroundService(intent);
                 Toast.makeText(this, "App services are now available", Toast.LENGTH_SHORT).show();
             }
         }
@@ -324,7 +334,7 @@ public class HomeActivity extends AppCompatActivity{
         Cursor cursor = helper.getUser();
         String till = "";
         if (cursor.getCount() == 0){
-            Toast.makeText(HomeActivity.this, "till number absent", Toast.LENGTH_SHORT).show();
+            Log.d("TILL","Till number absent");
         }else{
             while (cursor.moveToNext()){
                 till = cursor.getString(0);
@@ -335,13 +345,10 @@ public class HomeActivity extends AppCompatActivity{
     }
 
     private void initViews(){
-        bottomNavigationView = findViewById(R.id
-                .bottomNavigationView);
+        bottomNavigationView = findViewById(R.id.bottomNavigationView);
         viewPager2 = findViewById(R.id.myViewPager);
         toolbar = findViewById(R.id.mainToolBar);
     }
-
-
 
     @Override
     public void onBackPressed() {

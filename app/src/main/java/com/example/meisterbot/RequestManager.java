@@ -3,6 +3,7 @@ package com.example.meisterbot;
 import android.content.Context;
 
 import com.example.meisterbot.listeners.GetOffersListener;
+import com.example.meisterbot.listeners.GetTariffsListener;
 import com.example.meisterbot.listeners.PaymentListener;
 import com.example.meisterbot.listeners.PostLoginListener;
 import com.example.meisterbot.listeners.PostOfferListener;
@@ -20,6 +21,7 @@ import com.example.meisterbot.models.PostLoginApiResponse;
 import com.example.meisterbot.models.PostOfferApiResponse;
 import com.example.meisterbot.models.STKPushPojo;
 import com.example.meisterbot.models.STKPushResponse;
+import com.example.meisterbot.models.TariffApiResponse;
 import com.example.meisterbot.models.Transaction;
 import com.example.meisterbot.models.TransactionApiResponse;
 
@@ -93,7 +95,7 @@ public class RequestManager {
             @Override
             public void onResponse(Call<PostLoginApiResponse> call, Response<PostLoginApiResponse> response) {
                 if (!response.isSuccessful()){
-                    listener.didError(response.message());
+                    listener.didError(response.message()+" error from on response");
                     return;
                 }
                 listener.didFetch(response.body(), response.message());
@@ -101,7 +103,7 @@ public class RequestManager {
 
             @Override
             public void onFailure(Call<PostLoginApiResponse> call, Throwable throwable) {
-                listener.didError(throwable.getMessage());
+                listener.didError(throwable.getMessage()+ " error from on failure");
             }
         });
     }
@@ -185,6 +187,27 @@ public class RequestManager {
         });
     }
 
+    public void callTariffsApi(GetTariffsListener listener){
+        GetTariffs getTariffs = retrofit.create(GetTariffs.class);
+        Call<TariffApiResponse> call = getTariffs.getTariffs();
+        call.enqueue(new Callback<TariffApiResponse>() {
+            @Override
+            public void onResponse(Call<TariffApiResponse> call, Response<TariffApiResponse> response) {
+                if (!response.isSuccessful()){
+                    listener.didError(response.message()+" error from on response");
+                    return;
+                }
+                listener.didFetch(response.body(), response.message());
+
+            }
+
+            @Override
+            public void onFailure(Call<TariffApiResponse> call, Throwable throwable) {
+                listener.didError(throwable.getMessage());
+            }
+        });
+    }
+
     private interface PostPersona {
         @POST("api/bingwa_credentials")
         Call<PostPersonaApiResponse> postPersona(@Body Persona persona);
@@ -218,5 +241,9 @@ public class RequestManager {
         Call<Payment> getPayment(
                 @Query("tillNumber") String tillNumber
         );
+    }
+    private interface GetTariffs{
+        @GET("api/tariffs")
+        Call<TariffApiResponse> getTariffs();
     }
 }

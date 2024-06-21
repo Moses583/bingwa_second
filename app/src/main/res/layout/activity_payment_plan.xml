@@ -148,12 +148,14 @@
                         <RelativeLayout
                             android:layout_width="match_parent"
                             android:layout_height="match_parent">
+
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_centerInParent="true"
-                                android:text="0% off"
                                 android:fontFamily="@font/oxygen_bold"
+                                android:text="Free usage"
+                                android:id="@+id/tariffNameOne"
                                 android:textAlignment="center" />
                         </RelativeLayout>
 
@@ -211,13 +213,15 @@
                         <RelativeLayout
                             android:layout_width="match_parent"
                             android:layout_height="match_parent">
+
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_centerInParent="true"
-                                android:text="10% off"
                                 android:fontFamily="@font/oxygen_bold"
-                                android:textAlignment="center"/>
+                                android:text="Monthly"
+                                android:id="@+id/tariffNameTwo"
+                                android:textAlignment="center" />
                         </RelativeLayout>
 
                     </androidx.cardview.widget.CardView>
@@ -277,7 +281,8 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_centerInParent="true"
-                                android:text="15% off"
+                                android:text="Yearly"
+                                android:id="@+id/tariffNameThree"
                                 android:fontFamily="@font/oxygen_bold"
                                 android:textAlignment="center"/>
                         </RelativeLayout>

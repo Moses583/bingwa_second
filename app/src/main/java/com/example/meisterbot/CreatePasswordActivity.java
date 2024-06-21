@@ -7,6 +7,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -125,9 +126,9 @@ public class CreatePasswordActivity extends AppCompatActivity {
         String deviceId = intent.getStringExtra("deviceId");
         boolean insert = dbHelper.insertUser(till);
         if (insert){
-            Toast.makeText(this, "user added successfully", Toast.LENGTH_SHORT).show();
+            Log.d("TAG","user added successfully");
         }else{
-            Toast.makeText(this, "unable to add user to db", Toast.LENGTH_SHORT).show();
+            Log.d("TAG", "user not added successfully");
         }
         Persona persona = new Persona(name,number,till,storeName,deviceId,password);
         showAlertDialog(persona);
@@ -174,9 +175,17 @@ public class CreatePasswordActivity extends AppCompatActivity {
 
         @Override
         public void didError(String message) {
-            dialog1.dismiss();
-            edtTxtConfirmPassword.setHelperTextEnabled(true);
-            edtTxtConfirmPassword.setHelperText(message);
+            if (message.contains("Unable to resolve host")){
+                dialog1.dismiss();
+                edtTxtConfirmPassword.setHelperTextEnabled(true);
+                edtTxtConfirmPassword.setHelperText("Please connect to the internet");
+            }
+            else{
+                dialog1.dismiss();
+                edtTxtConfirmPassword.setHelperTextEnabled(true);
+                edtTxtConfirmPassword.setHelperText("Please connect to the internet");
+            }
+
         }
     };
 

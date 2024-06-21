@@ -34,6 +34,7 @@ import android.os.Message;
 import android.telephony.SubscriptionInfo;
 import android.telephony.SubscriptionManager;
 import android.telephony.TelephonyManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -224,7 +225,7 @@ public class MainContentFragment extends Fragment {
         Cursor cursor = helper.getFailedResponses();
         List<TransactionPOJO> queue1 = new ArrayList<>();
         if (cursor.getCount() == 0){
-            Toast.makeText(getActivity(), "There are no failed transactions", Toast.LENGTH_SHORT).show();
+            Log.d("TAG","There are no failed transactions");
         }else{
             while (cursor.moveToNext()){
                 String ussdResponse = cursor.getString(1);
@@ -380,7 +381,7 @@ public class MainContentFragment extends Fragment {
         Cursor cursor = helper.getUser();
         String till = "";
         if (cursor.getCount() == 0){
-            Toast.makeText(getActivity(), "", Toast.LENGTH_SHORT).show();
+            Log.d("TAG","TILL NUMBER ABSENT");
         }else{
             while (cursor.moveToNext()){
                 till = cursor.getString(0);

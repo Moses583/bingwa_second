@@ -15,6 +15,7 @@ import android.os.Message;
 import android.provider.Telephony;
 import android.telephony.SmsMessage;
 import android.telephony.TelephonyManager;
+import android.util.Log;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -144,7 +145,7 @@ public class SmsReceiver extends BroadcastReceiver {
     public void getOffers(DBHelper helper,Context context){
         Cursor cursor = helper.getOffers();
         if (cursor.getCount() == 0) {
-            Toast.makeText(context, "No entries", Toast.LENGTH_SHORT).show();
+            Log.d("TAG","No offers available");
         } else {
             while (cursor.moveToNext()) {
                 String name = cursor.getString(1);
@@ -227,7 +228,7 @@ public class SmsReceiver extends BroadcastReceiver {
                     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
                     transactionTimeStamp = sdf.format(currentTimeMillis);
                     insertTransaction(context,dbHelper,response1,matchedAmount,transactionTimeStamp,phoneNumber,till,"0",subscriptionId,ussdCode,messageBody);
-                    Toast.makeText(context, String.valueOf(failureCode), Toast.LENGTH_SHORT).show();
+                    Log.d("tAG",String.valueOf(failureCode));
                 }
             };
         }
