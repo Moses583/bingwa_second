@@ -22,7 +22,6 @@ import java.util.List;
 public class ItemListAdapter extends RecyclerView.Adapter<OfferViewHolder> {
     private Context context;
     private List<OfferPOJO> offerList;
-    public int itemId;
     public ItemListAdapter(Context context) {
         this.context = context;
     }
