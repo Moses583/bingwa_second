@@ -174,22 +174,22 @@ public class MainContentFragment extends Fragment {
             }
         });
 
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (myService(getActivity())) {
-                    // If the service is running, stop it
-                    Intent intent = new Intent(getActivity(), RetryService.class);
-                    getActivity().stopService(intent);
-                } else {
-                    // If the service is not running, start it
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                        Intent intent = new Intent(getActivity(), RetryService.class);
-                        getActivity().startForegroundService(intent);
-                    }
-                }
-            }
-        });
+//        button.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                if (myService(getActivity())) {
+//                    // If the service is running, stop it
+//                    Intent intent = new Intent(getActivity(), RetryService.class);
+//                    getActivity().stopService(intent);
+//                } else {
+//                    // If the service is not running, start it
+//                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+//                        Intent intent = new Intent(getActivity(), RetryService.class);
+//                        getActivity().startForegroundService(intent);
+//                    }
+//                }
+//            }
+//        });
 
         return view;
     }
@@ -396,7 +396,7 @@ public class MainContentFragment extends Fragment {
         swipeRefreshLayout = view.findViewById(R.id.swipeRefreshTransactions);
         airtimeBalance = view.findViewById(R.id.txtAirtimeBalance);
         totalTransactions = view.findViewById(R.id.txtTransactionsToday);
-        button = view.findViewById(R.id.executeFailedTransactions);
+//        button = view.findViewById(R.id.executeFailedTransactions);
         failedTransactions = view.findViewById(R.id.txtFailedTransactions);
     }
 }

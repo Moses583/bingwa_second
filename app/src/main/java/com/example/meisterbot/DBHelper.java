@@ -13,15 +13,15 @@ import com.google.gson.Gson;
 public class DBHelper extends SQLiteOpenHelper {
 
     public DBHelper( Context context) {
-        super(context, "Two.db",null,1);
+        super(context, "RealDbThree.db",null,1);
     }
 
     @Override
     public void onCreate(SQLiteDatabase db) {
         db.execSQL("create Table InboxTable(id INTEGER PRIMARY KEY AUTOINCREMENT,message TEXT, timeStamp TEXT,sender TEXT)");
-        db.execSQL("create table Offers(id INTEGER PRIMARY KEY AUTOINCREMENT,name TEXT,amount TEXT, ussdCode TEXT, dialSim TEXT, dialSimId TEXT,paymentSim TEXT, paymentSimId TEXT, offerTill TEXT)");
+        db.execSQL("create Table Offers(id INTEGER PRIMARY KEY AUTOINCREMENT,name TEXT,amount TEXT, ussdCode TEXT, dialSim TEXT, dialSimId TEXT,paymentSim TEXT, paymentSimId TEXT, offerTill TEXT)");
         db.execSQL("create Table Transactions(id INTEGER PRIMARY KEY AUTOINCREMENT,ussdResponse TEXT,amount TEXT,timeStamp TEXT,recipient TEXT, status TEXT, subId INTEGER,ussd TEXT, till INTEGER, messageFull TEXT)");
-        db.execSQL("create table User(tillNumber TEXT)");
+        db.execSQL("create Table User(tillNumber TEXT)");
     }
 
     @Override
@@ -84,7 +84,6 @@ public class DBHelper extends SQLiteOpenHelper {
         SQLiteDatabase database = this.getWritableDatabase();
         return database.rawQuery("Select * from User",null);
     }
-
     public Cursor getData(){
         SQLiteDatabase database = this.getWritableDatabase();
         return database.rawQuery("Select * from InboxTable ORDER BY id DESC",null);
@@ -97,7 +96,6 @@ public class DBHelper extends SQLiteOpenHelper {
         SQLiteDatabase database = this.getWritableDatabase();
         return database.rawQuery("Select * from Transactions ORDER BY id DESC",null);
     }
-
     public Cursor getSpecificOffer(String amount, String simId){
         SQLiteDatabase database = this.getReadableDatabase();
         return database.rawQuery("Select ussdCode from Offers where amount=? and paymentSimId =?", new String[]{amount,simId});
@@ -113,9 +111,6 @@ public class DBHelper extends SQLiteOpenHelper {
         long result = DB.delete("Transactions", "status=?", new String[]{pattern});
         return result != -1;
     }
-
-
-
     public Boolean deleteData (String ussdCode) {
         SQLiteDatabase DB = this.getWritableDatabase();
         long result = DB.delete("Offers", "ussdCode=?", new String[]{ussdCode});

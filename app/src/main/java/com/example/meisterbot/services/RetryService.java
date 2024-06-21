@@ -121,6 +121,7 @@ public class RetryService extends Service {
         Queue<TransactionPOJO> queue1 = new LinkedList<>();
         if (cursor.getCount() == 0){
             Toast.makeText(this, "There are no failed transactions", Toast.LENGTH_SHORT).show();
+            return queue1;
         }else{
             while (cursor.moveToNext()){
                 String ussdResponse = cursor.getString(1);

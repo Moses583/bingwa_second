@@ -123,13 +123,13 @@
                 android:textSize="20sp"
                 android:fontFamily="@font/oxygen_bold"
                 android:id="@+id/txtFailedTransactions"/>
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:padding="8dp"
-                android:text="Retry"
-                android:id="@+id/executeFailedTransactions"/>
+<!--            <Button-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_gravity="center"-->
+<!--                android:padding="8dp"-->
+<!--                android:text="Retry"-->
+<!--                android:id="@+id/executeFailedTransactions"/>-->
         </LinearLayout>
 
     </androidx.cardview.widget.CardView>
