@@ -39,6 +39,7 @@ public class TransactionPOJO {
     public String getUssd() {
         return ussd;
     }
+
     public String getMessageFull() {
         return messageFull;
     }

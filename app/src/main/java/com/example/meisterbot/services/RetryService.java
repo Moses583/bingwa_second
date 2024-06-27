@@ -40,6 +40,7 @@ public class RetryService extends Service {
     private Handler handler;
     private Runnable runnableCode;
     private Queue<TransactionPOJO> queue;
+    private Queue<String> queue1;
     private DBHelper dbHelper;
 
     TelephonyManager manager;
@@ -51,24 +52,40 @@ public class RetryService extends Service {
     private String transactionTimeStamp;
     private RequestManager requestManager;
 
+    private boolean isRunning = true;
+
+
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
 
         handler = new Handler();
         queue = new LinkedList<>();
+        queue1 = new LinkedList<>();
         dbHelper = new DBHelper(this);
         requestManager = new RequestManager(this);
 
         manager = (TelephonyManager) getSystemService(TELEPHONY_SERVICE);
 
         queue = getFailedTransactions();
+        queue1 = getStrings();
         runnableCode = new Runnable() {
             @Override
             public void run() {
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
+//                        if (queue1.isEmpty()){
+//                            isRunning = false;
+//                            Log.d("TESTING","QUEUE EMPTY STOP SERVICE");
+//                            stopSelf();
+//                        }
+//                        else {
+//                            String string = queue1.poll();
+//                            Log.d("TESTING", string);
+//                        }
+
                         if (queue.isEmpty()){
+                            isRunning = false;
                             Log.d(TAG,"queue is empty");
                             stopSelf();
                         }
@@ -86,9 +103,12 @@ public class RetryService extends Service {
                             dialUssdCode(getApplicationContext(),subId,ussd,till,amount,number,message);
                             Log.d(TAG,"Testing");
                         }
+
                     }
                 }).start();
-                handler.postDelayed(this, 2000);
+                if (isRunning){
+                    handler.postDelayed(this, 5000);
+                }
             }
         };
 
@@ -106,8 +126,6 @@ public class RetryService extends Service {
 
         handler.post(runnableCode);
 
-
-
         return super.onStartCommand(intent, flags, startId);
     }
 
@@ -115,12 +133,19 @@ public class RetryService extends Service {
     public void onDestroy() {
         super.onDestroy();
     }
+    private Queue<String> getStrings(){
+        Queue<String> queue = new LinkedList<>();
+        for (int i = 0; i < 10; i++) {
+            queue.add("This was added");
+        }
+        return queue;
+    }
 
     private Queue<TransactionPOJO> getFailedTransactions(){
         Cursor cursor = dbHelper.getFailedResponses();
         Queue<TransactionPOJO> queue1 = new LinkedList<>();
         if (cursor.getCount() == 0){
-            Toast.makeText(this, "There are no failed transactions", Toast.LENGTH_SHORT).show();
+            Log.d(TAG,"There are no failed transactions");
             return queue1;
         }else{
             while (cursor.moveToNext()){
