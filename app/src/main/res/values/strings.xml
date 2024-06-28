@@ -1,7 +1,8 @@
 <resources>
-    <string name="app_name">Bingwa Bot V2</string>
+    <string name="app_name">Bingwa</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="appName">Bingwa</string>
     <string name="LogoDescription">A Bingwa Sokoni Bot</string>
+    <string name="AboutAppText">Developed by Ujuzi Craft Limited Kikuyu, Kenya</string>
 </resources>

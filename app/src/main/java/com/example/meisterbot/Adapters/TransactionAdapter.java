@@ -40,24 +40,22 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionViewHold
 
     @Override
     public void onBindViewHolder(@NonNull TransactionViewHolder holder, int position) {
-        holder.transactionCardView.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
-                Toast.makeText(context, "to be added soon", Toast.LENGTH_SHORT).show();
-                return true;
-            }
-        });
-        holder.transactionCardView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(context, "Long click on a transaction to resend it.", Toast.LENGTH_LONG).show();
-            }
-        });
-        holder.txtUssdResponse.setText(pojoList.get(position).getUssdResponse());
+
+        String response = pojoList.get(position).getUssdResponse();
+        if (response.equalsIgnoreCase("-1")){
+            holder.txtUssdResponse.setText("Connection problem or invalid MMI code.");
+        }else {
+            holder.txtUssdResponse.setText(response);
+        }
         holder.txtTransactionAmount.setText(pojoList.get(position).getTransactionAmount());
         holder.txtTransactionTimeStamp.setText(pojoList.get(position).getTimeStamp());
         holder.txtTransactionRecipient.setText(pojoList.get(position).getRecipient());
-        holder.txtTransactionStatus.setText(pojoList.get(position).getStatus());
+        String status = pojoList.get(position).getStatus();
+        if (status.equalsIgnoreCase("0")){
+            holder.txtTransactionStatus.setText("Failed.");
+        }else if (status.equalsIgnoreCase("1")){
+            holder.txtTransactionStatus.setText("Successfull.");
+        }
     }
 
     @Override
