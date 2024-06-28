@@ -7,132 +7,134 @@
     tools:context=".fragments.MainContentFragment"
     android:orientation="vertical">
 
-    <androidx.cardview.widget.CardView
-        android:id="@+id/superCardView"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="150dp"
-        android:layout_margin="15dp"
-        app:cardCornerRadius="20dp"
-        app:cardElevation="10dp"
-        >
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:weightSum="3">
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="0dp"
+            android:layout_height="120dp"
+            app:cardCornerRadius="20dp"
+            android:layout_weight="1"
+            android:layout_margin="5dp"
+            app:cardBackgroundColor="#FF0000">
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+                <TextView
+                    android:id="@+id/textView5"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Total transactions occured"
+                    android:textSize="12sp"
+                    android:textColor="@color/white"
+                    android:textAlignment="center"
+                    android:layout_centerHorizontal="true"
+                    android:layout_alignParentBottom="true"
+                    android:layout_marginBottom="10dp"/>
+                <TextView
+                    android:id="@+id/txtTransactionsToday"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="0"
+                    android:textColor="@color/white"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="15dp"
+                    android:textAlignment="center"
+                    android:textSize="30sp"
+                    android:fontFamily="@font/oxygen_bold"
+                    android:layout_gravity="center"/>
+            </RelativeLayout>
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
+        </com.google.android.material.card.MaterialCardView>
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="0dp"
+            android:layout_height="120dp"
+            app:cardCornerRadius="20dp"
+            android:layout_weight="1"
+            android:layout_margin="5dp"
+            app:cardBackgroundColor="#0000FF">
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+                <TextView
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:foreground="?android:attr/selectableItemBackground"
+                    android:id="@+id/txtCheckAirtimeBalance"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Check airtime balance"
+                    android:textSize="12sp"
+                    android:textColor="@color/white"
+                    android:textAlignment="center"
+                    android:layout_gravity="center"
+                    android:layout_centerHorizontal="true"
+                    android:layout_alignParentBottom="true"
+                    android:layout_marginBottom="10dp"/>
 
-            <androidx.constraintlayout.widget.Guideline
-                android:id="@+id/guideLine4"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                app:layout_constraintGuide_percent="0.5" />
+                <TextView
+                    android:id="@+id/txtAirtimeBalance"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/oxygen_bold"
+                    android:text="0"
+                    android:textColor="@color/white"
+                    android:layout_gravity="center"
+                    android:textSize="30sp"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="15dp"/>
+            </RelativeLayout>
 
-            <androidx.constraintlayout.widget.Guideline
-                android:id="@+id/guideLine5"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                app:layout_constraintGuide_percent="0.25" />
+        </com.google.android.material.card.MaterialCardView>
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="0dp"
+            android:layout_height="120dp"
+            app:cardCornerRadius="20dp"
+            android:layout_weight="1"
+            android:layout_margin="5dp"
+            app:cardBackgroundColor="#008000">
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
 
-            <androidx.constraintlayout.widget.Guideline
-                android:id="@+id/guideLine7"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                app:layout_constraintGuide_percent="0.5" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:textColor="@color/white"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:foreground="?android:attr/selectableItemBackground"
+                    android:text="Retry failed transactions"
+                    android:id="@+id/executeFailedTransactions"
+                    android:textSize="12sp"
+                    android:layout_alignParentBottom="true"
+                    android:layout_marginBottom="10dp"
+                    android:textAlignment="center"
+                    android:layout_centerHorizontal="true"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="0"
+                    android:textColor="@color/white"
+                    android:textSize="30sp"
+                    android:fontFamily="@font/oxygen_bold"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="15dp"
+                    android:id="@+id/txtFailedTransactions"/>
 
-            <TextView
-                android:id="@+id/txtTransactionsToday"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="0"
-                android:textAlignment="center"
-                android:textSize="30sp"
-                android:fontFamily="@font/oxygen_bold"
-                app:layout_constraintBottom_toTopOf="@+id/guideLine7"
-                app:layout_constraintEnd_toStartOf="@+id/guideLine4"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+            </RelativeLayout>
 
-            <TextView
-                android:id="@+id/txtAirtimeBalance"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/oxygen_bold"
-                android:text="0"
-                android:textSize="30sp"
-                app:layout_constraintBottom_toTopOf="@+id/guideLine7"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="@+id/guideLine4"
-                app:layout_constraintTop_toTopOf="parent" />
+        </com.google.android.material.card.MaterialCardView>
+    </LinearLayout>
 
-            <TextView
-                android:id="@+id/textView5"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Total transactions"
-                android:textColor="@color/green"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/guideLine4"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/guideLine7"
-                android:textAlignment="center"/>
 
-            <TextView
-                android:clickable="true"
-                android:focusable="true"
-                android:foreground="?android:attr/selectableItemBackground"
-                android:id="@+id/txtCheckAirtimeBalance"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Check airtime balance"
-                android:textColor="@color/green"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="@+id/guideLine4"
-                app:layout_constraintTop_toTopOf="@+id/guideLine7"
-                android:textAlignment="center"/>
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-    </androidx.cardview.widget.CardView>
-
-    <androidx.cardview.widget.CardView
-        android:layout_width="match_parent"
-        android:layout_height="150dp"
-        app:cardCornerRadius="10dp"
-        android:layout_margin="10dp">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:textColor="@color/green"
-                android:padding="8dp"
-                android:text="Failed transactions"/>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:text="0"
-                android:padding="8dp"
-                android:textColor="@color/black"
-                android:textSize="20sp"
-                android:fontFamily="@font/oxygen_bold"
-                android:id="@+id/txtFailedTransactions"/>
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:padding="8dp"
-                android:text="Retry"
-                android:id="@+id/executeFailedTransactions"/>
-        </LinearLayout>
-
-    </androidx.cardview.widget.CardView>
 
     <TextView
         android:layout_width="wrap_content"
@@ -162,7 +164,7 @@
                 android:layout_height="match_parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"/>
 
         </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 

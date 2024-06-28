@@ -38,7 +38,7 @@
             app:counterEnabled="true"
             app:counterMaxLength="10"
             app:errorEnabled="true"
-            app:startIconDrawable="@drawable/phone_number">
+            app:startIconDrawable="@drawable/ic_phone_number">
             <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -57,7 +57,7 @@
             app:counterEnabled="true"
             app:counterMaxLength="7"
             app:errorEnabled="true"
-            app:startIconDrawable="@drawable/till_number">
+            app:startIconDrawable="@drawable/ic_till">
             <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -74,7 +74,7 @@
             app:helperTextEnabled="true"
             app:helperText="This is the name of your store"
             app:errorEnabled="true"
-            app:startIconDrawable="@drawable/store_name">
+            app:startIconDrawable="@drawable/ic_store">
             <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

@@ -3,6 +3,7 @@ package com.example.meisterbot;
 import android.app.ActivityManager;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.os.Build;
 import android.os.Bundle;
@@ -89,13 +90,13 @@ public class SettingsActivity extends AppCompatActivity {
         settingToken.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(SettingsActivity.this, "Feature coming soon", Toast.LENGTH_SHORT).show();
+                startActivity(new Intent(SettingsActivity.this, BingwaLinkActivity.class));
             }
         });
         settingAboutApp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(SettingsActivity.this, "Feature coming soon", Toast.LENGTH_SHORT).show();
+                startActivity(new Intent(SettingsActivity.this, AboutAppActivity.class));
             }
         });
 
@@ -103,7 +104,7 @@ public class SettingsActivity extends AppCompatActivity {
         settingProfile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(SettingsActivity.this, "Feature coming soon", Toast.LENGTH_SHORT).show();
+                logout();
             }
         });
     }
@@ -199,6 +200,7 @@ public class SettingsActivity extends AppCompatActivity {
         if (myService()){
             Intent intent = new Intent(this, MyService.class);
             stopService(intent);
+            Toast.makeText(this, "app paused", Toast.LENGTH_SHORT).show();
             txtPauseApp.setText("App paused");
         }
     }
@@ -210,6 +212,7 @@ public class SettingsActivity extends AppCompatActivity {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 Intent intent = new Intent(this, MyService.class);
                 startForegroundService(intent);
+                Toast.makeText(this, "app resumed", Toast.LENGTH_SHORT).show();
                 txtPauseApp.setText("App resumed");
             }
         }
@@ -240,6 +243,26 @@ public class SettingsActivity extends AppCompatActivity {
         cursor.close();
         return till;
     }
+
+    private void logout() {
+        // Clear user session data here
+        // This depends on how you're managing user sessions
+        // For example, if you're using SharedPreferences, you can do:
+        if (myService()){
+            Intent intent = new Intent(this, MyService.class);
+            stopService(intent);
+        }
+        SharedPreferences preferences = getSharedPreferences("app_name", MODE_PRIVATE);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.clear();
+        editor.apply();
+
+        // Navigate back to login screen
+        Intent intent = new Intent(SettingsActivity.this, LoginActivity.class);
+        startActivity(intent);
+        finish();
+    }
+
     private void initViews() {
         settingPaymentPlan = findViewById(R.id.settingPaymentPlan);
         settingToken = findViewById(R.id.settingToken);

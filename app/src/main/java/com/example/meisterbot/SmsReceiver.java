@@ -21,11 +21,12 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 
+import com.example.meisterbot.listeners.CheckTransactionListener;
 import com.example.meisterbot.listeners.PostTransactionListener;
+import com.example.meisterbot.models.CheckTransactionApiResponse;
 import com.example.meisterbot.models.OfferPOJO;
 import com.example.meisterbot.models.Transaction;
 import com.example.meisterbot.models.TransactionApiResponse;
-import com.google.gson.Gson;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -40,6 +41,7 @@ public class SmsReceiver extends BroadcastReceiver {
     List<OfferPOJO> pojos = new ArrayList<>();
     TelephonyManager manager;
     private TelephonyManager.UssdResponseCallback callback;
+    private Context mContext;
     Handler handler;
     String response1 = "";
     String messageBody = "";
@@ -49,16 +51,18 @@ public class SmsReceiver extends BroadcastReceiver {
 
     String sub = "";
     String phoneNumber = "";
+    String smsNumber = "";
 
     String transactionTimeStamp = "";
     List<OfferPOJO> pojoList = new ArrayList<>();
 
-    private RequestManager requestManager;
+    private RequestManager requestManager,requestManager2;
 
 
     @Override
     public void onReceive(Context context, Intent intent) {
         dbHelper = new DBHelper(context);
+        mContext = context;
             if (Telephony.Sms.Intents.SMS_RECEIVED_ACTION.equals(intent.getAction())) {
             StringBuilder stringBuilder = new StringBuilder();
             for (SmsMessage smsMessage : Telephony.Sms.Intents.getMessagesFromIntent(intent)) {
@@ -74,18 +78,21 @@ public class SmsReceiver extends BroadcastReceiver {
             if (messageSender.equals(SENDER_ID)){
                 if (messageBody.contains("received Ksh")){
                     extract(context,messageBody);
+                    checkTransaction(dbHelper,context, smsNumber);
                     getOffers(dbHelper,context);
                     compareOffer(context);
                     insert(context,dbHelper,messageBody,timeStamp);
                 }
                 else if(messageBody.contains("AMKsh")){
                     extract2(context,messageBody);
+                    checkTransaction(dbHelper,context, smsNumber);
                     getOffers(dbHelper,context);
                     compareOffer(context);
                     insert(context,dbHelper,messageBody,timeStamp);
                 }
                 else if(messageBody.contains("PMKsh")){
                     extract3(context,messageBody);
+                    checkTransaction(dbHelper,context, smsNumber);
                     getOffers(dbHelper,context);
                     compareOffer(context);
                     insert(context,dbHelper,messageBody,timeStamp);
@@ -100,6 +107,7 @@ public class SmsReceiver extends BroadcastReceiver {
         }
 
     }
+
     public void extract(Context context, String message){
         Pattern amountPattern = Pattern.compile("received Ksh([0-9,]+)\\.00");
         Matcher amountMatcher = amountPattern.matcher(message);
@@ -109,7 +117,7 @@ public class SmsReceiver extends BroadcastReceiver {
         Pattern phonePattern = Pattern.compile("\\b0[0-9]{9}\\b");
         Matcher phoneMatcher = phonePattern.matcher(message);
         if (phoneMatcher.find()) {
-            phoneNumber = phoneMatcher.group();
+            smsNumber = phoneMatcher.group();
         }
     }
     public void extract2(Context context, String message){
@@ -123,7 +131,7 @@ public class SmsReceiver extends BroadcastReceiver {
         Pattern phonePattern = Pattern.compile("(254)(\\d{9})");
         Matcher phoneMatcher = phonePattern.matcher(message);
         if (phoneMatcher.find()) {
-            phoneNumber = "0" + phoneMatcher.group(2);
+            smsNumber = "0" + phoneMatcher.group(2);
         }
     }
     public void extract3(Context context, String message){
@@ -132,16 +140,40 @@ public class SmsReceiver extends BroadcastReceiver {
         if (amountMatcher.find()) {
             matchedAmount = amountMatcher.group(1).replace(",", "");
         }
-
-
         // Pattern to match '254758567551'
         Pattern phonePattern = Pattern.compile("(254)(\\d{9})");
         Matcher phoneMatcher = phonePattern.matcher(message);
         if (phoneMatcher.find()) {
-            phoneNumber = "0" + phoneMatcher.group(2);
+            smsNumber = "0" + phoneMatcher.group(2);
         }
 
     }
+
+    public void checkTransaction(DBHelper helper,Context context,String phoneNumber){
+        requestManager2 = new RequestManager(context);
+        requestManager2.checkTransactions(listener,phoneNumber);
+    }
+
+    private final CheckTransactionListener listener = new CheckTransactionListener() {
+        @Override
+        public void didFetch(CheckTransactionApiResponse response, String message) {
+            if (response.status.contains("No transaction found")){
+                Toast.makeText(mContext, response.status, Toast.LENGTH_SHORT).show();
+                phoneNumber = smsNumber;
+
+            }
+            else {
+                Toast.makeText(mContext, response.status, Toast.LENGTH_SHORT).show();
+                Toast.makeText(mContext, response.Phone, Toast.LENGTH_SHORT).show();
+                phoneNumber = response.Phone;
+            }
+        }
+
+        @Override
+        public void didError(String message) {
+            Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
+        }
+    };
     public void getOffers(DBHelper helper,Context context){
         Cursor cursor = helper.getOffers();
         if (cursor.getCount() == 0) {
@@ -172,8 +204,6 @@ public class SmsReceiver extends BroadcastReceiver {
         }
         compareAmounts(context);
     }
-
-
     public void compareAmounts(Context context){
         boolean offerFound = false;
         String newUssd = "";
@@ -194,6 +224,7 @@ public class SmsReceiver extends BroadcastReceiver {
         }
         dialUssdCode(context, subscriptionId, newUssd,till);
     }
+
     private void dialUssdCode(Context context, int subscriptionId, String ussdCode, int till) {
         manager = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -218,7 +249,6 @@ public class SmsReceiver extends BroadcastReceiver {
 
                     Toast.makeText(context, response, Toast.LENGTH_SHORT).show();
                 }
-
                 @Override
                 public void onReceiveUssdResponseFailed(TelephonyManager telephonyManager, String request, int failureCode) {
                     super.onReceiveUssdResponseFailed(telephonyManager, request, failureCode);
@@ -228,7 +258,7 @@ public class SmsReceiver extends BroadcastReceiver {
                     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
                     transactionTimeStamp = sdf.format(currentTimeMillis);
                     insertTransaction(context,dbHelper,response1,matchedAmount,transactionTimeStamp,phoneNumber,till,"0",subscriptionId,ussdCode,messageBody);
-                    Log.d("tAG",String.valueOf(failureCode));
+                    Log.d("TAG",String.valueOf(failureCode));
                 }
             };
         }

@@ -5,55 +5,41 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".TokensActivity"
+    tools:context=".BingwaLinkActivity"
     android:orientation="vertical">
 
     <androidx.appcompat.widget.Toolbar
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:title="Token authorization"/>
+        app:title="My Bingwa link"/>
 
-    <androidx.cardview.widget.CardView
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="220dp"
-        app:cardCornerRadius="10dp"
-        app:cardElevation="10dp"
-        android:layout_margin="10dp">
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="start"
-                android:text="Enter token"
-                android:layout_margin="10dp"
-                android:padding="8dp"/>
-            <com.google.android.material.textfield.TextInputLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="10dp"
-                android:layout_marginStart="10dp"
-                android:padding="8dp">
-                <com.google.android.material.textfield.TextInputEditText
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:inputType="text"
-                    android:id="@+id/edtTxtEnterToken"
-                    android:hint="e.g.,aws86tvs354"/>
+        android:layout_height="wrap_content">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Your bingwa site link is:"
+            android:id="@+id/txtsts"
+            android:textColor="@color/black"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp"
+            android:layout_marginStart="5dp"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="my link"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp"
+            android:layout_toEndOf="@id/txtsts"
+            android:id="@+id/txtBingwaLink"
+            android:textColor="@color/green"
+            android:layout_marginStart="5dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:foreground="?android:attr/selectableItemBackground"/>
+    </RelativeLayout>
 
-            </com.google.android.material.textfield.TextInputLayout>
-            <Button
-                android:layout_width="100dp"
-                android:layout_height="wrap_content"
-                android:id="@+id/btnConfirmToken"
-                android:text="Check"
-                android:layout_gravity="end"
-                android:layout_margin="10dp"/>
 
-        </LinearLayout>
-
-    </androidx.cardview.widget.CardView>
 
 </LinearLayout>

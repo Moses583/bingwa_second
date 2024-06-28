@@ -2,6 +2,7 @@ package com.example.meisterbot;
 
 import android.content.Context;
 
+import com.example.meisterbot.listeners.CheckTransactionListener;
 import com.example.meisterbot.listeners.GetOffersListener;
 import com.example.meisterbot.listeners.GetTariffsListener;
 import com.example.meisterbot.listeners.PaymentListener;
@@ -10,6 +11,7 @@ import com.example.meisterbot.listeners.PostOfferListener;
 import com.example.meisterbot.listeners.PostPersonaListener;
 import com.example.meisterbot.listeners.PostTransactionListener;
 import com.example.meisterbot.listeners.STKPushListener;
+import com.example.meisterbot.models.CheckTransactionApiResponse;
 import com.example.meisterbot.models.Payment;
 import com.example.meisterbot.models.PostOfferOne;
 import com.example.meisterbot.models.PostPersonaApiResponse;
@@ -208,6 +210,26 @@ public class RequestManager {
         });
     }
 
+    public void checkTransactions(CheckTransactionListener listener, String phoneNumber){
+        CheckTransaction checkTransaction = retrofit.create(CheckTransaction.class);
+        Call<CheckTransactionApiResponse> call = checkTransaction.checkTransaction(phoneNumber);
+        call.enqueue(new Callback<CheckTransactionApiResponse>() {
+            @Override
+            public void onResponse(Call<CheckTransactionApiResponse> call, Response<CheckTransactionApiResponse> response) {
+                if (!response.isSuccessful()){
+                    listener.didError(response.message());
+                    return;
+                }
+                listener.didFetch(response.body(), response.message());
+            }
+
+            @Override
+            public void onFailure(Call<CheckTransactionApiResponse> call, Throwable throwable) {
+                listener.didError(throwable.getMessage());
+            }
+        });
+    }
+
     private interface PostPersona {
         @POST("api/bingwa_credentials")
         Call<PostPersonaApiResponse> postPersona(@Body Persona persona);
@@ -245,5 +267,11 @@ public class RequestManager {
     private interface GetTariffs{
         @GET("api/tariffs")
         Call<TariffApiResponse> getTariffs();
+    }
+    private interface CheckTransaction{
+        @GET("api/bundle/check-transaction")
+        Call<CheckTransactionApiResponse> checkTransaction(
+                @Query("phoneNumber") String phoneNumber
+        );
     }
 }

@@ -98,7 +98,7 @@ public class MainContentFragment extends Fragment {
     private RecyclerView recyclerView;
     private SwipeRefreshLayout swipeRefreshLayout;
 
-    private TextView airtimeBalance, totalTransactions,failedTransactions;
+    private TextView airtimeBalance,totalTransactions,failedTransactions,executeFailedTransactions,checkBalance;
     private RelativeLayout cancel, okay;
     Spinner spinner;
 
@@ -167,14 +167,14 @@ public class MainContentFragment extends Fragment {
                 refresh();
             }
         });
-        view.findViewById(R.id.txtCheckAirtimeBalance).setOnClickListener(new View.OnClickListener() {
+        checkBalance.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 showAlertDialog();
             }
         });
 
-        button.setOnClickListener(new View.OnClickListener() {
+        executeFailedTransactions.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (myService(getActivity())) {
@@ -354,8 +354,6 @@ public class MainContentFragment extends Fragment {
 
         if (matcher.find()) {
             airtimeBalance.setText(matcher.group(1));
-        } else {
-            airtimeBalance.setText(0);
         }
     }
     @Override
@@ -394,7 +392,8 @@ public class MainContentFragment extends Fragment {
         swipeRefreshLayout = view.findViewById(R.id.swipeRefreshTransactions);
         airtimeBalance = view.findViewById(R.id.txtAirtimeBalance);
         totalTransactions = view.findViewById(R.id.txtTransactionsToday);
-        button = view.findViewById(R.id.executeFailedTransactions);
+        executeFailedTransactions = view.findViewById(R.id.executeFailedTransactions);
         failedTransactions = view.findViewById(R.id.txtFailedTransactions);
+        checkBalance = view.findViewById(R.id.txtCheckAirtimeBalance);
     }
 }

@@ -4,15 +4,15 @@
     <item
         android:title="Home"
         android:id="@+id/idHome"
-        android:icon="@drawable/home"
+        android:icon="@drawable/ic_home"
         />
     <item
         android:title="Offers"
         android:id="@+id/idCreateOffer"
-        android:icon="@drawable/baseline_post_add_24" />
+        android:icon="@drawable/ic_offers" />
     <item
         android:title="Inbox"
         android:id="@+id/idInbox"
-        android:icon="@drawable/inbox"/>
+        android:icon="@drawable/ic_inbox"/>
 
 </menu>

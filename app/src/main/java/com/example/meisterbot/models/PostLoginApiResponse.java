@@ -5,4 +5,5 @@ public class PostLoginApiResponse {
     public String message;
     public String token;
     public String tillNumber;
+    public String bingwaSite;
 }

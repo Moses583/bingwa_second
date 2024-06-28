@@ -45,7 +45,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
         android:layout_margin="10dp"
-        app:icon="@drawable/edit_offer"
+        app:icon="@drawable/ic_create_offer"
         android:text="Create an offer"
         android:layout_above="@id/btnChoices"
         android:id="@+id/btnCreateOffer"
@@ -57,10 +57,9 @@
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
         android:layout_margin="10dp"
-        app:icon="@drawable/edit_offer"
         android:text="Create an offer"
         android:id="@+id/btnChoices"
-        android:src="@drawable/ic_add"/>
+        android:src="@drawable/ic_actions"/>
 
 
 </RelativeLayout>

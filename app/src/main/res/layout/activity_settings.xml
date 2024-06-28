@@ -33,7 +33,7 @@
         <ImageView
             android:layout_width="24dp"
             android:layout_height="24dp"
-            android:src="@drawable/credit_card"
+            android:src="@drawable/ic_payment"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/guideLine3"
             app:layout_constraintStart_toStartOf="parent"
@@ -66,7 +66,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:text="Tokens"
+            android:text="My Bingwa link"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="@+id/guideLine5"
             app:layout_constraintTop_toTopOf="parent" />
@@ -74,7 +74,7 @@
         <ImageView
             android:layout_width="24dp"
             android:layout_height="24dp"
-            android:src="@drawable/tokens"
+            android:src="@drawable/ic_link"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/guideLine5"
             app:layout_constraintStart_toStartOf="parent"
@@ -107,7 +107,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:text="Edit profile"
+            android:text="Log out"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="@+id/guideLine7"
             app:layout_constraintTop_toTopOf="parent" />
@@ -115,7 +115,7 @@
         <ImageView
             android:layout_width="24dp"
             android:layout_height="24dp"
-            android:src="@drawable/edit_profile"
+            android:src="@drawable/ic_log_out"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/guideLine7"
             app:layout_constraintStart_toStartOf="parent"
@@ -161,13 +161,11 @@
         <ImageView
             android:layout_width="24dp"
             android:layout_height="24dp"
-            android:src="@drawable/about"
+            android:src="@drawable/ic_about"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/guideLine9"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
-
-
 
         <androidx.constraintlayout.widget.Guideline
             android:layout_width="wrap_content"

@@ -13,7 +13,7 @@ import com.google.gson.Gson;
 public class DBHelper extends SQLiteOpenHelper {
 
     public DBHelper( Context context) {
-        super(context, "RealDbThree.db",null,1);
+        super(context, "RealDbFour.db",null,1);
     }
 
     @Override
@@ -22,6 +22,7 @@ public class DBHelper extends SQLiteOpenHelper {
         db.execSQL("create Table Offers(id INTEGER PRIMARY KEY AUTOINCREMENT,name TEXT,amount TEXT, ussdCode TEXT, dialSim TEXT, dialSimId TEXT,paymentSim TEXT, paymentSimId TEXT, offerTill TEXT)");
         db.execSQL("create Table Transactions(id INTEGER PRIMARY KEY AUTOINCREMENT,ussdResponse TEXT,amount TEXT,timeStamp TEXT,recipient TEXT, status TEXT, subId INTEGER,ussd TEXT, till INTEGER, messageFull TEXT)");
         db.execSQL("create Table User(tillNumber TEXT)");
+        db.execSQL("create Table Link(link TEXT)");
     }
 
     @Override
@@ -30,7 +31,7 @@ public class DBHelper extends SQLiteOpenHelper {
         db.execSQL("drop table if exists Offers");
         db.execSQL("drop table if exists Transactions");
         db.execSQL("drop table if exists User");
-
+        db.execSQL("drop table if exists Link");
     }
 
     public Boolean insertData( String message, String time, String sender){
@@ -80,9 +81,20 @@ public class DBHelper extends SQLiteOpenHelper {
         long result = database.insert("User",null,contentValues);
         return result != -1;
     }
+    public Boolean insertLink(String link){
+        SQLiteDatabase database = this.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put("link",link);
+        long result = database.insert("Link",null,contentValues);
+        return result != -1;
+    }
     public Cursor getUser(){
         SQLiteDatabase database = this.getWritableDatabase();
         return database.rawQuery("Select * from User",null);
+    }
+    public Cursor getLink(){
+        SQLiteDatabase database = this.getWritableDatabase();
+        return database.rawQuery("Select * from Link",null);
     }
     public Cursor getData(){
         SQLiteDatabase database = this.getWritableDatabase();

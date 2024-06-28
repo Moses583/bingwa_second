@@ -1,23 +1,59 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".AboutAppActivity">
+    tools:context=".AboutAppActivity"
+    android:orientation="vertical">
 
     <androidx.appcompat.widget.Toolbar
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:title="About app"
         android:layout_alignParentTop="true"/>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/AboutAppText"
+        android:textColor="@color/black"
+        android:textAlignment="viewStart"
+        android:layout_margin="10dp"
+        android:padding="8dp"/>
 
     <TextView
+        android:id="@+id/aboutTxtOne"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Coming soon!!!!"
-        android:layout_centerInParent="true"
-        android:textStyle="bold"/>
+        android:layout_margin="10dp"
+        android:padding="8dp"
+        android:text="Contact us at:"
+        android:textColor="@color/black" />
 
-</RelativeLayout>
+    <TextView
+        android:id="@+id/aboutTxtEmail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:text="support@ujuzicraft.com"
+        android:padding="8dp"
+        android:textColor="@color/green"
+        android:clickable="true"
+        android:focusable="true"
+        android:foreground="?android:attr/selectableItemBackground"/>
+
+    <TextView
+        android:id="@+id/aboutTxtNumber"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:layout_marginStart="16dp"
+        android:text="+254 796 888 444"
+        android:padding="8dp"
+        android:textColor="@color/green"
+        android:clickable="true"
+        android:focusable="true"
+        android:foreground="?android:attr/selectableItemBackground"/>
+
+</LinearLayout>

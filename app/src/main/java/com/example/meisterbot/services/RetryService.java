@@ -25,7 +25,9 @@ import androidx.core.app.NotificationCompat;
 
 import com.example.meisterbot.DBHelper;
 import com.example.meisterbot.RequestManager;
+import com.example.meisterbot.listeners.CheckTransactionListener;
 import com.example.meisterbot.listeners.PostTransactionListener;
+import com.example.meisterbot.models.CheckTransactionApiResponse;
 import com.example.meisterbot.models.Transaction;
 import com.example.meisterbot.models.TransactionApiResponse;
 import com.example.meisterbot.models.TransactionPOJO;
@@ -50,9 +52,10 @@ public class RetryService extends Service {
     String s = "";
     private String response1;
     private String transactionTimeStamp;
-    private RequestManager requestManager;
+    private RequestManager requestManager,requestManager2;
 
     private boolean isRunning = true;
+    private boolean isTransaction = true;
 
 
     @Override
@@ -63,6 +66,7 @@ public class RetryService extends Service {
         queue1 = new LinkedList<>();
         dbHelper = new DBHelper(this);
         requestManager = new RequestManager(this);
+        requestManager2 = new RequestManager(this);
 
         manager = (TelephonyManager) getSystemService(TELEPHONY_SERVICE);
 
@@ -74,16 +78,6 @@ public class RetryService extends Service {
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
-//                        if (queue1.isEmpty()){
-//                            isRunning = false;
-//                            Log.d("TESTING","QUEUE EMPTY STOP SERVICE");
-//                            stopSelf();
-//                        }
-//                        else {
-//                            String string = queue1.poll();
-//                            Log.d("TESTING", string);
-//                        }
-
                         if (queue.isEmpty()){
                             isRunning = false;
                             Log.d(TAG,"queue is empty");
@@ -100,8 +94,9 @@ public class RetryService extends Service {
                             String ussd = pojo.getUssd();
                             int till = pojo.getTill();
                             String message = pojo.getMessageFull();
+                            checkTransaction(RetryService.this,number);
                             dialUssdCode(getApplicationContext(),subId,ussd,till,amount,number,message);
-                            Log.d(TAG,"Testing");
+                            Log.d(TAG,"Executing...");
                         }
 
                     }
@@ -111,6 +106,7 @@ public class RetryService extends Service {
                 }
             }
         };
+
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             NotificationChannel channel = new NotificationChannel("ForegroundServiceChannel", "Foreground Service Channel", NotificationManager.IMPORTANCE_LOW);
@@ -140,6 +136,27 @@ public class RetryService extends Service {
         }
         return queue;
     }
+    public void checkTransaction(Context context,String phoneNumber){
+        requestManager2 = new RequestManager(context);
+        requestManager2.checkTransactions(listener,phoneNumber);
+    }
+
+    private final CheckTransactionListener listener = new CheckTransactionListener() {
+        @Override
+        public void didFetch(CheckTransactionApiResponse response, String message) {
+            if (response.status.contains("Transaction already made")){
+                Toast.makeText(RetryService.this, response.status, Toast.LENGTH_SHORT).show();
+            }
+            else {
+                Toast.makeText(RetryService.this, "A similar transaction already took place", Toast.LENGTH_SHORT).show();
+            }
+        }
+
+        @Override
+        public void didError(String message) {
+            Toast.makeText(RetryService.this, "Please check your internet connection", Toast.LENGTH_SHORT).show();
+        }
+    };
 
     private Queue<TransactionPOJO> getFailedTransactions(){
         Cursor cursor = dbHelper.getFailedResponses();

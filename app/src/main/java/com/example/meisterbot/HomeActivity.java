@@ -60,7 +60,8 @@ public class HomeActivity extends AppCompatActivity{
             android.Manifest.permission.SEND_SMS,
             android.Manifest.permission.READ_PHONE_STATE,
             android.Manifest.permission.RECEIVE_SMS,
-            Manifest.permission.READ_SMS
+            Manifest.permission.READ_SMS,
+            Manifest.permission.POST_NOTIFICATIONS
     };
 
     private String till;
@@ -226,7 +227,6 @@ public class HomeActivity extends AppCompatActivity{
             if (message.contains("Unable to resolve host")){
                 Toast.makeText(HomeActivity.this, "Please connect to the internet", Toast.LENGTH_SHORT).show();
             }
-
         }
     };
 

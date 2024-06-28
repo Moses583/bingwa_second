@@ -208,7 +208,7 @@
         <ImageView
             android:layout_width="20dp"
             android:layout_height="20dp"
-            android:src="@drawable/delete"
+            android:src="@drawable/ic_delete"
             android:id="@+id/btnEditOffer"
             android:layout_margin="8dp"
             android:layout_gravity="start"/>

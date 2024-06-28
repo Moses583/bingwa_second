@@ -193,12 +193,22 @@ public class CreatePasswordActivity extends AppCompatActivity {
         if (response.message1.equals("Successful account creation")){
             dialog1.dismiss();
             edtTxtConfirmPassword.setHelperTextEnabled(false);
-            createAccount();
+            insertTill(response);
         }else{
             dialog1.dismiss();
             edtTxtConfirmPassword.setHelperTextEnabled(true);
             edtTxtConfirmPassword.setHelperText(response.message1);
         }
+    }
+    public void insertTill(PostPersonaApiResponse link){
+        boolean checkInsertLink = dbHelper.insertLink(link.url);
+        if (checkInsertLink){
+            Toast.makeText(this, "link saved", Toast.LENGTH_SHORT).show();
+            createAccount();
+        }else{
+            Toast.makeText(this, "link not saved", Toast.LENGTH_SHORT).show();
+        }
+
     }
     private void createAccount() {
         SharedPreferences sharedPreferences = getSharedPreferences("app_name", Context.MODE_PRIVATE);

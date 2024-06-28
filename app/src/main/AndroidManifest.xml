@@ -12,6 +12,8 @@
     <uses-permission android:name="android.permission.CALL_PHONE" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_SPECIAL_USE"/>
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
 
     <application
         android:allowBackup="true"
@@ -39,7 +41,7 @@
             android:name=".AboutAppActivity"
             android:exported="false" />
         <activity
-            android:name=".TokensActivity"
+            android:name=".BingwaLinkActivity"
             android:exported="false" />
         <activity
             android:name=".PaymentPlanActivity"
@@ -79,8 +81,14 @@
         <!-- <action android:name="android.provider.Telephony.SMS_RECEIVED" /> -->
         <!-- </intent-filter> -->
         <!-- </receiver> -->
-        <service android:name=".services.MyService" />
-        <service android:name=".services.RetryService" />
+        <service android:name=".services.MyService"
+            android:foregroundServiceType="specialUse">
+
+        </service>
+        <service android:name=".services.RetryService"
+            android:foregroundServiceType="specialUse">
+
+        </service>
     </application>
 
 </manifest>

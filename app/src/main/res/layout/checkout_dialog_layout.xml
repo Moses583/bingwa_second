@@ -9,7 +9,7 @@
         android:layout_width="300dp"
         android:layout_height="wrap_content"
         android:id="@+id/enterSubNumber"
-        app:startIconDrawable="@drawable/phone_number"
+        app:startIconDrawable="@drawable/ic_number"
         app:helperTextEnabled="true"
         app:helperText="Enter your phone number"
         android:layout_gravity="center"

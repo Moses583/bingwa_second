@@ -130,6 +130,8 @@ public class LoginActivity extends AppCompatActivity {
             dialog.dismiss();
             Toast.makeText(this, "login successful", Toast.LENGTH_SHORT).show();
             String till = pojo.tillNumber;
+            String link = pojo.bingwaSite;
+            insertLink(link);
             insertTill(till);
 
         }
@@ -150,6 +152,16 @@ public class LoginActivity extends AppCompatActivity {
         }
 
     }
+    private void insertLink(String link) {
+        boolean insertTill = helper.insertLink(link);
+        if (insertTill){
+            Toast.makeText(this, link, Toast.LENGTH_SHORT).show();
+        }
+        else{
+            Toast.makeText(this, "link not saved", Toast.LENGTH_SHORT).show();
+        }
+
+    }
 
     private void createAccount() {
         SharedPreferences sharedPreferences = getSharedPreferences("app_name", Context.MODE_PRIVATE);
@@ -163,8 +175,6 @@ public class LoginActivity extends AppCompatActivity {
         startActivity(intent);
         finish();
     }
-
-
 
     private void initViews() {
         login = findViewById(R.id.btnLogIn);
