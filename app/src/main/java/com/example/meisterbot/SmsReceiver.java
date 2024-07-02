@@ -41,7 +41,7 @@ public class SmsReceiver extends BroadcastReceiver {
     List<OfferPOJO> pojos = new ArrayList<>();
     TelephonyManager manager;
     private TelephonyManager.UssdResponseCallback callback;
-    private Context mContext;
+    private Context mContext,zContext;
     Handler handler;
     String response1 = "";
     String messageBody = "";
@@ -56,6 +56,8 @@ public class SmsReceiver extends BroadcastReceiver {
     String transactionTimeStamp = "";
     List<OfferPOJO> pojoList = new ArrayList<>();
 
+    String globalTimestamp = "";
+
     private RequestManager requestManager,requestManager2;
 
 
@@ -63,6 +65,7 @@ public class SmsReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         dbHelper = new DBHelper(context);
         mContext = context;
+        zContext = context;
             if (Telephony.Sms.Intents.SMS_RECEIVED_ACTION.equals(intent.getAction())) {
             StringBuilder stringBuilder = new StringBuilder();
             for (SmsMessage smsMessage : Telephony.Sms.Intents.getMessagesFromIntent(intent)) {
@@ -79,23 +82,23 @@ public class SmsReceiver extends BroadcastReceiver {
                 if (messageBody.contains("received Ksh")){
                     extract(context,messageBody);
                     checkTransaction(dbHelper,context, smsNumber);
-                    getOffers(dbHelper,context);
-                    compareOffer(context);
-                    insert(context,dbHelper,messageBody,timeStamp);
+//                    getOffers(dbHelper,context);
+//                    compareOffer(context);
+//                    insert(context,dbHelper,messageBody,timeStamp);
                 }
                 else if(messageBody.contains("AMKsh")){
                     extract2(context,messageBody);
                     checkTransaction(dbHelper,context, smsNumber);
-                    getOffers(dbHelper,context);
-                    compareOffer(context);
-                    insert(context,dbHelper,messageBody,timeStamp);
+//                    getOffers(dbHelper,context);
+//                    compareOffer(context);
+//                    insert(context,dbHelper,messageBody,timeStamp);
                 }
                 else if(messageBody.contains("PMKsh")){
                     extract3(context,messageBody);
                     checkTransaction(dbHelper,context, smsNumber);
-                    getOffers(dbHelper,context);
-                    compareOffer(context);
-                    insert(context,dbHelper,messageBody,timeStamp);
+//                    getOffers(dbHelper,context);
+//                    compareOffer(context);
+//                    insert(context,dbHelper,messageBody,timeStamp);
                 }
                 else{
                     insert(context,dbHelper,messageBody,timeStamp);
@@ -160,13 +163,16 @@ public class SmsReceiver extends BroadcastReceiver {
             if (response.status.contains("No transaction found")){
                 Toast.makeText(mContext, response.status, Toast.LENGTH_SHORT).show();
                 phoneNumber = smsNumber;
-
             }
             else {
+                Toast.makeText(mContext, "Similar transaction found", Toast.LENGTH_SHORT).show();
                 Toast.makeText(mContext, response.status, Toast.LENGTH_SHORT).show();
                 Toast.makeText(mContext, response.Phone, Toast.LENGTH_SHORT).show();
                 phoneNumber = response.Phone;
             }
+            getOffers(dbHelper,mContext);
+            compareOffer(mContext);
+            insert(mContext,dbHelper,messageBody,globalTimestamp);
         }
 
         @Override
@@ -194,7 +200,6 @@ public class SmsReceiver extends BroadcastReceiver {
         }
         cursor.close();
     }
-
     public void compareOffer(Context context){
         for (OfferPOJO pojo :
                 pojos) {
@@ -213,15 +218,17 @@ public class SmsReceiver extends BroadcastReceiver {
                 pojoList) {
             if (pojo.getAmount().equals(matchedAmount)){
                 ussdCode = pojo.getUssdCode();
-                if (ussdCode.contains("pppp")){
-                    newUssd = ussdCode.replace("pppp",phoneNumber);
-                }
                 till = Integer.parseInt(pojo.getOfferTill());
                 subscriptionId = Integer.parseInt(pojo.getSubscriptionId());
-                offerFound = true;
+                break;
             }
-
         }
+        if (ussdCode.contains("pppp")){
+            newUssd = ussdCode.replace("pppp",phoneNumber);
+            Toast.makeText(context, "new ussd code: "+phoneNumber, Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, "dialed number: "+phoneNumber, Toast.LENGTH_SHORT).show();
+        }
+        offerFound = true;
         dialUssdCode(context, subscriptionId, newUssd,till);
     }
 
@@ -310,9 +317,11 @@ public class SmsReceiver extends BroadcastReceiver {
         boolean checkInsertData = helper.insertData(message, time, messageSender);
     }
 
-
     public void getOffer(Context context,DBHelper helper,String sub, String amount){
         String code = "";
+        String newCode = "";
+        int subscriptionId = 0;
+        int till = 0;
         Cursor cursor = helper.getSpecificOffer(amount,sub);
         if (cursor.getCount() == 0){
             Toast.makeText(context, "no offer found", Toast.LENGTH_SHORT).show();
@@ -321,10 +330,15 @@ public class SmsReceiver extends BroadcastReceiver {
             while (cursor.moveToNext()){
                 code = cursor.getString(0);
             }
-            String newUssd = code.replace("pppp",phoneNumber);
-//            dialUssdCode(context, Integer.parseInt(sub),newUssd);
+            if (code.contains("pppp")){
+                newCode = code.replace("pppp",phoneNumber);
+                Toast.makeText(context, "new ussd code"+smsNumber, Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, "dialed number"+smsNumber, Toast.LENGTH_SHORT).show();
+            }
+//            till = Integer.parseInt(pojo.getOfferTill());
+//            subscriptionId = Integer.parseInt(pojo.getSubscriptionId());
+//            dialUssdCode(context,,newCode,12);
         }
     }
-
 
 }

@@ -5,6 +5,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
 import android.os.Build;
 import android.os.Bundle;
 import android.telephony.SubscriptionInfo;
@@ -73,6 +74,8 @@ public class CreateOfferActivity extends AppCompatActivity {
 
         manager = new RequestManager(this);
         helper = new DBHelper(this);
+
+        three.setText(tillNumber());
 
         listSimInfo();
 
@@ -220,6 +223,21 @@ public class CreateOfferActivity extends AppCompatActivity {
             dialId = String.valueOf(simMap.get(1));
         }
         return dialSim1;
+    }
+
+    public String tillNumber(){
+        Intent intent = getIntent();
+        Cursor cursor = helper.getUser();
+        String till = "";
+        if (cursor.getCount() == 0){
+            till = intent.getStringExtra("till");
+        }else{
+            while (cursor.moveToNext()){
+                till = cursor.getString(0);
+            }
+        }
+        cursor.close();
+        return till;
     }
 
 

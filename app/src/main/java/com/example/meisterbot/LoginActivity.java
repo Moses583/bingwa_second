@@ -181,4 +181,10 @@ public class LoginActivity extends AppCompatActivity {
         enterName = findViewById(R.id.edtTxtLoginName);
         enterPassword = findViewById(R.id.edtTxtLoginPassword);
     }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        finish();
+        }
 }
