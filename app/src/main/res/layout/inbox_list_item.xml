@@ -22,11 +22,10 @@
             android:textColor="@color/green"
             android:fontFamily="@font/oxygen_bold"/>
 
-        <androidx.cardview.widget.CardView
+        <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:cardCornerRadius="10dp"
-            app:cardElevation="5dp"
             android:layout_margin="5dp">
             <LinearLayout
                 android:layout_width="match_parent"
@@ -43,7 +42,7 @@
                     android:layout_marginStart="10dp"
                     android:textColor="@color/black"/>
             </LinearLayout>
-        </androidx.cardview.widget.CardView>
+        </com.google.android.material.card.MaterialCardView>
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">

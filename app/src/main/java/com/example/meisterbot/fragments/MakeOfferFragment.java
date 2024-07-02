@@ -131,11 +131,13 @@ public class MakeOfferFragment extends Fragment {
                 if (show){
                     fab.show();
                     fab2.show();
+                    actions.setImageResource(R.drawable.ic_clear);
                     show = false;
                 }else{
                     fab.hide();
                     fab2.hide();
                     show = true;
+                    actions.setImageResource(R.drawable.ic_actions);
                 }
             }
         });
