@@ -50,6 +50,7 @@ import com.example.meisterbot.CreateOfferActivity;
 import com.example.meisterbot.CreatePasswordActivity;
 import com.example.meisterbot.DBHelper;
 import com.example.meisterbot.EnableServiceActivity;
+import com.example.meisterbot.HomeActivity;
 import com.example.meisterbot.LoginActivity;
 import com.example.meisterbot.PaymentPlanActivity;
 import com.example.meisterbot.R;
@@ -111,6 +112,10 @@ public class MainContentFragment extends Fragment {
     private TelephonyManager.UssdResponseCallback callback;
     private Handler handler;
     private AlertDialog dialog;
+    private RequestManager requestManager;
+
+    String till = "";
+    private androidx.appcompat.app.AlertDialog offerCreationDialog,firstTimePayDialog,renewPlanDialog;
 
 
 
@@ -152,11 +157,17 @@ public class MainContentFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_main_content, container, false);
         initViews(view);
         helper = new DBHelper(getActivity());
+        requestManager = new RequestManager(getActivity());
         showData();
         getFailedTransactions();
         simMap = new HashMap<>();
         simNames = new ArrayList<>();
         slotIndex = new ArrayList<>();
+
+        till = tillNumber();
+
+        checkOffersOne();
+//        startService();
 
 
 
@@ -178,7 +189,6 @@ public class MainContentFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 if (myService(getActivity())) {
-
                     Intent intent = new Intent(getActivity(), RetryService.class);
                     getActivity().stopService(intent);
                 } else {
@@ -373,11 +383,161 @@ public class MainContentFragment extends Fragment {
         return false;
     }
 
+    public void checkOffersOne(){
+        Cursor cursor = helper.getOffers();
+        if(cursor.getCount() == 0){
+            showOfferCreationDialog();
+        }else{
+            callPaymentApi(till);
+        }
+    }
+
+    private void showOfferCreationDialog(){
+        androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(getActivity());
+        LayoutInflater inflater = getLayoutInflater();
+        View view = inflater.inflate(R.layout.dialog_create_offer,null);
+        Button btn = view.findViewById(R.id.btnNavigateToCreateOffer);
+        builder.setView(view);
+        offerCreationDialog = builder.create();
+        offerCreationDialog.show();
+        btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                navigateToCreateOfferActivity();
+            }
+        });
+    }
+
+    private void navigateToCreateOfferActivity() {
+        startActivity(new Intent(getActivity(), CreateOfferActivity.class));
+        offerCreationDialog.dismiss();
+    }
+
+    private void callPaymentApi(String till) {
+        requestManager.getPaymentStatus(paymentListener,till);
+    }
+
+
+    private final PaymentListener paymentListener = new PaymentListener() {
+        @Override
+        public void didFetch(Payment payment, String message) {
+            confirm1(payment);
+        }
+
+        @Override
+        public void didError(String message) {
+            stopServiceOne();
+            if (message.contains("Unable to resolve host")){
+                Toast.makeText(getActivity(), "Please connect to the internet", Toast.LENGTH_SHORT).show();
+            }
+        }
+    };
+
+    public void confirm1(Payment payment){
+        if (payment.status.equalsIgnoreCase("error")){
+            showFirstTimePayDialog();
+        }else if (payment.status.equals("success")){
+            compareDates(payment.data.timestamp);
+        }
+    }
+
+    private void showFirstTimePayDialog() {
+        androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(getActivity());
+        LayoutInflater inflater = getLayoutInflater();
+        View view = inflater.inflate(R.layout.dialog_first_time_pay,null);
+        Button btn = view.findViewById(R.id.btnCheckAvailablePlans);
+        builder.setView(view);
+        firstTimePayDialog = builder.create();
+        firstTimePayDialog.show();
+        btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                navigateToPlansActivity();
+            }
+        });
+    }
+
+    private void navigateToPlansActivity() {
+        startActivity(new Intent(getActivity(), PaymentPlanActivity.class));
+        firstTimePayDialog.dismiss();
+    }
+
+    public void compareDates(String two){
+        long currentTimeMillis = System.currentTimeMillis();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
+        String time = sdf.format(currentTimeMillis);
+        Date current, expiry;
+        try {
+            current =  sdf.parse(time);
+            expiry = sdf.parse(two);
+            if (current.compareTo(expiry) > 0) {
+                stopServiceOne();
+                showRenewPlanDialog();
+            } else if (current.compareTo(expiry) < 0) {
+                startService();
+            }
+        } catch (ParseException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private void showRenewPlanDialog() {
+        androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(getActivity());
+        LayoutInflater inflater = getLayoutInflater();
+        View view = inflater.inflate(R.layout.dialog_subscription_expired,null);
+        Button btn = view.findViewById(R.id.btnRenewPlan);
+        builder.setView(view);
+        renewPlanDialog = builder.create();
+        renewPlanDialog.show();
+        btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                navigateToPlansActivity2();
+            }
+        });
+    }
+
+    private void navigateToPlansActivity2() {
+        startActivity(new Intent(getActivity(), PaymentPlanActivity.class));
+        renewPlanDialog.dismiss();
+    }
+
+    public void stopServiceOne() {
+        if (myService2()){
+            Intent intent = new Intent(getActivity(), MyService.class);
+            getActivity().stopService(intent);
+            Toast.makeText(getActivity(), "App paused, you need to check your subscription", Toast.LENGTH_LONG).show();
+        }
+    }
+
+    public void startService(){
+        if (myService2()) {
+            Log.d("MAIN_SERVICE","Service already running");
+        } else {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                Intent intent = new Intent(getActivity(), MyService.class);
+                getActivity().startForegroundService(intent);
+                Toast.makeText(getActivity(), "App services are now available", Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
+    public boolean myService2(){
+        ActivityManager manager = (ActivityManager) getActivity().getSystemService(Context.ACTIVITY_SERVICE);
+        for (ActivityManager.RunningServiceInfo info :
+                manager.getRunningServices(Integer.MAX_VALUE)) {
+            if (MyService.class.getName().equalsIgnoreCase(info.service.getClassName())){
+                return true;
+            }
+        }
+        return false;
+    }
+
     public String tillNumber(){
         Cursor cursor = helper.getUser();
         String till = "";
         if (cursor.getCount() == 0){
-            Log.d("TAG","TILL NUMBER ABSENT");
+            Log.d("TILL","Till number absent");
         }else{
             while (cursor.moveToNext()){
                 till = cursor.getString(0);

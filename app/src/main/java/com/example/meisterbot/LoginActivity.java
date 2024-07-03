@@ -66,6 +66,7 @@ public class LoginActivity extends AppCompatActivity {
             public void onClick(View v) {
                 dialog.show();
                 fetchDetails();
+//                createAccount();
             }
         });
 
@@ -170,8 +171,14 @@ public class LoginActivity extends AppCompatActivity {
         editor.apply();
 
         dialog.dismiss();
+        login1();
+
+    }
+    private void login1(){
         // Navigate to the main screen
         Intent intent = new Intent(this, HomeActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(intent);
         finish();
     }

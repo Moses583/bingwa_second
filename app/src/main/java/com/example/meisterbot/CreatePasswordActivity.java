@@ -216,8 +216,15 @@ public class CreatePasswordActivity extends AppCompatActivity {
         editor.putBoolean("hasAccount", true);
         editor.apply();
 
+        login1();
+
+
+    }
+    private void login1(){
         // Navigate to the main screen
         Intent intent = new Intent(this, HomeActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(intent);
         finish();
     }

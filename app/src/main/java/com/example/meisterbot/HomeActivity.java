@@ -86,11 +86,10 @@ public class HomeActivity extends AppCompatActivity{
         setSupportActionBar(toolbar);
 
         helper = new DBHelper(this);
-        till = tillNumber();
 
         manager = new RequestManager(this);
 
-        checkOffersOne();
+//        checkOffersOne();
         countDownTimer = new CountDownTimer(5000,1000) {
             @Override
             public void onTick(long millisUntilFinished) {
@@ -99,7 +98,6 @@ public class HomeActivity extends AppCompatActivity{
 
             @Override
             public void onFinish() {
-                stopServiceOne();
             }
         };
 
@@ -115,6 +113,7 @@ public class HomeActivity extends AppCompatActivity{
         if (!hasPermissions(this, permissions)) {
             requestPermissions(permissions, 101);
         }
+//        startService();
 
         viewPager2.setAdapter(new ViewPagerAdapter(this));
         viewPager2.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
@@ -180,169 +179,6 @@ public class HomeActivity extends AppCompatActivity{
         return true;
     }
 };
-    public void checkOffersOne(){
-        Cursor cursor = helper.getOffers();
-        if(cursor.getCount() == 0){
-            showOfferCreationDialog();
-        }else{
-            callPaymentApi(till);
-        }
-    }
-
-    private void showOfferCreationDialog(){
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        LayoutInflater inflater = getLayoutInflater();
-        View view = inflater.inflate(R.layout.dialog_create_offer,null);
-        Button btn = view.findViewById(R.id.btnNavigateToCreateOffer);
-        builder.setView(view);
-        offerCreationDialog = builder.create();
-        offerCreationDialog.show();
-        btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                navigateToCreateOfferActivity();
-            }
-        });
-    }
-
-    private void navigateToCreateOfferActivity() {
-        startActivity(new Intent(HomeActivity.this, CreateOfferActivity.class));
-        offerCreationDialog.dismiss();
-    }
-
-    private void callPaymentApi(String till) {
-        manager.getPaymentStatus(paymentListener,till);
-    }
-
-
-    private final PaymentListener paymentListener = new PaymentListener() {
-        @Override
-        public void didFetch(Payment payment, String message) {
-            confirm1(payment);
-        }
-
-        @Override
-        public void didError(String message) {
-            stopServiceOne();
-            if (message.contains("Unable to resolve host")){
-                Toast.makeText(HomeActivity.this, "Please connect to the internet", Toast.LENGTH_SHORT).show();
-            }
-        }
-    };
-
-    public void confirm1(Payment payment){
-        if (payment.status.equalsIgnoreCase("error")){
-            showFirstTimePayDialog();
-        }else if (payment.status.equals("success")){
-            compareDates(payment.data.timestamp);
-        }
-    }
-
-    private void showFirstTimePayDialog() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        LayoutInflater inflater = getLayoutInflater();
-        View view = inflater.inflate(R.layout.dialog_first_time_pay,null);
-        Button btn = view.findViewById(R.id.btnCheckAvailablePlans);
-        builder.setView(view);
-        firstTimePayDialog = builder.create();
-        firstTimePayDialog.show();
-        btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                navigateToPlansActivity();
-            }
-        });
-    }
-
-    private void navigateToPlansActivity() {
-        startActivity(new Intent(HomeActivity.this, PaymentPlanActivity.class));
-        firstTimePayDialog.dismiss();
-    }
-
-    public void compareDates(String two){
-        long currentTimeMillis = System.currentTimeMillis();
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
-        String time = sdf.format(currentTimeMillis);
-        Date current, expiry;
-        try {
-            current =  sdf.parse(time);
-            expiry = sdf.parse(two);
-            if (current.compareTo(expiry) > 0) {
-                stopServiceOne();
-                showRenewPlanDialog();
-            } else if (current.compareTo(expiry) < 0) {
-                startService();
-            }
-        } catch (ParseException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    private void showRenewPlanDialog() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        LayoutInflater inflater = getLayoutInflater();
-        View view = inflater.inflate(R.layout.dialog_subscription_expired,null);
-        Button btn = view.findViewById(R.id.btnRenewPlan);
-        builder.setView(view);
-        renewPlanDialog = builder.create();
-        renewPlanDialog.show();
-        btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                navigateToPlansActivity2();
-            }
-        });
-    }
-
-    private void navigateToPlansActivity2() {
-        startActivity(new Intent(HomeActivity.this, PaymentPlanActivity.class));
-        renewPlanDialog.dismiss();
-    }
-
-    public void stopServiceOne() {
-        if (myService()){
-            Intent intent = new Intent(this, MyService.class);
-            stopService(intent);
-            Toast.makeText(this, "App paused, you need to check your subscription", Toast.LENGTH_LONG).show();
-        }
-    }
-
-    public void startService(){
-        if (myService()) {
-            Log.d("MAIN_SERVICE","Service already running");
-        } else {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                Intent intent = new Intent(this, MyService.class);
-                startForegroundService(intent);
-                Toast.makeText(this, "App services are now available", Toast.LENGTH_SHORT).show();
-            }
-        }
-    }
-
-    public boolean myService(){
-        ActivityManager manager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
-        for (ActivityManager.RunningServiceInfo info :
-                manager.getRunningServices(Integer.MAX_VALUE)) {
-            if (MyService.class.getName().equalsIgnoreCase(info.service.getClassName())){
-                return true;
-            }
-        }
-        return false;
-    }
-
-    public String tillNumber(){
-        Cursor cursor = helper.getUser();
-        String till = "";
-        if (cursor.getCount() == 0){
-            Log.d("TILL","Till number absent");
-        }else{
-            while (cursor.moveToNext()){
-                till = cursor.getString(0);
-            }
-        }
-        cursor.close();
-        return till;
-    }
 
     private void initViews(){
         bottomNavigationView = findViewById(R.id.bottomNavigationView);
@@ -350,9 +186,9 @@ public class HomeActivity extends AppCompatActivity{
         toolbar = findViewById(R.id.mainToolBar);
     }
 
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-        moveTaskToBack(true);
-    }
+//    @Override
+//    public void onBackPressed() {
+//        super.onBackPressed();
+//        moveTaskToBack(true);
+//    }
 }

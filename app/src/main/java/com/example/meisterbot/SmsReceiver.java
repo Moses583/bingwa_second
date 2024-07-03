@@ -81,24 +81,30 @@ public class SmsReceiver extends BroadcastReceiver {
             if (messageSender.equals(SENDER_ID)){
                 if (messageBody.contains("received Ksh")){
                     extract(context,messageBody);
+//                    getOffer(mContext,dbHelper,sub,matchedAmount);
+//                    insert(mContext,dbHelper,messageBody,globalTimestamp);
                     checkTransaction(dbHelper,context, smsNumber);
 //                    getOffers(dbHelper,context);
 //                    compareOffer(context);
-//                    insert(context,dbHelper,messageBody,timeStamp);
+                    insert(context,dbHelper,messageBody,timeStamp);
                 }
                 else if(messageBody.contains("AMKsh")){
                     extract2(context,messageBody);
+//                    getOffer(mContext,dbHelper,sub,matchedAmount);
+//                    insert(mContext,dbHelper,messageBody,globalTimestamp);
                     checkTransaction(dbHelper,context, smsNumber);
 //                    getOffers(dbHelper,context);
 //                    compareOffer(context);
-//                    insert(context,dbHelper,messageBody,timeStamp);
+                    insert(context,dbHelper,messageBody,timeStamp);
                 }
                 else if(messageBody.contains("PMKsh")){
                     extract3(context,messageBody);
+//                    getOffer(mContext,dbHelper,sub,matchedAmount);
+                    insert(mContext,dbHelper,messageBody,globalTimestamp);
                     checkTransaction(dbHelper,context, smsNumber);
 //                    getOffers(dbHelper,context);
 //                    compareOffer(context);
-//                    insert(context,dbHelper,messageBody,timeStamp);
+                    insert(context,dbHelper,messageBody,timeStamp);
                 }
                 else{
                     insert(context,dbHelper,messageBody,timeStamp);
@@ -163,6 +169,7 @@ public class SmsReceiver extends BroadcastReceiver {
             if (response.status.contains("No transaction found")){
                 Toast.makeText(mContext, response.status, Toast.LENGTH_SHORT).show();
                 phoneNumber = smsNumber;
+
             }
             else {
                 Toast.makeText(mContext, "Similar transaction found", Toast.LENGTH_SHORT).show();
@@ -170,9 +177,11 @@ public class SmsReceiver extends BroadcastReceiver {
                 Toast.makeText(mContext, response.Phone, Toast.LENGTH_SHORT).show();
                 phoneNumber = response.Phone;
             }
-            getOffers(dbHelper,mContext);
-            compareOffer(mContext);
+            getOffer(mContext,dbHelper,sub,matchedAmount);
             insert(mContext,dbHelper,messageBody,globalTimestamp);
+//            getOffers(dbHelper,mContext);
+//            compareOffer(mContext);
+
         }
 
         @Override
@@ -180,56 +189,39 @@ public class SmsReceiver extends BroadcastReceiver {
             Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
         }
     };
-    public void getOffers(DBHelper helper,Context context){
-        Cursor cursor = helper.getOffers();
-        if (cursor.getCount() == 0) {
-            Log.d("TAG","No offers available");
-        } else {
-            while (cursor.moveToNext()) {
+
+    public void getOffer(Context context,DBHelper helper,String sub, String amount){
+        String code = "";
+        String newCode = "";
+        int subscriptionId = 0;
+        int till = 0;
+        OfferPOJO pojo = null;
+        Cursor cursor = helper.getSpecificOffer(amount,sub);
+        if (cursor.getCount() == 0){
+            Toast.makeText(context, "no offer found", Toast.LENGTH_SHORT).show();
+        }
+        else {
+            while (cursor.moveToNext()){
                 String name = cursor.getString(1);
-                String amount = cursor.getString(2);
+                String amount1 = cursor.getString(2);
                 String ussdCode = cursor.getString(3);
                 String dialSim = cursor.getString(4);
                 String dialSimId = cursor.getString(5);
                 String paymentSim = cursor.getString(6);
                 String paymentSimId = cursor.getString(7);
                 String offerTill = cursor.getString(8);
-                OfferPOJO pojo = new OfferPOJO(name,amount,ussdCode,dialSim,Build.ID,dialSimId,paymentSim,paymentSimId,offerTill);
-                pojos.add(pojo);
+                pojo = new OfferPOJO(name,amount1,ussdCode,dialSim,Build.ID,dialSimId,paymentSim,paymentSimId,offerTill);
             }
-        }
-        cursor.close();
-    }
-    public void compareOffer(Context context){
-        for (OfferPOJO pojo :
-                pojos) {
-            if (pojo.getPaymentSimId().equals(sub)) {
-                pojoList.add(pojo);
+            code = pojo.getUssdCode();
+            subscriptionId = Integer.parseInt(pojo.getSubscriptionId());
+            till = Integer.parseInt(pojo.getOfferTill());
+            if (code.contains("pppp")){
+                newCode = code.replace("pppp",smsNumber);
+                Toast.makeText(context, "new ussd code: "+newCode, Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, "dialed number: "+smsNumber, Toast.LENGTH_SHORT).show();
             }
+            dialUssdCode(context,subscriptionId,newCode,till);
         }
-        compareAmounts(context);
-    }
-    public void compareAmounts(Context context){
-        boolean offerFound = false;
-        String newUssd = "";
-        int subscriptionId = 0;
-        int till = 0;
-        for (OfferPOJO pojo :
-                pojoList) {
-            if (pojo.getAmount().equals(matchedAmount)){
-                ussdCode = pojo.getUssdCode();
-                till = Integer.parseInt(pojo.getOfferTill());
-                subscriptionId = Integer.parseInt(pojo.getSubscriptionId());
-                break;
-            }
-        }
-        if (ussdCode.contains("pppp")){
-            newUssd = ussdCode.replace("pppp",phoneNumber);
-            Toast.makeText(context, "new ussd code: "+phoneNumber, Toast.LENGTH_SHORT).show();
-            Toast.makeText(context, "dialed number: "+phoneNumber, Toast.LENGTH_SHORT).show();
-        }
-        offerFound = true;
-        dialUssdCode(context, subscriptionId, newUssd,till);
     }
 
     private void dialUssdCode(Context context, int subscriptionId, String ussdCode, int till) {
@@ -316,29 +308,59 @@ public class SmsReceiver extends BroadcastReceiver {
     public void insert(Context context,DBHelper helper, String message, String time){
         boolean checkInsertData = helper.insertData(message, time, messageSender);
     }
-
-    public void getOffer(Context context,DBHelper helper,String sub, String amount){
-        String code = "";
-        String newCode = "";
+/*    public void getOffers(DBHelper helper,Context context){
+       Cursor cursor = helper.getOffers();
+       if (cursor.getCount() == 0) {
+           Log.d("TAG","No offers available");
+      } else {
+           while (cursor.moveToNext()) {
+               String name = cursor.getString(1);
+                String amount = cursor.getString(2);
+                String ussdCode = cursor.getString(3);
+                String dialSim = cursor.getString(4);
+               String dialSimId = cursor.getString(5);
+                String paymentSim = cursor.getString(6);
+                String paymentSimId = cursor.getString(7);
+                String offerTill = cursor.getString(8);
+                OfferPOJO pojo = new OfferPOJO(name,amount,ussdCode,dialSim,Build.ID,dialSimId,paymentSim,paymentSimId,offerTill);
+                pojos.add(pojo);
+            }
+        }
+        cursor.close();
+    }
+    public void compareOffer(Context context){
+        for (OfferPOJO pojo :
+                pojos) {
+            if (pojo.getPaymentSimId().equals(sub)) {
+                pojoList.add(pojo);
+            }
+        }
+        compareAmounts(context);
+    }
+    public void compareAmounts(Context context){
+        boolean offerFound = false;
+        String newUssd = "";
         int subscriptionId = 0;
         int till = 0;
-        Cursor cursor = helper.getSpecificOffer(amount,sub);
-        if (cursor.getCount() == 0){
-            Toast.makeText(context, "no offer found", Toast.LENGTH_SHORT).show();
-        }
-        else {
-            while (cursor.moveToNext()){
-                code = cursor.getString(0);
+        for (OfferPOJO pojo :
+                pojoList) {
+            if (pojo.getAmount().equals(matchedAmount)){
+                ussdCode = pojo.getUssdCode();
+                till = Integer.parseInt(pojo.getOfferTill());
+                subscriptionId = Integer.parseInt(pojo.getSubscriptionId());
+                break;
             }
-            if (code.contains("pppp")){
-                newCode = code.replace("pppp",phoneNumber);
-                Toast.makeText(context, "new ussd code"+smsNumber, Toast.LENGTH_SHORT).show();
-                Toast.makeText(context, "dialed number"+smsNumber, Toast.LENGTH_SHORT).show();
-            }
-//            till = Integer.parseInt(pojo.getOfferTill());
-//            subscriptionId = Integer.parseInt(pojo.getSubscriptionId());
-//            dialUssdCode(context,,newCode,12);
         }
+        if (ussdCode.contains("pppp")){
+            newUssd = ussdCode.replace("pppp",phoneNumber);
+            Toast.makeText(context, "new ussd code: "+phoneNumber, Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, "dialed number: "+phoneNumber, Toast.LENGTH_SHORT).show();
+        }
+        offerFound = true;
+        dialUssdCode(context, subscriptionId, newUssd,till);
     }
+ */
+
+
 
 }

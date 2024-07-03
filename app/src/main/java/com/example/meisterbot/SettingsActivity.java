@@ -56,6 +56,12 @@ public class SettingsActivity extends AppCompatActivity {
 
         });
         initViews();
+        // Retrieve the state from SharedPreferences
+        SharedPreferences prefs = getSharedPreferences("prefs", MODE_PRIVATE);
+        boolean isChecked = prefs.getBoolean("toggleButtonState", false); // Default value is false
+
+        // Set the state of the toggle button
+        pauseApp.setChecked(isChecked);
 
         manager = new RequestManager(this);
         helper = new DBHelper(this);
@@ -74,7 +80,6 @@ public class SettingsActivity extends AppCompatActivity {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
                     checkStatus(till);
-
                 } else {
                     checkStatus(till);
                 }
@@ -258,12 +263,36 @@ public class SettingsActivity extends AppCompatActivity {
         editor.apply();
 
         // Navigate back to login screen
-        Intent intent = new Intent(SettingsActivity.this, LoginActivity.class);
+        Intent intent = new Intent(SettingsActivity.this, CreateAccountActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
         intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
         startActivity(intent);
         finish();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        // Get the state of the toggle button
+        boolean isChecked = pauseApp.isChecked();
+
+        // Save the state in SharedPreferences
+        SharedPreferences prefs = getSharedPreferences("prefs", MODE_PRIVATE);
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putBoolean("toggleButtonState", isChecked);
+        editor.apply();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        // Retrieve the state from SharedPreferences
+        SharedPreferences prefs = getSharedPreferences("prefs", MODE_PRIVATE);
+        boolean isChecked = prefs.getBoolean("toggleButtonState", false); // Default value is false
+
+        // Set the state of the toggle button
+        pauseApp.setChecked(isChecked);
     }
 
     private void initViews() {

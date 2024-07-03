@@ -13,7 +13,7 @@ import com.google.gson.Gson;
 public class DBHelper extends SQLiteOpenHelper {
 
     public DBHelper( Context context) {
-        super(context, "RealDbFour.db",null,1);
+        super(context, "RealDbFive.db",null,1);
     }
 
     @Override
@@ -110,7 +110,7 @@ public class DBHelper extends SQLiteOpenHelper {
     }
     public Cursor getSpecificOffer(String amount, String simId){
         SQLiteDatabase database = this.getReadableDatabase();
-        return database.rawQuery("Select ussdCode from Offers where amount=? and paymentSimId =?", new String[]{amount,simId});
+        return database.rawQuery("Select * from Offers where amount=? and paymentSimId =?", new String[]{amount,simId});
     }
     public Cursor getFailedResponses(){
         SQLiteDatabase database = this.getWritableDatabase();
