@@ -167,7 +167,6 @@ public class MainContentFragment extends Fragment {
         till = tillNumber();
 
         checkOffersOne();
-//        startService();
 
 
 

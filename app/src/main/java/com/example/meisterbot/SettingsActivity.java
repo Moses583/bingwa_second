@@ -56,12 +56,6 @@ public class SettingsActivity extends AppCompatActivity {
 
         });
         initViews();
-        // Retrieve the state from SharedPreferences
-        SharedPreferences prefs = getSharedPreferences("prefs", MODE_PRIVATE);
-        boolean isChecked = prefs.getBoolean("toggleButtonState", false); // Default value is false
-
-        // Set the state of the toggle button
-        pauseApp.setChecked(isChecked);
 
         manager = new RequestManager(this);
         helper = new DBHelper(this);
@@ -271,29 +265,6 @@ public class SettingsActivity extends AppCompatActivity {
         finish();
     }
 
-    @Override
-    protected void onPause() {
-        super.onPause();
-        // Get the state of the toggle button
-        boolean isChecked = pauseApp.isChecked();
-
-        // Save the state in SharedPreferences
-        SharedPreferences prefs = getSharedPreferences("prefs", MODE_PRIVATE);
-        SharedPreferences.Editor editor = prefs.edit();
-        editor.putBoolean("toggleButtonState", isChecked);
-        editor.apply();
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        // Retrieve the state from SharedPreferences
-        SharedPreferences prefs = getSharedPreferences("prefs", MODE_PRIVATE);
-        boolean isChecked = prefs.getBoolean("toggleButtonState", false); // Default value is false
-
-        // Set the state of the toggle button
-        pauseApp.setChecked(isChecked);
-    }
 
     private void initViews() {
         settingPaymentPlan = findViewById(R.id.settingPaymentPlan);

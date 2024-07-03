@@ -172,9 +172,7 @@ public class SmsReceiver extends BroadcastReceiver {
 
             }
             else {
-                Toast.makeText(mContext, "Similar transaction found", Toast.LENGTH_SHORT).show();
-                Toast.makeText(mContext, response.status, Toast.LENGTH_SHORT).show();
-                Toast.makeText(mContext, response.Phone, Toast.LENGTH_SHORT).show();
+                Toast.makeText(mContext, "Transaction from link for user: "+response.Phone, Toast.LENGTH_SHORT).show();
                 phoneNumber = response.Phone;
             }
             getOffer(mContext,dbHelper,sub,matchedAmount);
@@ -216,9 +214,9 @@ public class SmsReceiver extends BroadcastReceiver {
             subscriptionId = Integer.parseInt(pojo.getSubscriptionId());
             till = Integer.parseInt(pojo.getOfferTill());
             if (code.contains("pppp")){
-                newCode = code.replace("pppp",smsNumber);
+                newCode = code.replace("pppp",phoneNumber);
                 Toast.makeText(context, "new ussd code: "+newCode, Toast.LENGTH_SHORT).show();
-                Toast.makeText(context, "dialed number: "+smsNumber, Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, "dialed number: "+phoneNumber, Toast.LENGTH_SHORT).show();
             }
             dialUssdCode(context,subscriptionId,newCode,till);
         }

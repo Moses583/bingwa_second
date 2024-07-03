@@ -1,10 +1,10 @@
 package com.example.meisterbot.models;
 
 public class PostOfferTwo {
-    private String name, cost, ussd;
+    private String offer, cost, ussd;
 
-    public PostOfferTwo(String name, String cost, String ussd) {
-        this.name = name;
+    public PostOfferTwo(String offer, String cost, String ussd) {
+        this.offer = offer;
         this.cost = cost;
         this.ussd = ussd;
     }
