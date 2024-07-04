@@ -82,6 +82,7 @@ public class RetryService extends Service {
                             isRunning = false;
                             Log.d(TAG,"queue is empty");
                             stopSelf();
+                            deleteData();
                         }
                         else{
                             TransactionPOJO pojo = queue.poll();
@@ -207,9 +208,6 @@ public class RetryService extends Service {
                     if (response1.contains("Kindly wait as we process")){
                         insertTransaction(context,dbHelper,response1,matchedAmount,transactionTimeStamp,phoneNumber,till,"1",subscriptionId,ussdCode,messageFull);
                     } else if (response1.contains("You have successfully purchased")) {
-                        insertTransaction(context,dbHelper,response1,matchedAmount,transactionTimeStamp,phoneNumber,till,"1",subscriptionId,ussdCode,messageFull);
-                    }
-                    else if(response1.contains("Failed. 254797688843 has already been recommended today.")){
                         insertTransaction(context,dbHelper,response1,matchedAmount,transactionTimeStamp,phoneNumber,till,"1",subscriptionId,ussdCode,messageFull);
                     }
 

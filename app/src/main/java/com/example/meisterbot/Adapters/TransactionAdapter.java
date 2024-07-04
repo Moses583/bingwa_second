@@ -1,6 +1,10 @@
 package com.example.meisterbot.Adapters;
 
+import static androidx.core.content.ContextCompat.startActivity;
+
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -49,13 +53,22 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionViewHold
         }
         holder.txtTransactionAmount.setText(pojoList.get(position).getTransactionAmount());
         holder.txtTransactionTimeStamp.setText(pojoList.get(position).getTimeStamp());
-        holder.txtTransactionRecipient.setText(pojoList.get(position).getRecipient());
         String status = pojoList.get(position).getStatus();
+        String ussdCode = pojoList.get(position).getUssd();
         if (status.equalsIgnoreCase("0")){
             holder.txtTransactionStatus.setText("Failed.");
         }else if (status.equalsIgnoreCase("1")){
             holder.txtTransactionStatus.setText("Successfull.");
         }
+        holder.txtTransactionRecipient.setText(ussdCode);
+        holder.txtTransactionRecipient.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(Intent.ACTION_DIAL);
+                intent.setData(Uri.parse("tel:" + ussdCode));
+                context.startActivity(intent);
+            }
+        });
     }
 
     @Override
