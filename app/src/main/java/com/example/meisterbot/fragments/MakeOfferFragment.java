@@ -118,7 +118,8 @@ public class MakeOfferFragment extends Fragment {
         fab2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                callPostOfferApi();
+                Toast.makeText(getActivity(), "Offers uploaded", Toast.LENGTH_SHORT).show();
             }
         });
         actions.setOnClickListener(new View.OnClickListener() {
@@ -160,7 +161,6 @@ public class MakeOfferFragment extends Fragment {
     private final PostOfferListener listener2 = new PostOfferListener() {
         @Override
         public void didFetch(PostOfferApiResponse response, String message) {
-            Toast.makeText(getActivity(), response.message, Toast.LENGTH_SHORT).show();
         }
 
         @Override
