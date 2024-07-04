@@ -10,6 +10,9 @@ import android.database.sqlite.SQLiteOpenHelper;
 import com.example.meisterbot.models.OfferPOJO;
 import com.google.gson.Gson;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class DBHelper extends SQLiteOpenHelper {
 
     public DBHelper( Context context) {
@@ -127,5 +130,22 @@ public class DBHelper extends SQLiteOpenHelper {
         SQLiteDatabase DB = this.getWritableDatabase();
         long result = DB.delete("Offers", "ussdCode=?", new String[]{ussdCode});
         return result != -1;
+    }
+    public void clearAllTables() {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT name FROM sqlite_master WHERE type='table'", null);
+        List<String> tables = new ArrayList<>();
+
+        // get all table names
+        while (cursor.moveToNext()) {
+            tables.add(cursor.getString(0));
+        }
+
+        // delete all records from each table
+        for (String table : tables) {
+            String deleteQuery = "DELETE FROM " + table;
+            db.execSQL(deleteQuery);
+        }
+        cursor.close();
     }
 }

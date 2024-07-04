@@ -259,6 +259,8 @@ public class SettingsActivity extends AppCompatActivity {
         editor.clear();
         editor.apply();
 
+        helper.clearAllTables();
+
         // Navigate back to login screen
         Intent intent = new Intent(SettingsActivity.this, CreateAccountActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
