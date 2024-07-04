@@ -39,7 +39,7 @@ public class LoginActivity extends AppCompatActivity {
     RequestManager manager;
     private AlertDialog dialog;
     ProgressBar progressBar;
-    private TextView txtLoading;
+    private TextView txtLoading,txtForgotPassword;
     DBHelper helper;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,6 +67,13 @@ public class LoginActivity extends AppCompatActivity {
                 dialog.show();
                 fetchDetails();
 //                createAccount();
+            }
+        });
+        txtForgotPassword.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(LoginActivity.this, RequestTokenActivity.class));
+                finish();
             }
         });
 
@@ -187,6 +194,7 @@ public class LoginActivity extends AppCompatActivity {
         login = findViewById(R.id.btnLogIn);
         enterName = findViewById(R.id.edtTxtLoginName);
         enterPassword = findViewById(R.id.edtTxtLoginPassword);
+        txtForgotPassword = findViewById(R.id.txtForgotPassword);
     }
 
     @Override

@@ -11,6 +11,7 @@ import com.example.meisterbot.listeners.PostLoginListener;
 import com.example.meisterbot.listeners.PostOfferListener;
 import com.example.meisterbot.listeners.PostPersonaListener;
 import com.example.meisterbot.listeners.PostTransactionListener;
+import com.example.meisterbot.listeners.RequestTokenListener;
 import com.example.meisterbot.listeners.STKPushListener;
 import com.example.meisterbot.models.CheckTransactionApiResponse;
 import com.example.meisterbot.models.GetOffersBody;
@@ -23,6 +24,8 @@ import com.example.meisterbot.models.LoginPojo;
 import com.example.meisterbot.models.Persona;
 import com.example.meisterbot.models.PostLoginApiResponse;
 import com.example.meisterbot.models.PostOfferApiResponse;
+import com.example.meisterbot.models.RequestTokenApiResponse;
+import com.example.meisterbot.models.RequestTokenPojo;
 import com.example.meisterbot.models.STKPushPojo;
 import com.example.meisterbot.models.STKPushResponse;
 import com.example.meisterbot.models.TariffApiResponse;
@@ -232,6 +235,25 @@ public class RequestManager {
             }
         });
     }
+    public void requestToken(RequestTokenListener listener, RequestTokenPojo pojo){
+        RequestToken requestToken = retrofit.create(RequestToken.class);
+        Call<RequestTokenApiResponse> call = requestToken.requestToken(pojo);
+        call.enqueue(new Callback<RequestTokenApiResponse>() {
+            @Override
+            public void onResponse(Call<RequestTokenApiResponse> call, Response<RequestTokenApiResponse> response) {
+                if (!response.isSuccessful()){
+                    listener.didError(response.message()+" error from onResponse");
+                    return;
+                }
+                listener.didFetch(response.body(), response.message());
+            }
+
+            @Override
+            public void onFailure(Call<RequestTokenApiResponse> call, Throwable throwable) {
+                listener.didError(throwable.getMessage()+" error from onFailure");
+            }
+        });
+    }
 
     private interface PostPersona {
         @POST("api/bingwa_credentials")
@@ -276,5 +298,10 @@ public class RequestManager {
         Call<CheckTransactionApiResponse> checkTransaction(
                 @Query("phoneNumber") String phoneNumber
         );
+    }
+
+    private interface RequestToken{
+        @POST("api/request-reset")
+        Call<RequestTokenApiResponse> requestToken (@Body RequestTokenPojo pojo);
     }
 }

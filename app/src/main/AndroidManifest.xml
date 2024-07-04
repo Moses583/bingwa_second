@@ -12,8 +12,8 @@
     <uses-permission android:name="android.permission.CALL_PHONE" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
-    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_SPECIAL_USE"/>
-    <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_SPECIAL_USE" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
 
     <application
         android:allowBackup="true"
@@ -25,6 +25,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MeisterBot"
         tools:targetApi="31">
+        <activity
+            android:name=".RequestTokenActivity"
+            android:exported="false" />
         <activity
             android:name=".EnableServiceActivity"
             android:exported="false" />
@@ -81,14 +84,12 @@
         <!-- <action android:name="android.provider.Telephony.SMS_RECEIVED" /> -->
         <!-- </intent-filter> -->
         <!-- </receiver> -->
-        <service android:name=".services.MyService"
-            android:foregroundServiceType="specialUse">
-
-        </service>
-        <service android:name=".services.RetryService"
-            android:foregroundServiceType="specialUse">
-
-        </service>
+        <service
+            android:name=".services.MyService"
+            android:foregroundServiceType="specialUse" />
+        <service
+            android:name=".services.RetryService"
+            android:foregroundServiceType="specialUse" />
     </application>
 
 </manifest>

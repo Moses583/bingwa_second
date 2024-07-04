@@ -44,6 +44,18 @@
 
     </com.google.android.material.textfield.TextInputLayout>
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/txtForgotPassword"
+        android:text="Forgot password"
+        android:layout_margin="10dp"
+        android:textColor="@color/green"
+        android:layout_gravity="center"
+        android:clickable="true"
+        android:focusable="true"
+        android:foreground="?android:attr/selectableItemBackground"/>
+
     <Button
         android:layout_width="150dp"
         android:layout_height="wrap_content"

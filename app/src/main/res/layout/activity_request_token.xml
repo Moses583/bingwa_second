@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".RequestTokenActivity"
+    android:orientation="vertical">
+
+    <androidx.appcompat.widget.Toolbar
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:title="Request Authentication Token"/>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/edtRequestPhoneNumber"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        app:endIconMode="clear_text"
+        app:helperTextEnabled="true"
+        app:helperText="Enter the phone number you signed up with"
+        app:counterEnabled="true"
+        app:counterMaxLength="10"
+        app:errorEnabled="true"
+        app:startIconDrawable="@drawable/ic_phone_number">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="07 *** or 01 ***"
+            android:inputType="phone"/>
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_margin="10dp"
+        android:text="Request token"
+        android:id="@+id/btnGoToResetPassword"/>
+
+</LinearLayout>
