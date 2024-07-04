@@ -107,6 +107,7 @@ public class MakeOfferFragment extends Fragment {
         manager = new RequestManager(getActivity());
         String id = Build.ID;
         dbHelper = new DBHelper(getActivity());
+        callPostOfferApi();
 
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -117,7 +118,7 @@ public class MakeOfferFragment extends Fragment {
         fab2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                callPostOfferApi();
+
             }
         });
         actions.setOnClickListener(new View.OnClickListener() {
@@ -149,6 +150,7 @@ public class MakeOfferFragment extends Fragment {
 
     private void refresh() {
         showData();
+        callPostOfferApi();
     }
 
     private void callPostOfferApi(){
@@ -228,6 +230,7 @@ public class MakeOfferFragment extends Fragment {
     public void onResume() {
         super.onResume();
         showData();
+        callPostOfferApi();
     }
 
     private void initViews(View view) {
