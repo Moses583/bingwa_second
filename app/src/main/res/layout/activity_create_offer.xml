@@ -56,7 +56,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="e.g., 10,20,50,99"
-                    android:inputType="text"/>
+                    android:inputType="number"/>
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -78,7 +78,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="e.g., 1234567"
-                android:inputType="text"/>
+                android:inputType="number"/>
 
         </com.google.android.material.textfield.TextInputLayout>
         <TextView
