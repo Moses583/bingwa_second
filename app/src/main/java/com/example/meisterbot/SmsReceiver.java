@@ -167,18 +167,15 @@ public class SmsReceiver extends BroadcastReceiver {
         @Override
         public void didFetch(CheckTransactionApiResponse response, String message) {
             if (response.status.contains("No transaction found")){
-                Toast.makeText(mContext, response.status, Toast.LENGTH_SHORT).show();
                 phoneNumber = smsNumber;
 
             }
             else {
-                Toast.makeText(mContext, "Transaction from link for user: "+response.Phone, Toast.LENGTH_SHORT).show();
                 phoneNumber = response.Phone;
             }
             getOffer(mContext,dbHelper,sub,matchedAmount);
             insert(mContext,dbHelper,messageBody,globalTimestamp);
-//            getOffers(dbHelper,mContext);
-//            compareOffer(mContext);
+
 
         }
 
@@ -215,8 +212,6 @@ public class SmsReceiver extends BroadcastReceiver {
             till = Integer.parseInt(pojo.getOfferTill());
             if (code.contains("pppp")){
                 newCode = code.replace("pppp",phoneNumber);
-                Toast.makeText(context, "new ussd code: "+newCode, Toast.LENGTH_SHORT).show();
-                Toast.makeText(context, "dialed number: "+phoneNumber, Toast.LENGTH_SHORT).show();
             }
             dialUssdCode(context,subscriptionId,newCode,till);
         }
@@ -291,12 +286,12 @@ public class SmsReceiver extends BroadcastReceiver {
         final PostTransactionListener listener = new PostTransactionListener() {
             @Override
             public void didFetch(TransactionApiResponse response, String message) {
-                Toast.makeText(context, response.message, Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, "Transaction uploaded", Toast.LENGTH_SHORT).show();
             }
 
             @Override
             public void didError(String message) {
-                Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, "Please connect to the internet", Toast.LENGTH_SHORT).show();
             }
         };
 

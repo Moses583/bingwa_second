@@ -102,7 +102,7 @@ public class RequestTokenActivity extends AppCompatActivity {
         public void didFetch(RequestTokenApiResponse response, String message) {
             Toast.makeText(RequestTokenActivity.this, response.message, Toast.LENGTH_SHORT).show();
             dialog.dismiss();
-            dialog2.show();
+            showDialog2(response);
         }
 
         @Override
@@ -111,6 +111,12 @@ public class RequestTokenActivity extends AppCompatActivity {
             dialog.dismiss();
         }
     };
+
+    private void showDialog2(RequestTokenApiResponse response) {
+        if (response.message.contains("Token sent")){
+            dialog2.show();
+        }
+    }
 
     private void initViews(){
         enterPhoneNumber = findViewById(R.id.edtRequestPhoneNumber);

@@ -12,6 +12,7 @@ import com.example.meisterbot.listeners.PostOfferListener;
 import com.example.meisterbot.listeners.PostPersonaListener;
 import com.example.meisterbot.listeners.PostTransactionListener;
 import com.example.meisterbot.listeners.RequestTokenListener;
+import com.example.meisterbot.listeners.ResetPasswordListener;
 import com.example.meisterbot.listeners.STKPushListener;
 import com.example.meisterbot.models.CheckTransactionApiResponse;
 import com.example.meisterbot.models.GetOffersBody;
@@ -26,6 +27,8 @@ import com.example.meisterbot.models.PostLoginApiResponse;
 import com.example.meisterbot.models.PostOfferApiResponse;
 import com.example.meisterbot.models.RequestTokenApiResponse;
 import com.example.meisterbot.models.RequestTokenPojo;
+import com.example.meisterbot.models.ResetPasswordApiResponse;
+import com.example.meisterbot.models.ResetPasswordPojo;
 import com.example.meisterbot.models.STKPushPojo;
 import com.example.meisterbot.models.STKPushResponse;
 import com.example.meisterbot.models.TariffApiResponse;
@@ -255,6 +258,26 @@ public class RequestManager {
         });
     }
 
+    public void resetPassword(ResetPasswordListener listener, ResetPasswordPojo pojo){
+        ResetPassword resetPassword = retrofit.create(ResetPassword.class);
+        Call<ResetPasswordApiResponse> call = resetPassword.resetPassword(pojo);
+        call.enqueue(new Callback<ResetPasswordApiResponse>() {
+            @Override
+            public void onResponse(Call<ResetPasswordApiResponse> call, Response<ResetPasswordApiResponse> response) {
+                if (!response.isSuccessful()){
+                    listener.didError(response.message()+" error from onResponse");
+                    return;
+                }
+                listener.didFetch(response.body(), response.message());
+            }
+
+            @Override
+            public void onFailure(Call<ResetPasswordApiResponse> call, Throwable throwable) {
+                listener.didError(throwable.getMessage()+" error from onFailure");
+            }
+        });
+    }
+
     private interface PostPersona {
         @POST("api/bingwa_credentials")
         Call<PostPersonaApiResponse> postPersona(@Body Persona persona);
@@ -277,12 +300,10 @@ public class RequestManager {
         @POST("api/transactions")
         Call<TransactionApiResponse> postTransaction(@Body Transaction transaction);
     }
-
     private interface STKPush{
         @POST("api/stkpush")
         Call<STKPushResponse> stkPush (@Body STKPushPojo stkPushPojo);
     }
-
     private interface GetPayment{
         @GET("api/successful-payments")
         Call<Payment> getPayment(
@@ -299,9 +320,12 @@ public class RequestManager {
                 @Query("phoneNumber") String phoneNumber
         );
     }
-
     private interface RequestToken{
         @POST("api/request-reset")
         Call<RequestTokenApiResponse> requestToken (@Body RequestTokenPojo pojo);
+    }
+    private interface ResetPassword{
+        @POST("api/update-password")
+        Call<ResetPasswordApiResponse> resetPassword (@Body ResetPasswordPojo pojo);
     }
 }

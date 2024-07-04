@@ -94,7 +94,7 @@ public class RetryService extends Service {
                             String ussd = pojo.getUssd();
                             int till = pojo.getTill();
                             String message = pojo.getMessageFull();
-                            checkTransaction(RetryService.this,number);
+//                            checkTransaction(RetryService.this,number);
                             dialUssdCode(getApplicationContext(),subId,ussd,till,amount,number,message);
                             Log.d(TAG,"Executing...");
                         }

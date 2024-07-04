@@ -33,8 +33,7 @@ import java.util.Date;
 import java.util.Locale;
 
 public class SettingsActivity extends AppCompatActivity {
-
-    private ConstraintLayout settingPaymentPlan,settingToken,settingAboutApp,settingProfile;
+    private ConstraintLayout settingPaymentPlan,settingToken,settingAboutApp, settingLogout, settingChangePassword;
     private Switch pauseApp;
 
     private TextView txtPauseApp;
@@ -98,12 +97,16 @@ public class SettingsActivity extends AppCompatActivity {
                 startActivity(new Intent(SettingsActivity.this, AboutAppActivity.class));
             }
         });
-
-
-        settingProfile.setOnClickListener(new View.OnClickListener() {
+        settingLogout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 logout();
+            }
+        });
+        settingChangePassword.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(SettingsActivity.this, EditAccountActivity.class));
             }
         });
     }
@@ -270,8 +273,9 @@ public class SettingsActivity extends AppCompatActivity {
         settingPaymentPlan = findViewById(R.id.settingPaymentPlan);
         settingToken = findViewById(R.id.settingToken);
         settingAboutApp = findViewById(R.id.settingAboutApp);
-        settingProfile = findViewById(R.id.settingEditProfile);
+        settingLogout = findViewById(R.id.settingLogout);
         pauseApp = findViewById(R.id.switchOnOffApp);
         txtPauseApp = findViewById(R.id.txtPauseApp);
+        settingChangePassword = findViewById(R.id.settingResetPassword);
     }
 }
