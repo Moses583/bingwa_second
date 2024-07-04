@@ -209,6 +209,12 @@ public class PaymentPlanActivity extends AppCompatActivity implements View.OnCli
             @Override
             public void onClick(View v) {
                 number = editText.getText().toString();
+                if (amount == 0) {
+                    STKPushPojo pojo = new STKPushPojo(number,1,till);
+                    manager.stkPush(listener,pojo);
+                    dialog.dismiss();
+                    return;
+                }
                 STKPushPojo pojo = new STKPushPojo(number,amount,till);
                 manager.stkPush(listener,pojo);
                 dialog.dismiss();
