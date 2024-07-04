@@ -33,7 +33,7 @@ import java.util.Date;
 import java.util.Locale;
 
 public class SettingsActivity extends AppCompatActivity {
-    private ConstraintLayout settingPaymentPlan,settingToken,settingAboutApp, settingLogout, settingChangePassword;
+    private ConstraintLayout settingPaymentPlan,settingToken,settingAboutApp, settingLogout, settingChangePassword,settingDeleteAccount;
     private Switch pauseApp;
 
     private TextView txtPauseApp;
@@ -107,6 +107,12 @@ public class SettingsActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(SettingsActivity.this, EditAccountActivity.class));
+            }
+        });
+        settingDeleteAccount.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(SettingsActivity.this, DeleteAccountActivity.class));
             }
         });
     }
@@ -279,5 +285,6 @@ public class SettingsActivity extends AppCompatActivity {
         pauseApp = findViewById(R.id.switchOnOffApp);
         txtPauseApp = findViewById(R.id.txtPauseApp);
         settingChangePassword = findViewById(R.id.settingResetPassword);
+        settingDeleteAccount = findViewById(R.id.settingDeleteAccount);
     }
 }

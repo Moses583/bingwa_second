@@ -19,15 +19,14 @@
         android:text="@string/AboutAppText"
         android:textColor="@color/black"
         android:textAlignment="viewStart"
-        android:layout_margin="10dp"
-        android:padding="8dp"/>
+        android:layout_margin="10dp"/>
 
     <TextView
         android:id="@+id/aboutTxtOne"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
-        android:padding="8dp"
+
         android:text="Contact us at:"
         android:textColor="@color/black" />
 
@@ -37,7 +36,6 @@
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
         android:text="support@ujuzicraft.com"
-        android:padding="8dp"
         android:textColor="@color/green"
         android:clickable="true"
         android:focusable="true"
@@ -50,10 +48,42 @@
         android:layout_margin="10dp"
         android:layout_marginStart="16dp"
         android:text="+254 796 888 444"
-        android:padding="8dp"
         android:textColor="@color/green"
         android:clickable="true"
         android:focusable="true"
         android:foreground="?android:attr/selectableItemBackground"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Dear user, take a moment to review our Privacy Policy and Terms and Conditions"
+        android:textColor="@color/black"
+        android:textAlignment="viewStart"
+        android:layout_margin="10dp"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Privacy policy"
+        android:textColor="@color/green"
+        android:textAlignment="viewStart"
+        android:layout_margin="10dp"
+        android:clickable="true"
+        android:focusable="true"
+        android:foreground="?android:attr/selectableItemBackground"
+        android:id="@+id/txtPrivacyPolicy"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Terms and conditions"
+        android:textColor="@color/green"
+        android:textAlignment="viewStart"
+        android:layout_margin="10dp"
+        android:clickable="true"
+        android:focusable="true"
+        android:foreground="?android:attr/selectableItemBackground"
+        android:id="@+id/txtTermsAndConditions"/>
+
 
 </LinearLayout>

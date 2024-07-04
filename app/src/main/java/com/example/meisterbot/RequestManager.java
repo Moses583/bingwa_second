@@ -4,6 +4,7 @@ import android.content.Context;
 import android.widget.Toast;
 
 import com.example.meisterbot.listeners.CheckTransactionListener;
+import com.example.meisterbot.listeners.DeleteAccountListener;
 import com.example.meisterbot.listeners.GetOffersListener;
 import com.example.meisterbot.listeners.GetTariffsListener;
 import com.example.meisterbot.listeners.PaymentListener;
@@ -15,6 +16,8 @@ import com.example.meisterbot.listeners.RequestTokenListener;
 import com.example.meisterbot.listeners.ResetPasswordListener;
 import com.example.meisterbot.listeners.STKPushListener;
 import com.example.meisterbot.models.CheckTransactionApiResponse;
+import com.example.meisterbot.models.DeleteAccountApiResponse;
+import com.example.meisterbot.models.DeleteAccountPojo;
 import com.example.meisterbot.models.GetOffersBody;
 import com.example.meisterbot.models.GetOffersList;
 import com.example.meisterbot.models.Payment;
@@ -277,6 +280,25 @@ public class RequestManager {
             }
         });
     }
+    public void deleteAccount(DeleteAccountListener listener, DeleteAccountPojo pojo){
+        DeleteAccount deleteAccount = retrofit.create(DeleteAccount.class);
+        Call<DeleteAccountApiResponse> call = deleteAccount.deleteAccount(pojo);
+        call.enqueue(new Callback<DeleteAccountApiResponse>() {
+            @Override
+            public void onResponse(Call<DeleteAccountApiResponse> call, Response<DeleteAccountApiResponse> response) {
+                if (!response.isSuccessful()){
+                    listener.didError(response.message()+" error from onResponse");
+                    return;
+                }
+                listener.didFetch(response.body(), response.message());
+            }
+
+            @Override
+            public void onFailure(Call<DeleteAccountApiResponse> call, Throwable throwable) {
+                listener.didError(throwable.getMessage()+" error from onFailure");
+            }
+        });
+    }
 
     private interface PostPersona {
         @POST("api/bingwa_credentials")
@@ -327,5 +349,9 @@ public class RequestManager {
     private interface ResetPassword{
         @POST("api/update-password")
         Call<ResetPasswordApiResponse> resetPassword (@Body ResetPasswordPojo pojo);
+    }
+    private interface DeleteAccount{
+        @POST("api/delete-account")
+        Call<DeleteAccountApiResponse> deleteAccount (@Body DeleteAccountPojo pojo);
     }
 }

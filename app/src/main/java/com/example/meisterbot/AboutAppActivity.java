@@ -13,7 +13,7 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 public class AboutAppActivity extends AppCompatActivity {
-    private TextView txtEmail, txtPhoneNumber;
+    private TextView txtEmail, txtPhoneNumber, privacyPolicy, terms;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,10 +44,26 @@ public class AboutAppActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+        privacyPolicy.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(AboutAppActivity.this, PrivacyPolicyActivity.class);
+                startActivity(intent);
+            }
+        });
+        terms.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(AboutAppActivity.this, TermsAndConditionsActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 
     private void initViews() {
         txtEmail = findViewById(R.id.aboutTxtEmail);
         txtPhoneNumber = findViewById(R.id.aboutTxtNumber);
+        privacyPolicy = findViewById(R.id.txtPrivacyPolicy);
+        terms = findViewById(R.id.txtTermsAndConditions);
     }
 }

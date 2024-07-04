@@ -26,6 +26,15 @@
         android:theme="@style/Theme.MeisterBot"
         tools:targetApi="31">
         <activity
+            android:name=".DeleteAccountActivity"
+            android:exported="false" />
+        <activity
+            android:name=".TermsAndConditionsActivity"
+            android:exported="false" />
+        <activity
+            android:name=".PrivacyPolicyActivity"
+            android:exported="false" />
+        <activity
             android:name=".RequestTokenActivity"
             android:exported="false" />
         <activity
