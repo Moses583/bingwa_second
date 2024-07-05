@@ -3,15 +3,15 @@ plugins {
 }
 
 android {
-    namespace 'com.bingwa.meisterbot'
+    namespace 'com.bingwa.bingwasokonibot'
     compileSdk 34
 
     defaultConfig {
-        applicationId "com.bingwa.meisterbot"
+        applicationId "com.bingwa.bingwasokonibot"
         minSdk 24
         targetSdk 34
-        versionCode 18
-        versionName "1.18"
+        versionCode 25
+        versionName "1.25"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
