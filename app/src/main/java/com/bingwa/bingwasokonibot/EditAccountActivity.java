@@ -31,7 +31,7 @@ public class EditAccountActivity extends AppCompatActivity {
     private EditText one,two;
     private Button button;
     RequestManager manager;
-    DBHelper helper;
+    DBHelper helper,helper2;
     public String till;
     private AlertDialog dialog,dialog2;
     private Button btnResetExit;
@@ -121,7 +121,7 @@ public class EditAccountActivity extends AppCompatActivity {
 
     private void callApi(String till, String passTwo) {
         ResetPasswordPojo pojo = new ResetPasswordPojo(till,passTwo);
-        manager.resetPassword(listener,pojo);
+        manager.resetPassword(listener,pojo,token());
     }
     private final ResetPasswordListener listener = new ResetPasswordListener() {
         @Override
@@ -164,6 +164,20 @@ public class EditAccountActivity extends AppCompatActivity {
         }
         cursor.close();
         return till;
+    }
+    public String token(){
+        helper2 = new DBHelper(this);
+        Cursor cursor = helper2.getToken();
+        String token = "";
+        if (cursor.getCount() == 0){
+            Toast.makeText(this, "token not found", Toast.LENGTH_SHORT).show();
+        }else{
+            while (cursor.moveToNext()){
+                token = cursor.getString(0);
+            }
+        }
+        cursor.close();
+        return "Bearer "+token;
     }
 
     private void initViews() {

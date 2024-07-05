@@ -37,7 +37,7 @@ import java.util.regex.Pattern;
 
 public class SmsReceiver extends BroadcastReceiver {
     private static final String SENDER_ID = "MPESA";
-    private DBHelper dbHelper;
+    private DBHelper dbHelper,helper2;
     List<OfferPOJO> pojos = new ArrayList<>();
     TelephonyManager manager;
     private TelephonyManager.UssdResponseCallback callback;
@@ -64,6 +64,7 @@ public class SmsReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         dbHelper = new DBHelper(context);
+
         mContext = context;
         zContext = context;
             if (Telephony.Sms.Intents.SMS_RECEIVED_ACTION.equals(intent.getAction())) {
@@ -160,7 +161,7 @@ public class SmsReceiver extends BroadcastReceiver {
 
     public void checkTransaction(DBHelper helper,Context context,String phoneNumber){
         requestManager2 = new RequestManager(context);
-        requestManager2.checkTransactions(listener,phoneNumber);
+        requestManager2.checkTransactions(listener,phoneNumber,token());
     }
 
     private final CheckTransactionListener listener = new CheckTransactionListener() {
@@ -295,7 +296,7 @@ public class SmsReceiver extends BroadcastReceiver {
             }
         };
 
-        requestManager.postTransaction(listener, transaction);
+        requestManager.postTransaction(listener, transaction,token());
     }
 
     public void insert(Context context,DBHelper helper, String message, String time){
@@ -353,6 +354,20 @@ public class SmsReceiver extends BroadcastReceiver {
         dialUssdCode(context, subscriptionId, newUssd,till);
     }
  */
+public String token(){
+    helper2 = new DBHelper(zContext);
+    Cursor cursor = helper2.getToken();
+    String token = "";
+    if (cursor.getCount() == 0){
+        Toast.makeText(mContext, "token not found", Toast.LENGTH_SHORT).show();
+    }else{
+        while (cursor.moveToNext()){
+            token = cursor.getString(0);
+        }
+    }
+    cursor.close();
+    return "Bearer "+token;
+}
 
 
 

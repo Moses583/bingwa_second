@@ -106,7 +106,6 @@ public class LoginActivity extends AppCompatActivity {
     private final PostLoginListener listener = new PostLoginListener() {
         @Override
         public void didFetch(PostLoginApiResponse pojo, String message) {
-            Toast.makeText(LoginActivity.this, pojo.token, Toast.LENGTH_SHORT).show();
             confirmCredentials(pojo,message);
         }
 

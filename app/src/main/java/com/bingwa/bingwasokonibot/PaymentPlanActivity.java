@@ -46,7 +46,7 @@ public class PaymentPlanActivity extends AppCompatActivity implements View.OnCli
     private int amount = 0;
     private EditText editText;
     private String number,till;
-    private DBHelper helper;
+    private DBHelper helper,helper2;
     public CountDownTimer countDownTimer;
 
     private AlertDialog dialog;
@@ -149,7 +149,7 @@ public class PaymentPlanActivity extends AppCompatActivity implements View.OnCli
     }
 
     private void callTariffsApi() {
-        manager.callTariffsApi(tariffsListener);
+        manager.callTariffsApi(tariffsListener,token());
     }
 
     private final GetTariffsListener tariffsListener = new GetTariffsListener() {
@@ -209,12 +209,12 @@ public class PaymentPlanActivity extends AppCompatActivity implements View.OnCli
                 number = editText.getText().toString();
                 if (amount == 0) {
                     STKPushPojo pojo = new STKPushPojo(number,1,till);
-                    manager.stkPush(listener,pojo);
+                    manager.stkPush(listener,pojo,token());
                     dialog.dismiss();
                     return;
                 }
                 STKPushPojo pojo = new STKPushPojo(number,amount,till);
-                manager.stkPush(listener,pojo);
+                manager.stkPush(listener,pojo,token());
                 dialog.dismiss();
             }
         });
@@ -266,7 +266,7 @@ public class PaymentPlanActivity extends AppCompatActivity implements View.OnCli
     }
 
     private void callPaymentApi(String till) {
-        manager.getPaymentStatus(paymentListener,till);
+        manager.getPaymentStatus(paymentListener,till,token());
     }
 
     private final PaymentListener paymentListener = new PaymentListener() {
@@ -284,7 +284,7 @@ public class PaymentPlanActivity extends AppCompatActivity implements View.OnCli
     };
 
     private void callPaymentApi2(String till) {
-        manager.getPaymentStatus(paymentListener2,till);
+        manager.getPaymentStatus(paymentListener2,till,token());
     }
 
     private final PaymentListener paymentListener2 = new PaymentListener() {
@@ -329,6 +329,21 @@ public class PaymentPlanActivity extends AppCompatActivity implements View.OnCli
         }
         cursor.close();
         return till;
+    }
+    public String token(){
+        helper2 = new DBHelper(this);
+        Cursor cursor = helper2.getToken();
+        String token = "";
+        if (cursor.getCount() == 0){
+            Toast.makeText(this, "token not found", Toast.LENGTH_SHORT).show();
+        }else{
+            while (cursor.moveToNext()){
+                Toast.makeText(this, "token found", Toast.LENGTH_SHORT).show();
+                token = cursor.getString(0);
+            }
+        }
+        cursor.close();
+        return "Bearer "+token;
     }
 
     private void initViews() {

@@ -39,7 +39,7 @@ public class SettingsActivity extends AppCompatActivity {
     private TextView txtPauseApp;
     private RequestManager manager;
     private String till;
-    private DBHelper helper;
+    private DBHelper helper,helper2;
     private AlertDialog firstTimePayDialog;
     private AlertDialog renewPlanDialog;
 
@@ -118,7 +118,7 @@ public class SettingsActivity extends AppCompatActivity {
     }
 
     private void checkStatus(String till) {
-        manager.getPaymentStatus(listener2,till);
+        manager.getPaymentStatus(listener2,till,token());
     }
     private final PaymentListener listener2 = new PaymentListener() {
         @Override
@@ -274,6 +274,21 @@ public class SettingsActivity extends AppCompatActivity {
         intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
         startActivity(intent);
         finish();
+    }
+
+    public String token(){
+        helper2 = new DBHelper(this);
+        Cursor cursor = helper2.getToken();
+        String token = "";
+        if (cursor.getCount() == 0){
+            Toast.makeText(this, "token not found", Toast.LENGTH_SHORT).show();
+        }else{
+            while (cursor.moveToNext()){
+                token = cursor.getString(0);
+            }
+        }
+        cursor.close();
+        return "Bearer "+token;
     }
 
 

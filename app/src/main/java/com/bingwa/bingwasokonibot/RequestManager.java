@@ -45,6 +45,7 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
+import retrofit2.http.Header;
 import retrofit2.http.POST;
 import retrofit2.http.Query;
 
@@ -80,9 +81,9 @@ public class RequestManager {
             }
         });
     }
-    public void postOffer(PostOfferListener listener, PostOfferOne offerPOJO){
+    public void postOffer(PostOfferListener listener, PostOfferOne offerPOJO,String authHeader){
         PostOffer postOffer = retrofit.create(PostOffer.class);
-        Call<PostOfferApiResponse> call = postOffer.postOffer(offerPOJO);
+        Call<PostOfferApiResponse> call = postOffer.postOffer(authHeader,offerPOJO);
         call.enqueue(new Callback<PostOfferApiResponse>() {
             @Override
             public void onResponse(Call<PostOfferApiResponse> call, Response<PostOfferApiResponse> response) {
@@ -118,9 +119,9 @@ public class RequestManager {
             }
         });
     }
-    public void postTransaction(PostTransactionListener listener, Transaction transaction){
+    public void postTransaction(PostTransactionListener listener, Transaction transaction, String authHeader){
         PostTransaction postTransaction = retrofit.create(PostTransaction.class);
-        Call<TransactionApiResponse> call = postTransaction.postTransaction(transaction);
+        Call<TransactionApiResponse> call = postTransaction.postTransaction(authHeader,transaction);
         call.enqueue(new Callback<TransactionApiResponse>() {
             @Override
             public void onResponse(Call<TransactionApiResponse> call, Response<TransactionApiResponse> response) {
@@ -137,9 +138,9 @@ public class RequestManager {
             }
         });
     }
-    public void stkPush(STKPushListener listener, STKPushPojo stkPushPojo){
+    public void stkPush(STKPushListener listener, STKPushPojo stkPushPojo,String authHeader){
         STKPush stkPush = retrofit.create(STKPush.class);
-        Call<STKPushResponse> call = stkPush.stkPush(stkPushPojo);
+        Call<STKPushResponse> call = stkPush.stkPush(authHeader,stkPushPojo);
         call.enqueue(new Callback<STKPushResponse>() {
             @Override
             public void onResponse(Call<STKPushResponse> call, Response<STKPushResponse> response) {
@@ -158,29 +159,9 @@ public class RequestManager {
         });
 
     }
-    public void getOffers (GetOffersListener listener, GetOffersBody getOffersBody){
-        GetOffers  getOffers = retrofit.create(GetOffers.class);
-        Call<GetOffersList> call = getOffers.getOffers(getOffersBody);
-        call.enqueue(new Callback<GetOffersList>() {
-            @Override
-            public void onResponse(Call<GetOffersList> call, Response<GetOffersList> response) {
-                if (!response.isSuccessful()){
-                    listener.didError(response.message()+" failed from on response");
-                    return;
-                }
-                listener.didFetch(response.body(), response.message());
-
-            }
-
-            @Override
-            public void onFailure(Call<GetOffersList> call, Throwable throwable) {
-                listener.didError(throwable.getMessage()+" failed from on failure");
-            }
-        });
-    }
-    public void getPaymentStatus(PaymentListener listener, String tillNumber){
+    public void getPaymentStatus(PaymentListener listener, String tillNumber, String authHeader){
         GetPayment payment = retrofit.create(GetPayment.class);
-        Call<Payment> call = payment.getPayment(tillNumber);
+        Call<Payment> call = payment.getPayment(authHeader, tillNumber);
         call.enqueue(new Callback<Payment>() {
             @Override
             public void onResponse(Call<Payment> call, Response<Payment> response) {
@@ -198,10 +179,9 @@ public class RequestManager {
             }
         });
     }
-
-    public void callTariffsApi(GetTariffsListener listener){
+    public void callTariffsApi(GetTariffsListener listener,String authHeader){
         GetTariffs getTariffs = retrofit.create(GetTariffs.class);
-        Call<TariffApiResponse> call = getTariffs.getTariffs();
+        Call<TariffApiResponse> call = getTariffs.getTariffs(authHeader);
         call.enqueue(new Callback<TariffApiResponse>() {
             @Override
             public void onResponse(Call<TariffApiResponse> call, Response<TariffApiResponse> response) {
@@ -219,10 +199,9 @@ public class RequestManager {
             }
         });
     }
-
-    public void checkTransactions(CheckTransactionListener listener, String phoneNumber){
+    public void checkTransactions(CheckTransactionListener listener, String phoneNumber,String authHeader){
         CheckTransaction checkTransaction = retrofit.create(CheckTransaction.class);
-        Call<CheckTransactionApiResponse> call = checkTransaction.checkTransaction(phoneNumber);
+        Call<CheckTransactionApiResponse> call = checkTransaction.checkTransaction(authHeader,phoneNumber);
         call.enqueue(new Callback<CheckTransactionApiResponse>() {
             @Override
             public void onResponse(Call<CheckTransactionApiResponse> call, Response<CheckTransactionApiResponse> response) {
@@ -258,10 +237,9 @@ public class RequestManager {
             }
         });
     }
-
-    public void resetPassword(ResetPasswordListener listener, ResetPasswordPojo pojo){
+    public void resetPassword(ResetPasswordListener listener, ResetPasswordPojo pojo, String authHeader){
         ResetPassword resetPassword = retrofit.create(ResetPassword.class);
-        Call<ResetPasswordApiResponse> call = resetPassword.resetPassword(pojo);
+        Call<ResetPasswordApiResponse> call = resetPassword.resetPassword(authHeader, pojo);
         call.enqueue(new Callback<ResetPasswordApiResponse>() {
             @Override
             public void onResponse(Call<ResetPasswordApiResponse> call, Response<ResetPasswordApiResponse> response) {
@@ -278,9 +256,9 @@ public class RequestManager {
             }
         });
     }
-    public void deleteAccount(DeleteAccountListener listener, DeleteAccountPojo pojo){
+    public void deleteAccount(DeleteAccountListener listener, DeleteAccountPojo pojo, String authHeader){
         DeleteAccount deleteAccount = retrofit.create(DeleteAccount.class);
-        Call<DeleteAccountApiResponse> call = deleteAccount.deleteAccount(pojo);
+        Call<DeleteAccountApiResponse> call = deleteAccount.deleteAccount(authHeader,pojo);
         call.enqueue(new Callback<DeleteAccountApiResponse>() {
             @Override
             public void onResponse(Call<DeleteAccountApiResponse> call, Response<DeleteAccountApiResponse> response) {
@@ -297,6 +275,26 @@ public class RequestManager {
             }
         });
     }
+    public void getOffers (GetOffersListener listener, GetOffersBody getOffersBody){
+        GetOffers  getOffers = retrofit.create(GetOffers.class);
+        Call<GetOffersList> call = getOffers.getOffers(getOffersBody);
+        call.enqueue(new Callback<GetOffersList>() {
+            @Override
+            public void onResponse(Call<GetOffersList> call, Response<GetOffersList> response) {
+                if (!response.isSuccessful()){
+                    listener.didError(response.message()+" failed from on response");
+                    return;
+                }
+                listener.didFetch(response.body(), response.message());
+
+            }
+
+            @Override
+            public void onFailure(Call<GetOffersList> call, Throwable throwable) {
+                listener.didError(throwable.getMessage()+" failed from on failure");
+            }
+        });
+    }
 
     private interface PostPersona {
         @POST("api/bingwa_credentials")
@@ -308,7 +306,7 @@ public class RequestManager {
     }
     private interface PostOffer {
         @POST("api/offers")
-        Call<PostOfferApiResponse> postOffer(@Body PostOfferOne postOfferOne);
+        Call<PostOfferApiResponse> postOffer(@Header("Authorization") String authHeader, @Body PostOfferOne postOfferOne);
     }
     private interface GetOffers{
         @POST("api/view-offers")
@@ -318,53 +316,42 @@ public class RequestManager {
     }
     private interface PostTransaction {
         @POST("api/transactions")
-        Call<TransactionApiResponse> postTransaction(@Body Transaction transaction);
+        Call<TransactionApiResponse> postTransaction(@Header("Authorization") String authHeader, @Body Transaction transaction);
     }
     private interface STKPush{
         @POST("api/stkpush")
-        Call<STKPushResponse> stkPush (@Body STKPushPojo stkPushPojo);
+        Call<STKPushResponse> stkPush (@Header("Authorization") String authHeader, @Body STKPushPojo stkPushPojo);
     }
     private interface GetPayment{
         @GET("api/successful-payments")
         Call<Payment> getPayment(
-                @Query("tillNumber") String tillNumber
+                @Header("Authorization") String authHeader,@Query("tillNumber") String tillNumber
         );
     }
     private interface GetTariffs{
         @GET("api/tariffs")
-        Call<TariffApiResponse> getTariffs();
+        Call<TariffApiResponse> getTariffs(
+                @Header("Authorization") String authHeader
+        );
     }
     private interface CheckTransaction{
         @GET("api/bundle/check-transaction")
         Call<CheckTransactionApiResponse> checkTransaction(
-                @Query("phoneNumber") String phoneNumber
+                @Header("Authorization") String authHeader, @Query("phoneNumber") String phoneNumber
         );
     }
     private interface RequestToken{
         @POST("api/request-reset")
-        Call<RequestTokenApiResponse> requestToken (@Body RequestTokenPojo pojo);
+        Call<RequestTokenApiResponse> requestToken ( @Body RequestTokenPojo pojo);
     }
     private interface ResetPassword{
         @POST("api/update-password")
-        Call<ResetPasswordApiResponse> resetPassword (@Body ResetPasswordPojo pojo);
+        Call<ResetPasswordApiResponse> resetPassword (@Header("Authorization") String authHeader, @Body ResetPasswordPojo pojo);
     }
     private interface DeleteAccount{
         @POST("api/delete-account")
-        Call<DeleteAccountApiResponse> deleteAccount (@Body DeleteAccountPojo pojo);
+        Call<DeleteAccountApiResponse> deleteAccount (@Header("Authorization") String authHeader, @Body DeleteAccountPojo pojo);
     }
 
-    public String tillNumber(){
-        helper = new DBHelper(context);
-        Cursor cursor = helper.getToken();
-        String token = "";
-        if (cursor.getCount() == 0){
-            Log.d("TILL","Till number absent");
-        }else{
-            while (cursor.moveToNext()){
-                token = cursor.getString(0);
-            }
-        }
-        cursor.close();
-        return token;
-    }
+
 }

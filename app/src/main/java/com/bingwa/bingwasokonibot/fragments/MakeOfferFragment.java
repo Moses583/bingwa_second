@@ -53,7 +53,7 @@ public class MakeOfferFragment extends Fragment {
     private List<OfferPOJO> pojos = new ArrayList<>();
     private ItemListAdapter listAdapter;
     RequestManager manager;
-    DBHelper dbHelper;
+    DBHelper dbHelper,helper2;
 
     private SwipeRefreshLayout swipeRefreshLayout;
 
@@ -151,7 +151,7 @@ public class MakeOfferFragment extends Fragment {
     }
 
     private void callPostOfferApi(){
-        manager.postOffer(listener2, postOffers());
+        manager.postOffer(listener2, postOffers(),token());
     }
 
     private final PostOfferListener listener2 = new PostOfferListener() {
@@ -227,6 +227,20 @@ public class MakeOfferFragment extends Fragment {
         super.onResume();
         showData();
         callPostOfferApi();
+    }
+    public String token(){
+        helper2 = new DBHelper(getActivity());
+        Cursor cursor = helper2.getToken();
+        String token = "";
+        if (cursor.getCount() == 0){
+            Toast.makeText(getActivity(), "token not found", Toast.LENGTH_SHORT).show();
+        }else{
+            while (cursor.moveToNext()){
+                token = cursor.getString(0);
+            }
+        }
+        cursor.close();
+        return "Bearer "+token;
     }
 
     private void initViews(View view) {

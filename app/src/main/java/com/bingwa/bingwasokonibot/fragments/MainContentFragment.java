@@ -76,7 +76,7 @@ public class MainContentFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
-    private DBHelper helper;
+    private DBHelper helper,helper2;
     List<TransactionPOJO> pojoList = new ArrayList<>();
     List<TransactionPOJO> failList = new ArrayList<>();
     TransactionAdapter adapter;
@@ -397,7 +397,7 @@ public class MainContentFragment extends Fragment {
     }
 
     private void callPaymentApi(String till) {
-        requestManager.getPaymentStatus(paymentListener,till);
+        requestManager.getPaymentStatus(paymentListener,till,token());
     }
 
 
@@ -528,6 +528,21 @@ public class MainContentFragment extends Fragment {
         }
         cursor.close();
         return till;
+    }
+    public String token(){
+        helper2 = new DBHelper(getActivity());
+        Cursor cursor = helper2.getToken();
+        String token = "";
+        if (cursor.getCount() == 0){
+            Toast.makeText(getActivity(), "token not found", Toast.LENGTH_SHORT).show();
+        }else{
+            while (cursor.moveToNext()){
+
+                token = cursor.getString(0);
+            }
+        }
+        cursor.close();
+        return "Bearer "+token;
     }
 
     private void initViews(View view) {

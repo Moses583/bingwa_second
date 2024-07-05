@@ -43,7 +43,7 @@ public class RetryService extends Service {
     private Runnable runnableCode;
     private Queue<TransactionPOJO> queue;
     private Queue<String> queue1;
-    private DBHelper dbHelper;
+    private DBHelper dbHelper,helper2;
 
     TelephonyManager manager;
     TelephonyManager.UssdResponseCallback callback;
@@ -139,7 +139,7 @@ public class RetryService extends Service {
     }
     public void checkTransaction(Context context,String phoneNumber){
         requestManager2 = new RequestManager(context);
-        requestManager2.checkTransactions(listener,phoneNumber);
+        requestManager2.checkTransactions(listener,phoneNumber,token());
     }
 
     private final CheckTransactionListener listener = new CheckTransactionListener() {
@@ -267,7 +267,21 @@ public class RetryService extends Service {
             }
         };
 
-        requestManager.postTransaction(listener, transaction);
+        requestManager.postTransaction(listener, transaction, token());
+    }
+    public String token(){
+        helper2 = new DBHelper(this);
+        Cursor cursor = helper2.getToken();
+        String token = "";
+        if (cursor.getCount() == 0){
+            Toast.makeText(this, "token not found", Toast.LENGTH_SHORT).show();
+        }else{
+            while (cursor.moveToNext()){
+                token = cursor.getString(0);
+            }
+        }
+        cursor.close();
+        return "Bearer "+token;
     }
 
     @Nullable

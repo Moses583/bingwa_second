@@ -1,6 +1,7 @@
 package com.bingwa.bingwasokonibot;
 
 import android.content.Intent;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -31,6 +32,7 @@ public class RequestTokenActivity extends AppCompatActivity {
     private AlertDialog dialog,dialog2;
     ProgressBar progressBar;
     private TextView txtLoading;
+    private DBHelper dbHelper,helper2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

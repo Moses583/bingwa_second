@@ -4,6 +4,7 @@ import android.app.ActivityManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -34,7 +35,7 @@ public class DeleteAccountActivity extends AppCompatActivity {
     private AlertDialog dialog;
     ProgressBar progressBar;
     private TextView txtLoading;
-    private DBHelper helper;
+    private DBHelper helper,helper2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,7 +86,7 @@ public class DeleteAccountActivity extends AppCompatActivity {
         else{
             deletePassword.setHelperTextEnabled(false);
             DeleteAccountPojo pojo = new DeleteAccountPojo(till,password);
-            manager.deleteAccount(listener,pojo);
+            manager.deleteAccount(listener,pojo,token());
         }
     }
 
@@ -160,6 +161,20 @@ public class DeleteAccountActivity extends AppCompatActivity {
             }
         }
         return false;
+    }
+    public String token(){
+        helper2 = new DBHelper(this);
+        Cursor cursor = helper2.getToken();
+        String token = "";
+        if (cursor.getCount() == 0){
+            Toast.makeText(this, "token not found", Toast.LENGTH_SHORT).show();
+        }else{
+            while (cursor.moveToNext()){
+                token = cursor.getString(0);
+            }
+        }
+        cursor.close();
+        return "Bearer "+token;
     }
 
     private void initViews() {
