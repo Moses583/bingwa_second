@@ -82,7 +82,6 @@ public class MainContentFragment extends Fragment {
     private String mParam2;
     private DBHelper helper,helper2;
     List<TransactionPOJO> pojoList = new ArrayList<>();
-    List<TransactionPOJO> failList = new ArrayList<>();
     TransactionAdapter adapter;
     private RecyclerView recyclerView;
     private SwipeRefreshLayout swipeRefreshLayout;
