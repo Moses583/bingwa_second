@@ -49,7 +49,6 @@ public class HomeActivity extends AppCompatActivity{
     private RequestManager manager;
     private DBHelper helper;
     private FloatingActionButton button;
-    private AlertDialog offerCreationDialog,firstTimePayDialog,renewPlanDialog;
     private ExtendedFloatingActionButton start,stop;
     public CountDownTimer countDownTimer;
 
@@ -164,10 +163,4 @@ public class HomeActivity extends AppCompatActivity{
         viewPager2 = findViewById(R.id.myViewPager);
         toolbar = findViewById(R.id.mainToolBar);
     }
-
-//    @Override
-//    public void onBackPressed() {
-//        super.onBackPressed();
-//        moveTaskToBack(true);
-//    }
 }

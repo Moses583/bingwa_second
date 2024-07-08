@@ -1,11 +1,14 @@
 package com.bingwa.bingwasokonibot.fragments;
 
 
+import static androidx.core.content.ContextCompat.checkSelfPermission;
+
 import android.Manifest;
 import android.app.Activity;
 import android.app.ActivityManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
@@ -13,6 +16,9 @@ import android.database.Cursor;
 import android.os.Build;
 import android.os.Bundle;
 
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.core.app.ActivityCompat;
@@ -103,7 +109,7 @@ public class MainContentFragment extends Fragment {
     private RequestManager requestManager;
 
     String till = "";
-    private AlertDialog offerCreationDialog,firstTimePayDialog,renewPlanDialog,dialog;
+    private AlertDialog offerCreationDialog,firstTimePayDialog,renewPlanDialog,dialog,requestPermissionDialog;
     private BroadcastReceiver dateBroadCast;
 
 
@@ -362,7 +368,7 @@ public class MainContentFragment extends Fragment {
         simMap.clear();
         simNames.clear();
         slotIndex.clear();
-        if (ActivityCompat.checkSelfPermission(getActivity(), android.Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
+        if (checkSelfPermission(getActivity(), android.Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(getActivity(),new String[]{android.Manifest.permission.READ_PHONE_STATE, Manifest.permission.CALL_PHONE},101);
             return;
         }
@@ -418,7 +424,7 @@ public class MainContentFragment extends Fragment {
                 super.handleMessage(msg);
             }
         };
-        if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
+        if (checkSelfPermission(getActivity(), Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions((Activity) getActivity(),new String[]{Manifest.permission.CALL_PHONE},101);
             return;
         }
@@ -463,7 +469,6 @@ public class MainContentFragment extends Fragment {
     }
 
 
-
     public void checkOffersOne(){
         Cursor cursor = helper.getOffers();
         if(cursor.getCount() == 0){
@@ -504,7 +509,6 @@ public class MainContentFragment extends Fragment {
         public void didFetch(Payment payment, String message) {
             confirm1(payment);
         }
-
         @Override
         public void didError(String message) {
             stopServiceOne();
