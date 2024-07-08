@@ -162,7 +162,6 @@ public class CreatePasswordActivity extends AppCompatActivity {
     private final PostPersonaListener listener = new PostPersonaListener() {
         @Override
         public void didFetch(PostPersonaApiResponse response, String message) {
-            Toast.makeText(CreatePasswordActivity.this, response.token, Toast.LENGTH_SHORT).show();
             edtTxtConfirmPassword.setHelperTextEnabled(false);
             completeLogin(response);
         }

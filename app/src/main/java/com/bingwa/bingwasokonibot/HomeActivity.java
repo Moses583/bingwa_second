@@ -94,7 +94,6 @@ public class HomeActivity extends AppCompatActivity{
         if (!hasPermissions(this, permissions)) {
             requestPermissions(permissions, 101);
         }
-//        startService();
 
         viewPager2.setAdapter(new ViewPagerAdapter(this));
         viewPager2.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
@@ -111,7 +110,7 @@ public class HomeActivity extends AppCompatActivity{
         bottomNavigationView.setOnItemSelectedListener(listener);
     }
 
-    private boolean hasPermissions(Context context, String... permissions) {
+    private boolean hasPermissions(Context context, String[] permissions) {
         for (String permission : permissions) {
             if (ContextCompat.checkSelfPermission(context, permission) != PackageManager.PERMISSION_GRANTED) {
                 return false;
@@ -131,7 +130,6 @@ public class HomeActivity extends AppCompatActivity{
         if (id == R.id.idSettings){
             startActivity(new Intent(HomeActivity.this, SettingsActivity.class));
             return true;
-
         }
 
         return super.onOptionsItemSelected(item);

@@ -132,6 +132,11 @@ public class DBHelper extends SQLiteOpenHelper {
         String pattern = "0";
         return database.rawQuery("SELECT * FROM Transactions WHERE status=?", new String[]{pattern});
     }
+    public Cursor getYesTransactions(){
+        SQLiteDatabase database = this.getWritableDatabase();
+        String pattern = "1";
+        return database.rawQuery("SELECT * FROM Transactions WHERE status=?", new String[]{pattern});
+    }
     public Boolean deleteTransaction () {
         SQLiteDatabase DB = this.getWritableDatabase();
         String pattern = "0";

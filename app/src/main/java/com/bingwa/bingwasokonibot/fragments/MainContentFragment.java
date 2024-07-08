@@ -4,16 +4,19 @@ package com.bingwa.bingwasokonibot.fragments;
 import android.Manifest;
 import android.app.Activity;
 import android.app.ActivityManager;
-import android.app.AlertDialog;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -47,6 +50,7 @@ import com.bingwa.bingwasokonibot.models.Payment;
 import com.bingwa.bingwasokonibot.models.TransactionPOJO;
 import com.bingwa.bingwasokonibot.services.MyService;
 import com.bingwa.bingwasokonibot.services.RetryService;
+import com.google.android.material.chip.ChipGroup;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -86,6 +90,7 @@ public class MainContentFragment extends Fragment {
     private TextView airtimeBalance,totalTransactions,failedTransactions,executeFailedTransactions,checkBalance;
     private RelativeLayout cancel, okay;
     Spinner spinner;
+    private ChipGroup chipGroup;
 
     private Button button;
 
@@ -95,11 +100,12 @@ public class MainContentFragment extends Fragment {
     private TelephonyManager manager;
     private TelephonyManager.UssdResponseCallback callback;
     private Handler handler;
-    private AlertDialog dialog;
+
     private RequestManager requestManager;
 
     String till = "";
-    private androidx.appcompat.app.AlertDialog offerCreationDialog,firstTimePayDialog,renewPlanDialog;
+    private AlertDialog offerCreationDialog,firstTimePayDialog,renewPlanDialog,dialog;
+    private BroadcastReceiver dateBroadCast;
 
 
 
@@ -152,9 +158,6 @@ public class MainContentFragment extends Fragment {
 
         checkOffersOne();
 
-
-
-
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -182,6 +185,43 @@ public class MainContentFragment extends Fragment {
                 }
             }
         });
+
+        chipGroup.setOnCheckedStateChangeListener(new ChipGroup.OnCheckedStateChangeListener() {
+            @Override
+            public void onCheckedChanged(@NonNull ChipGroup group, @NonNull List<Integer> checkedIds) {
+                if (checkedIds.isEmpty()){
+                    showData();
+                }else{
+                    for (int i:
+                            checkedIds) {
+                        switch (i){
+                            case R.id.chipAllTransactions:
+                                showData();
+                                break;
+                            case R.id.chipSuccessfulTransactions:
+                                showSuccess();
+                                break;
+                            case R.id.chipFailedTransactions:
+                                showFailed();
+                                break;
+                            default:
+                                showData();
+                                break;
+                        }
+                    }
+                }
+            }
+        });
+
+        dateBroadCast = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                if (intent.getAction().equals(Intent.ACTION_DATE_CHANGED)){
+                    pojoList.clear();
+                }
+            }
+        };
+
         return view;
     }
 
@@ -262,9 +302,59 @@ public class MainContentFragment extends Fragment {
             swipeRefreshLayout.setRefreshing(false);
         }
         cursor.close();
-        totalTransactions.setText(String.valueOf(pojoList.size()));
+        showRecycler(pojoList);
+    }
+    private void showSuccess(){
+        pojoList.clear();
+        Cursor cursor = helper.getYesTransactions();
+        if (cursor.getCount() == 0){
+            swipeRefreshLayout.setRefreshing(false);
+        }else{
+            while (cursor.moveToNext()){
+                String ussdResponse = cursor.getString(1);
+                String amount = cursor.getString(2);
+                String timeStamp = cursor.getString(3);
+                String recipient = cursor.getString(4);
+                String status = cursor.getString(5);
+                int subId = cursor.getInt(6);
+                String ussd = cursor.getString(7);
+                int till = cursor.getInt(8);
+                String messageFull = cursor.getString(9);
+                pojoList.add(new TransactionPOJO(ussdResponse,amount,timeStamp,recipient,status,subId,ussd,till,messageFull));
+            }
+            swipeRefreshLayout.setRefreshing(false);
+        }
+        cursor.close();
+        showRecycler(pojoList);
+    }
+    private void showFailed(){
+        pojoList.clear();
+        Cursor cursor = helper.getFailedResponses();
+        if (cursor.getCount() == 0){
+            swipeRefreshLayout.setRefreshing(false);
+        }else{
+            while (cursor.moveToNext()){
+                String ussdResponse = cursor.getString(1);
+                String amount = cursor.getString(2);
+                String timeStamp = cursor.getString(3);
+                String recipient = cursor.getString(4);
+                String status = cursor.getString(5);
+                int subId = cursor.getInt(6);
+                String ussd = cursor.getString(7);
+                int till = cursor.getInt(8);
+                String messageFull = cursor.getString(9);
+                pojoList.add(new TransactionPOJO(ussdResponse,amount,timeStamp,recipient,status,subId,ussd,till,messageFull));
+            }
+            swipeRefreshLayout.setRefreshing(false);
+        }
+        cursor.close();
+        showRecycler(pojoList);
+    }
+
+    private void showRecycler(List<TransactionPOJO> list){
+        totalTransactions.setText(String.valueOf(list.size()));
         adapter = new TransactionAdapter(getActivity());
-        adapter.setPojoList(pojoList);
+        adapter.setPojoList(list);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.setHasFixedSize(true);
@@ -320,7 +410,6 @@ public class MainContentFragment extends Fragment {
                         dialog.dismiss();
                     }
                     dialog.dismiss();
-
                 }
             };
         }
@@ -353,6 +442,14 @@ public class MainContentFragment extends Fragment {
     public void onResume() {
         super.onResume();
         showData();
+        getActivity().registerReceiver(dateBroadCast, new IntentFilter(Intent.ACTION_DATE_CHANGED));
+
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        getActivity().registerReceiver(dateBroadCast, new IntentFilter(Intent.ACTION_DATE_CHANGED));
     }
 
     public boolean myService(Context context){
@@ -366,6 +463,8 @@ public class MainContentFragment extends Fragment {
         return false;
     }
 
+
+
     public void checkOffersOne(){
         Cursor cursor = helper.getOffers();
         if(cursor.getCount() == 0){
@@ -376,7 +475,7 @@ public class MainContentFragment extends Fragment {
     }
 
     private void showOfferCreationDialog(){
-        androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(getActivity());
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         LayoutInflater inflater = getLayoutInflater();
         View view = inflater.inflate(R.layout.dialog_create_offer,null);
         Button btn = view.findViewById(R.id.btnNavigateToCreateOffer);
@@ -425,7 +524,7 @@ public class MainContentFragment extends Fragment {
     }
 
     private void showFirstTimePayDialog() {
-        androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(getActivity());
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         LayoutInflater inflater = getLayoutInflater();
         View view = inflater.inflate(R.layout.dialog_first_time_pay,null);
         Button btn = view.findViewById(R.id.btnCheckAvailablePlans);
@@ -465,7 +564,7 @@ public class MainContentFragment extends Fragment {
     }
 
     private void showRenewPlanDialog() {
-        androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(getActivity());
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         LayoutInflater inflater = getLayoutInflater();
         View view = inflater.inflate(R.layout.dialog_subscription_expired,null);
         Button btn = view.findViewById(R.id.btnRenewPlan);
@@ -553,5 +652,6 @@ public class MainContentFragment extends Fragment {
         executeFailedTransactions = view.findViewById(R.id.executeFailedTransactions);
         failedTransactions = view.findViewById(R.id.txtFailedTransactions);
         checkBalance = view.findViewById(R.id.txtCheckAirtimeBalance);
+        chipGroup = view.findViewById(R.id.chipGroup);
     }
 }
