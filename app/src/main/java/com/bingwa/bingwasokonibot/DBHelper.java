@@ -13,7 +13,7 @@ import java.util.List;
 public class DBHelper extends SQLiteOpenHelper {
 
     public DBHelper( Context context) {
-        super(context, "RealDbSix.db",null,1);
+        super(context, "RealDbSeven.db",null,1);
     }
 
     @Override
@@ -24,6 +24,7 @@ public class DBHelper extends SQLiteOpenHelper {
         db.execSQL("create Table User(tillNumber TEXT)");
         db.execSQL("create Table Link(link TEXT)");
         db.execSQL("create Table AuthenticationToken(token TEXT)");
+        db.execSQL("create Table Renewals(id INTEGER PRIMARY KEY AUTOINCREMENT,frequency TEXT, codeUssd TEXT,period TEXT,numberTill TEXT)");
     }
 
     @Override
@@ -34,6 +35,7 @@ public class DBHelper extends SQLiteOpenHelper {
         db.execSQL("drop table if exists User");
         db.execSQL("drop table if exists Link");
         db.execSQL("drop table if exists AuthenticationToken");
+        db.execSQL("drop table if exists Renewals");
     }
 
     public Boolean insertData( String message, String time, String sender){
@@ -46,6 +48,19 @@ public class DBHelper extends SQLiteOpenHelper {
         return result != -1;
 
     }
+
+    public Boolean insertRenewals( String frequency, String codeUssd, String period,String numberTill){
+        SQLiteDatabase database = this.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put("frequency",frequency);
+        contentValues.put("codeUssd",codeUssd);
+        contentValues.put("period",period);
+        contentValues.put("numberTill",numberTill);
+        long result = database.insert("Renewals",null,contentValues);
+        return result != -1;
+
+    }
+
     public Boolean insertTransaction(String ussdResponse, String amount,String timeStamp, String recipient,String status, int subId, String ussd, int till, String messageFull){
         SQLiteDatabase database = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
@@ -119,6 +134,10 @@ public class DBHelper extends SQLiteOpenHelper {
         SQLiteDatabase database = this.getWritableDatabase();
         return database.rawQuery("Select * from Offers ORDER BY id DESC",null);
     }
+    public Cursor getRenewals(){
+        SQLiteDatabase database = this.getWritableDatabase();
+        return database.rawQuery("Select * from Renewals ORDER BY id DESC",null);
+    }
     public Cursor getTransactions(){
         SQLiteDatabase database = this.getWritableDatabase();
         return database.rawQuery("Select * from Transactions ORDER BY id DESC",null);
@@ -146,6 +165,11 @@ public class DBHelper extends SQLiteOpenHelper {
     public Boolean deleteData (String ussdCode) {
         SQLiteDatabase DB = this.getWritableDatabase();
         long result = DB.delete("Offers", "ussdCode=?", new String[]{ussdCode});
+        return result != -1;
+    }
+    public Boolean deleteRenewal (String ussdCode) {
+        SQLiteDatabase DB = this.getWritableDatabase();
+        long result = DB.delete("Renewals", "codeUssd=?", new String[]{ussdCode});
         return result != -1;
     }
     public void clearAllTables() {

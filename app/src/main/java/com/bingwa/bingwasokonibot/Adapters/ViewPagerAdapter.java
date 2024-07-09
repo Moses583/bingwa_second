@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 
+import com.bingwa.bingwasokonibot.fragments.AutorenewalsFragment;
 import com.bingwa.bingwasokonibot.fragments.InboxFragment;
 import com.bingwa.bingwasokonibot.fragments.MainContentFragment;
 import com.bingwa.bingwasokonibot.fragments.MakeOfferFragment;
@@ -25,6 +26,8 @@ public class ViewPagerAdapter extends FragmentStateAdapter {
             case 1:
                 return new MakeOfferFragment();
             case 2:
+                return new AutorenewalsFragment();
+            case 3:
                 return new InboxFragment();
             default:
                 return new MainContentFragment();
@@ -33,6 +36,6 @@ public class ViewPagerAdapter extends FragmentStateAdapter {
 
     @Override
     public int getItemCount() {
-        return 3;
+        return 4;
     }
 }

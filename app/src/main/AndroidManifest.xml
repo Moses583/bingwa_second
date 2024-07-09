@@ -26,6 +26,9 @@
         android:theme="@style/Theme.MeisterBot"
         tools:targetApi="31">
         <activity
+            android:name=".CreateRenewalActivity"
+            android:exported="false" />
+        <activity
             android:name=".DeleteAccountActivity"
             android:exported="false" />
         <activity
@@ -84,8 +87,7 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity>
-        <!-- <receiver -->
+        </activity> <!-- <receiver -->
         <!-- android:name=".SmsReceiver" -->
         <!-- android:enabled="true" -->
         <!-- android:exported="true" -->

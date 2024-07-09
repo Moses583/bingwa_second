@@ -11,6 +11,10 @@
         android:id="@+id/idCreateOffer"
         android:icon="@drawable/ic_offers" />
     <item
+        android:title="Auto renewals"
+        android:id="@+id/idAutoRenewOffer"
+        android:icon="@drawable/ic_auto_renew" />
+    <item
         android:title="Inbox"
         android:id="@+id/idInbox"
         android:icon="@drawable/ic_inbox"/>
