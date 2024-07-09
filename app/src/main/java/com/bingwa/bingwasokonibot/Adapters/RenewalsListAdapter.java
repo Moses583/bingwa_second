@@ -44,6 +44,7 @@ public class RenewalsListAdapter extends RecyclerView.Adapter<RenewalsViewHolder
         holder.ussdCode.setText(offerList.get(holder.getAdapterPosition()).getUssdCode());
         holder.period.setText(offerList.get(holder.getAdapterPosition()).getPeriod());
         holder.till.setText(offerList.get(holder.getAdapterPosition()).getTill());
+        holder.time.setText(offerList.get(holder.getAdapterPosition()).getTime());
         holder.btnEdit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -72,7 +73,7 @@ public class RenewalsListAdapter extends RecyclerView.Adapter<RenewalsViewHolder
     }
 }
 class RenewalsViewHolder extends RecyclerView.ViewHolder {
-    TextView frequency, ussdCode, period,till;
+    TextView frequency, ussdCode, period,till,time;
     LinearLayout selectOffer;
     ImageView btnEdit;
     public RenewalsViewHolder(@NonNull View itemView) {
@@ -81,6 +82,7 @@ class RenewalsViewHolder extends RecyclerView.ViewHolder {
         ussdCode = itemView.findViewById(R.id.renewalUssd);
         period = itemView.findViewById(R.id.renewalPeriod);
         till = itemView.findViewById(R.id.renewalTill);
+        time = itemView.findViewById(R.id.renewalTime);
         selectOffer = itemView.findViewById(R.id.selectRenewal);
         btnEdit = itemView.findViewById(R.id.btnEditRenewal);
     }

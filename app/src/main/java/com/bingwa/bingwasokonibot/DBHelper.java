@@ -13,7 +13,7 @@ import java.util.List;
 public class DBHelper extends SQLiteOpenHelper {
 
     public DBHelper( Context context) {
-        super(context, "RealDbSeven.db",null,1);
+        super(context, "RealDbEight.db",null,1);
     }
 
     @Override
@@ -24,7 +24,7 @@ public class DBHelper extends SQLiteOpenHelper {
         db.execSQL("create Table User(tillNumber TEXT)");
         db.execSQL("create Table Link(link TEXT)");
         db.execSQL("create Table AuthenticationToken(token TEXT)");
-        db.execSQL("create Table Renewals(id INTEGER PRIMARY KEY AUTOINCREMENT,frequency TEXT, codeUssd TEXT,period TEXT,numberTill TEXT)");
+        db.execSQL("create Table Renewals(id INTEGER PRIMARY KEY AUTOINCREMENT,frequency TEXT, codeUssd TEXT,period TEXT,numberTill TEXT,theTime TEXT)");
     }
 
     @Override
@@ -49,13 +49,14 @@ public class DBHelper extends SQLiteOpenHelper {
 
     }
 
-    public Boolean insertRenewals( String frequency, String codeUssd, String period,String numberTill){
+    public Boolean insertRenewals( String frequency, String codeUssd, String period,String numberTill,String time){
         SQLiteDatabase database = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put("frequency",frequency);
         contentValues.put("codeUssd",codeUssd);
         contentValues.put("period",period);
         contentValues.put("numberTill",numberTill);
+        contentValues.put("theTime",time);
         long result = database.insert("Renewals",null,contentValues);
         return result != -1;
 
