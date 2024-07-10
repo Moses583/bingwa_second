@@ -78,34 +78,6 @@
 
         </com.google.android.material.textfield.TextInputLayout>
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="start"
-                android:textColor="@color/black"
-                android:text="Select time of renewal:"
-                android:layout_marginStart="10dp"/>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="start"
-                android:textColor="@color/green"
-                android:text="Time of renewal"
-                android:layout_marginStart="10dp"
-                android:id="@+id/txtRenewalTime"/>
-        </LinearLayout>
-        <Button
-            android:id="@+id/btnSelectTime"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Select time"
-            android:layout_gravity="center"
-            android:layout_margin="10dp"/>
-
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="70dp">

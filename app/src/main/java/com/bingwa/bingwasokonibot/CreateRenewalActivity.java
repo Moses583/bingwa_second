@@ -40,13 +40,12 @@ public class CreateRenewalActivity extends AppCompatActivity {
 
     private DBHelper helper;
     private String frequency,period,ussdCode,dialId;
-    private Button btnSave,btnSelectTime;
+    private Button btnSave;
     private TextInputLayout enterUssdCode, enterPeriod;
     private Spinner spinner;
     RequestManager manager;
     private ArrayList<String> frequencies;
     private EditText one,two;
-    private TextView txtTime;
 
     private Map<Integer, Integer> simMap;
     private ArrayList<String> simNames;
@@ -80,12 +79,7 @@ public class CreateRenewalActivity extends AppCompatActivity {
                 proceed();
             }
         });
-        btnSelectTime.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                getRenewalTime();
-            }
-        });
+
     }
 
     private void listSimInfo() {
@@ -123,10 +117,9 @@ public class CreateRenewalActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (timePicker.getHour()>12){
-                    txtTime.setText(String.format("%02d",(timePicker.getHour()-12)) +":"+ String.format("%02d", timePicker.getMinute())+"PM");
                 }
                 else{
-                    txtTime.setText(timePicker.getHour()+":" + timePicker.getMinute()+ "AM");
+
                 }
                 calendar = Calendar.getInstance();
                 calendar.set(Calendar.HOUR_OF_DAY, timePicker.getHour());
@@ -239,8 +232,6 @@ public class CreateRenewalActivity extends AppCompatActivity {
     }
     private void initViews() {
         btnSave = findViewById(R.id.btnSaveRenewal);
-        btnSelectTime = findViewById(R.id.btnSelectTime);
-        txtTime = findViewById(R.id.txtRenewalTime);
         enterPeriod = findViewById(R.id.edtEnterPeriod);
         enterUssdCode = findViewById(R.id.edtUssdRenewal);
         spinner = findViewById(R.id.frequencySpinner);
