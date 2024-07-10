@@ -1,14 +1,15 @@
 package com.bingwa.bingwasokonibot.models;
 
 public class RenewalPOJO {
-    private String frequency,ussdCode,period,till,time;
+    private String frequency,ussdCode,period,till,subId,dialSimCard;
 
-    public RenewalPOJO(String frequency, String ussdCode, String period,String till,String time) {
+    public RenewalPOJO(String frequency, String ussdCode, String period,String till,String subId, String dialSimCard) {
         this.frequency = frequency;
         this.ussdCode = ussdCode;
         this.period = period;
         this.till = till;
-        this.time = time;
+        this.subId = subId;
+        this.dialSimCard = dialSimCard;
     }
 
     public String getFrequency() {
@@ -25,7 +26,10 @@ public class RenewalPOJO {
     public String getTill() {
         return till;
     }
-    public String getTime() {
-        return time;
+    public String getSubId() {
+        return subId;
+    }
+    public String getDialSimCard() {
+        return dialSimCard;
     }
 }

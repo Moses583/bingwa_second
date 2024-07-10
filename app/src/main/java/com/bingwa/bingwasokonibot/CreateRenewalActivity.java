@@ -1,15 +1,15 @@
 package com.bingwa.bingwasokonibot;
 
-import android.app.AlarmManager;
+import android.Manifest;
 import android.app.AlertDialog;
-import android.app.PendingIntent;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.icu.util.Calendar;
-import android.os.Build;
 import android.os.Bundle;
+import android.telephony.SubscriptionInfo;
+import android.telephony.SubscriptionManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -21,23 +21,25 @@ import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
-import com.bingwa.bingwasokonibot.models.OfferPOJO;
 import com.bingwa.bingwasokonibot.models.RenewalPOJO;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.android.material.timepicker.MaterialTimePicker;
 import com.google.android.material.timepicker.TimeFormat;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class CreateRenewalActivity extends AppCompatActivity {
 
     private DBHelper helper;
-    private String frequency,period,ussdCode;
+    private String frequency,period,ussdCode,dialId;
     private Button btnSave,btnSelectTime;
     private TextInputLayout enterUssdCode, enterPeriod;
     private Spinner spinner;
@@ -45,6 +47,10 @@ public class CreateRenewalActivity extends AppCompatActivity {
     private ArrayList<String> frequencies;
     private EditText one,two;
     private TextView txtTime;
+
+    private Map<Integer, Integer> simMap;
+    private ArrayList<String> simNames;
+    private ArrayList<Integer> slotIndex;
 
     private MaterialTimePicker timePicker;
     private Calendar calendar;
@@ -59,9 +65,14 @@ public class CreateRenewalActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+
+        helper = new DBHelper(this);
         initViews();
-        loadFrequencies();
         initEditTexts();
+        initArrays();
+
+        listSimInfo();
+
 
         btnSave.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -75,6 +86,29 @@ public class CreateRenewalActivity extends AppCompatActivity {
                 getRenewalTime();
             }
         });
+    }
+
+    private void listSimInfo() {
+        if (ActivityCompat.checkSelfPermission(CreateRenewalActivity.this, android.Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(CreateRenewalActivity.this,new String[]{android.Manifest.permission.READ_PHONE_STATE, Manifest.permission.CALL_PHONE},101);
+            return;
+        }
+        List<SubscriptionInfo> infoList = SubscriptionManager.from(CreateRenewalActivity.this).getActiveSubscriptionInfoList();
+        for (SubscriptionInfo info:
+                infoList) {
+            simMap.put(info.getSimSlotIndex(),info.getSubscriptionId());
+            String slot = String.valueOf(info.getSimSlotIndex()+1);
+            simNames.add(info.getCarrierName().toString()+" SIM: "+slot);
+            slotIndex.add(info.getSimSlotIndex());
+        }
+        ArrayAdapter adapter1 = new ArrayAdapter(CreateRenewalActivity.this, androidx.appcompat.R.layout.support_simple_spinner_dropdown_item,simNames);
+        spinner.setAdapter(adapter1);
+    }
+
+    private void initArrays() {
+        simMap = new HashMap<>();
+        simNames = new ArrayList<>();
+        slotIndex = new ArrayList<>();
     }
 
     private void getRenewalTime() {
@@ -124,13 +158,13 @@ public class CreateRenewalActivity extends AppCompatActivity {
         three.setText(fetchData().getUssdCode());
         four.setText(fetchData().getTill());
         two.setText(fetchData().getPeriod());
-        five.setText(fetchData().getTime());
+        five.setText(fetchData().getDialSimCard());
         builder.setView(dialogView);
 
         builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                boolean checkInsertData = helper.insertRenewals(fetchData().getFrequency(),fetchData().getUssdCode(),fetchData().getPeriod(), fetchData().getTill(), fetchData().getTime());
+                boolean checkInsertData = helper.insertRenewals(fetchData().getFrequency(),fetchData().getUssdCode(),fetchData().getPeriod(), fetchData().getTill(), fetchData().getSubId(), fetchData().getDialSimCard());
                 if (checkInsertData){
                     Toast.makeText(CreateRenewalActivity.this, "data inserted", Toast.LENGTH_SHORT).show();
                 }else {
@@ -155,15 +189,7 @@ public class CreateRenewalActivity extends AppCompatActivity {
         two = enterUssdCode.getEditText();
     }
 
-    private void loadFrequencies(){
-        helper = new DBHelper(this);
-        frequencies = new ArrayList<>();
-        frequencies.add("Daily");
-        frequencies.add("Weekly");
-        frequencies.add("Monthly");
-        ArrayAdapter adapter1 = new ArrayAdapter(CreateRenewalActivity.this, androidx.appcompat.R.layout.support_simple_spinner_dropdown_item,frequencies);
-        spinner.setAdapter(adapter1);
-    }
+
 
     public RenewalPOJO fetchData(){
         boolean complete = true;
@@ -178,24 +204,31 @@ public class CreateRenewalActivity extends AppCompatActivity {
             complete = false;
         }
         if (complete){
-            return new RenewalPOJO(getFrequency(),period,ussdCode,tillNumber(),getTheTime());
+            return new RenewalPOJO("Daily",period,ussdCode,tillNumber(),dialId,getDialSimCard());
         }else{
             return null;
         }
 
     }
 
-    private String getFrequency() {
-        frequency = spinner.getSelectedItem().toString();
-        return frequency;
+    public String getDialSimCard(){
+        String dialSim1;
+        dialSim1 = spinner.getSelectedItem().toString();
+        if (dialSim1.contains("SIM: 1")){
+            dialId = String.valueOf(simMap.get(0));
+        }else if(dialSim1.contains("SIM: 2")){
+            dialId = String.valueOf(simMap.get(1));
+        }
+        return dialSim1;
     }
 
+
+
     public String tillNumber(){
-        Intent intent = getIntent();
         Cursor cursor = helper.getUser();
         String till = "";
         if (cursor.getCount() == 0){
-            till = intent.getStringExtra("till");
+            Toast.makeText(this, "till", Toast.LENGTH_SHORT).show();
         }else{
             while (cursor.moveToNext()){
                 till = cursor.getString(0);
@@ -203,9 +236,6 @@ public class CreateRenewalActivity extends AppCompatActivity {
         }
         cursor.close();
         return till;
-    }
-    private String getTheTime(){
-       return txtTime.getText().toString();
     }
     private void initViews() {
         btnSave = findViewById(R.id.btnSaveRenewal);

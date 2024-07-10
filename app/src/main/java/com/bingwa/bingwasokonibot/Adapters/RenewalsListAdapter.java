@@ -14,7 +14,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bingwa.bingwasokonibot.DBHelper;
 import com.bingwa.bingwasokonibot.R;
-import com.bingwa.bingwasokonibot.models.OfferPOJO;
 import com.bingwa.bingwasokonibot.models.RenewalPOJO;
 
 import java.util.List;
@@ -44,7 +43,7 @@ public class RenewalsListAdapter extends RecyclerView.Adapter<RenewalsViewHolder
         holder.ussdCode.setText(offerList.get(holder.getAdapterPosition()).getUssdCode());
         holder.period.setText(offerList.get(holder.getAdapterPosition()).getPeriod());
         holder.till.setText(offerList.get(holder.getAdapterPosition()).getTill());
-        holder.time.setText(offerList.get(holder.getAdapterPosition()).getTime());
+        holder.time.setText(offerList.get(holder.getAdapterPosition()).getDialSimCard());
         holder.btnEdit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

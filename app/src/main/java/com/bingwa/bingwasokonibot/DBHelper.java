@@ -13,7 +13,7 @@ import java.util.List;
 public class DBHelper extends SQLiteOpenHelper {
 
     public DBHelper( Context context) {
-        super(context, "RealDbEight.db",null,1);
+        super(context, "RealDbNine.db",null,1);
     }
 
     @Override
@@ -24,7 +24,7 @@ public class DBHelper extends SQLiteOpenHelper {
         db.execSQL("create Table User(tillNumber TEXT)");
         db.execSQL("create Table Link(link TEXT)");
         db.execSQL("create Table AuthenticationToken(token TEXT)");
-        db.execSQL("create Table Renewals(id INTEGER PRIMARY KEY AUTOINCREMENT,frequency TEXT, codeUssd TEXT,period TEXT,numberTill TEXT,theTime TEXT)");
+        db.execSQL("create Table Renewals(id INTEGER PRIMARY KEY AUTOINCREMENT,frequency TEXT, codeUssd TEXT,period TEXT,numberTill TEXT,theTime TEXT,simDial TEXT)");
     }
 
     @Override
@@ -49,7 +49,7 @@ public class DBHelper extends SQLiteOpenHelper {
 
     }
 
-    public Boolean insertRenewals( String frequency, String codeUssd, String period,String numberTill,String time){
+    public Boolean insertRenewals( String frequency, String codeUssd, String period,String numberTill,String time, String simDial){
         SQLiteDatabase database = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put("frequency",frequency);
@@ -57,6 +57,7 @@ public class DBHelper extends SQLiteOpenHelper {
         contentValues.put("period",period);
         contentValues.put("numberTill",numberTill);
         contentValues.put("theTime",time);
+        contentValues.put("simDial",simDial);
         long result = database.insert("Renewals",null,contentValues);
         return result != -1;
 

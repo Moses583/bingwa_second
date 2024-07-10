@@ -147,7 +147,8 @@ public class AutorenewalsFragment extends Fragment {
                 String period = cursor.getString(3);
                 String tillNumber = cursor.getString(4);
                 String time = cursor.getString(5);
-                RenewalPOJO pojo = new RenewalPOJO(frequency,ussdCode,period,tillNumber,time);
+                String dialSim = cursor.getString(6);
+                RenewalPOJO pojo = new RenewalPOJO(frequency,ussdCode,period,tillNumber,time,dialSim);
                 pojos.add(pojo);
             }
             swipeRefreshLayout.setRefreshing(false);

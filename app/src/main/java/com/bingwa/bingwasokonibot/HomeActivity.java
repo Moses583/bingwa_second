@@ -52,6 +52,8 @@ public class HomeActivity extends AppCompatActivity{
     private ExtendedFloatingActionButton start,stop;
     public CountDownTimer countDownTimer;
 
+    MyAlarmManager myAlarmManager;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -69,7 +71,9 @@ public class HomeActivity extends AppCompatActivity{
 
         manager = new RequestManager(this);
 
-//        checkOffersOne();
+
+        myAlarmManager = new MyAlarmManager(this);
+        myAlarmManager.setAlarm(19,02);
         countDownTimer = new CountDownTimer(5000,1000) {
             @Override
             public void onTick(long millisUntilFinished) {
