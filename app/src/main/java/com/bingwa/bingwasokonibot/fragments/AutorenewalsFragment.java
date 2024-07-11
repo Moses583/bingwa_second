@@ -121,18 +121,12 @@ public class AutorenewalsFragment extends Fragment {
         dbHelper = new DBHelper(getActivity());
         requestManager = new RequestManager(getActivity());
         showData();
-//        checkOffersOne();
+        checkOffersOne();
 
         create.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(getActivity(), CreateRenewalActivity.class));
-            }
-        });
-        upload.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                checkOffersOne();
             }
         });
 
@@ -141,12 +135,10 @@ public class AutorenewalsFragment extends Fragment {
             public void onClick(View v) {
                 if (show){
                     create.show();
-                    upload.show();
                     actions.setImageResource(R.drawable.ic_clear);
                     show = false;
                 }else{
                     create.hide();
-                    upload.hide();
                     show = true;
                     actions.setImageResource(R.drawable.ic_actions);
                 }
@@ -365,6 +357,7 @@ public class AutorenewalsFragment extends Fragment {
         myRecycler.setAdapter(listAdapter);
     }
 
+
     public String tillNumber(){
         Cursor cursor = dbHelper.getUser();
         String till = "";
@@ -383,6 +376,7 @@ public class AutorenewalsFragment extends Fragment {
     public void onResume() {
         super.onResume();
         showData();
+        checkOffersOne();
     }
     public String token(){
         Cursor cursor = dbHelper.getToken();
@@ -401,7 +395,6 @@ public class AutorenewalsFragment extends Fragment {
     private void initViews(View view) {
         myRecycler = view.findViewById(R.id.autorenewalsRecycler);
         create = view.findViewById(R.id.btnCreateRenewals);
-        upload = view.findViewById(R.id.btnUploadAllRenewals);
         actions = view.findViewById(R.id.btnChoices2);
         swipeRefreshLayout = view.findViewById(R.id.swipeRenewalsOffers);
     }
