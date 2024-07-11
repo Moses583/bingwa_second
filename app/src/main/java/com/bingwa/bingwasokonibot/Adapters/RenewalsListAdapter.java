@@ -41,9 +41,12 @@ public class RenewalsListAdapter extends RecyclerView.Adapter<RenewalsViewHolder
     public void onBindViewHolder(@NonNull RenewalsViewHolder holder, int position) {
         holder.frequency.setText(offerList.get(holder.getAdapterPosition()).getFrequency());
         holder.ussdCode.setText(offerList.get(holder.getAdapterPosition()).getUssdCode());
-        holder.period.setText(offerList.get(holder.getAdapterPosition()).getPeriod());
+        holder.period.setText(String.valueOf(offerList.get(holder.getAdapterPosition()).getPeriod()));
         holder.till.setText(offerList.get(holder.getAdapterPosition()).getTill());
         holder.time.setText(offerList.get(holder.getAdapterPosition()).getDialSimCard());
+        holder.money.setText(offerList.get(holder.getAdapterPosition()).getMoney());
+        holder.startDate.setText(offerList.get(holder.getAdapterPosition()).getDateCreation());
+        holder.endDate.setText(offerList.get(holder.getAdapterPosition()).getDateExpiry());
         holder.btnEdit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -72,7 +75,7 @@ public class RenewalsListAdapter extends RecyclerView.Adapter<RenewalsViewHolder
     }
 }
 class RenewalsViewHolder extends RecyclerView.ViewHolder {
-    TextView frequency, ussdCode, period,till,time;
+    TextView frequency, ussdCode, period,till,time,money,startDate,endDate;
     LinearLayout selectOffer;
     ImageView btnEdit;
     public RenewalsViewHolder(@NonNull View itemView) {
@@ -82,6 +85,9 @@ class RenewalsViewHolder extends RecyclerView.ViewHolder {
         period = itemView.findViewById(R.id.renewalPeriod);
         till = itemView.findViewById(R.id.renewalTill);
         time = itemView.findViewById(R.id.renewalTime);
+        money = itemView.findViewById(R.id.renewalMoney);
+        startDate = itemView.findViewById(R.id.renewalStartDate);
+        endDate = itemView.findViewById(R.id.renewalEndDate);
         selectOffer = itemView.findViewById(R.id.selectRenewal);
         btnEdit = itemView.findViewById(R.id.btnEditRenewal);
     }

@@ -13,7 +13,7 @@ import java.util.List;
 public class DBHelper extends SQLiteOpenHelper {
 
     public DBHelper( Context context) {
-        super(context, "RealDbNine.db",null,1);
+        super(context, "RealDbTwelve.db",null,1);
     }
 
     @Override
@@ -24,7 +24,7 @@ public class DBHelper extends SQLiteOpenHelper {
         db.execSQL("create Table User(tillNumber TEXT)");
         db.execSQL("create Table Link(link TEXT)");
         db.execSQL("create Table AuthenticationToken(token TEXT)");
-        db.execSQL("create Table Renewals(id INTEGER PRIMARY KEY AUTOINCREMENT,frequency TEXT, codeUssd TEXT,period TEXT,numberTill TEXT,theTime TEXT,simDial TEXT)");
+        db.execSQL("create Table Renewals(id INTEGER PRIMARY KEY AUTOINCREMENT,frequency TEXT, codeUssd TEXT,period INTEGER,numberTill TEXT,theTime TEXT,simDial TEXT,money TEXT, dateCreation TEXT, dateExpiry TEXT)");
     }
 
     @Override
@@ -38,7 +38,7 @@ public class DBHelper extends SQLiteOpenHelper {
         db.execSQL("drop table if exists Renewals");
     }
 
-    public Boolean insertData( String message, String time, String sender){
+    public boolean insertData( String message, String time, String sender){
         SQLiteDatabase database = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put("message",message);
@@ -46,10 +46,9 @@ public class DBHelper extends SQLiteOpenHelper {
         contentValues.put("sender",sender);
         long result = database.insert("InboxTable",null,contentValues);
         return result != -1;
-
     }
 
-    public Boolean insertRenewals( String frequency, String codeUssd, String period,String numberTill,String time, String simDial){
+    public boolean insertRenewals( String frequency, String codeUssd, int period, String numberTill, String time, String simDial,String money, String dateCreation, String dateExpiry){
         SQLiteDatabase database = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put("frequency",frequency);
@@ -58,12 +57,14 @@ public class DBHelper extends SQLiteOpenHelper {
         contentValues.put("numberTill",numberTill);
         contentValues.put("theTime",time);
         contentValues.put("simDial",simDial);
+        contentValues.put("money",money);
+        contentValues.put("dateCreation",dateCreation);
+        contentValues.put("dateExpiry",dateExpiry);
         long result = database.insert("Renewals",null,contentValues);
         return result != -1;
-
     }
 
-    public Boolean insertTransaction(String ussdResponse, String amount,String timeStamp, String recipient,String status, int subId, String ussd, int till, String messageFull){
+    public boolean insertTransaction(String ussdResponse, String amount,String timeStamp, String recipient,String status, int subId, String ussd, int till, String messageFull){
         SQLiteDatabase database = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put("ussdResponse",ussdResponse);
@@ -78,7 +79,7 @@ public class DBHelper extends SQLiteOpenHelper {
         long result = database.insert("Transactions",null,contentValues);
         return result != -1;
     }
-    public Boolean insertOffer(String name, String amount, String ussdCode, String dialSim, String dialSimId,String paymentSim,String paymentSimId,String offerTill){
+    public boolean insertOffer(String name, String amount, String ussdCode, String dialSim, String dialSimId,String paymentSim,String paymentSimId,String offerTill){
         SQLiteDatabase database = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put("name",name);
@@ -93,26 +94,31 @@ public class DBHelper extends SQLiteOpenHelper {
         return result != -1;
     }
 
-    public Boolean insertUser(String tillNumber){
+    public boolean insertUser(String tillNumber){
         SQLiteDatabase database = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put("tillNumber",tillNumber);
         long result = database.insert("User",null,contentValues);
         return result != -1;
     }
-    public Boolean insertLink(String link){
+    public boolean insertLink(String link){
         SQLiteDatabase database = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put("link",link);
         long result = database.insert("Link",null,contentValues);
         return result != -1;
     }
-    public Boolean insertToken(String token){
+    public boolean insertToken(String token){
         SQLiteDatabase database = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put("token",token);
         long result = database.insert("AuthenticationToken",null,contentValues);
         return result != -1;
+    }
+
+    public void updateRenewals() {
+        SQLiteDatabase database = this.getWritableDatabase();
+        database.execSQL("UPDATE Renewals SET period = period - 1 WHERE period > 0");
     }
 
     public Cursor getToken(){
@@ -174,17 +180,22 @@ public class DBHelper extends SQLiteOpenHelper {
         long result = DB.delete("Renewals", "codeUssd=?", new String[]{ussdCode});
         return result != -1;
     }
+    public Boolean deleteSuccessfulTransactions() {
+        SQLiteDatabase DB = this.getWritableDatabase();
+        long result = DB.delete("Transactions", null, null);
+        return result != -1;
+    }
+
     public void clearAllTables() {
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.rawQuery("SELECT name FROM sqlite_master WHERE type='table'", null);
         List<String> tables = new ArrayList<>();
 
-        // get all table names
+
         while (cursor.moveToNext()) {
             tables.add(cursor.getString(0));
         }
 
-        // delete all records from each table
         for (String table : tables) {
             String deleteQuery = "DELETE FROM " + table;
             db.execSQL(deleteQuery);

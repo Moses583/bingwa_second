@@ -82,29 +82,18 @@ public class SmsReceiver extends BroadcastReceiver {
             if (messageSender.equals(SENDER_ID)){
                 if (messageBody.contains("received Ksh")){
                     extract(context,messageBody);
-//                    getOffer(mContext,dbHelper,sub,matchedAmount);
-//                    insert(mContext,dbHelper,messageBody,globalTimestamp);
                     checkTransaction(dbHelper,context, smsNumber);
-//                    getOffers(dbHelper,context);
-//                    compareOffer(context);
                     insert(context,dbHelper,messageBody,timeStamp);
                 }
                 else if(messageBody.contains("AMKsh")){
                     extract2(context,messageBody);
-//                    getOffer(mContext,dbHelper,sub,matchedAmount);
-//                    insert(mContext,dbHelper,messageBody,globalTimestamp);
                     checkTransaction(dbHelper,context, smsNumber);
-//                    getOffers(dbHelper,context);
-//                    compareOffer(context);
                     insert(context,dbHelper,messageBody,timeStamp);
                 }
                 else if(messageBody.contains("PMKsh")){
                     extract3(context,messageBody);
-//                    getOffer(mContext,dbHelper,sub,matchedAmount);
                     insert(mContext,dbHelper,messageBody,globalTimestamp);
                     checkTransaction(dbHelper,context, smsNumber);
-//                    getOffers(dbHelper,context);
-//                    compareOffer(context);
                     insert(context,dbHelper,messageBody,timeStamp);
                 }
                 else{
@@ -302,58 +291,6 @@ public class SmsReceiver extends BroadcastReceiver {
     public void insert(Context context,DBHelper helper, String message, String time){
         boolean checkInsertData = helper.insertData(message, time, messageSender);
     }
-/*    public void getOffers(DBHelper helper,Context context){
-       Cursor cursor = helper.getOffers();
-       if (cursor.getCount() == 0) {
-           Log.d("TAG","No offers available");
-      } else {
-           while (cursor.moveToNext()) {
-               String name = cursor.getString(1);
-                String amount = cursor.getString(2);
-                String ussdCode = cursor.getString(3);
-                String dialSim = cursor.getString(4);
-               String dialSimId = cursor.getString(5);
-                String paymentSim = cursor.getString(6);
-                String paymentSimId = cursor.getString(7);
-                String offerTill = cursor.getString(8);
-                OfferPOJO pojo = new OfferPOJO(name,amount,ussdCode,dialSim,Build.ID,dialSimId,paymentSim,paymentSimId,offerTill);
-                pojos.add(pojo);
-            }
-        }
-        cursor.close();
-    }
-    public void compareOffer(Context context){
-        for (OfferPOJO pojo :
-                pojos) {
-            if (pojo.getPaymentSimId().equals(sub)) {
-                pojoList.add(pojo);
-            }
-        }
-        compareAmounts(context);
-    }
-    public void compareAmounts(Context context){
-        boolean offerFound = false;
-        String newUssd = "";
-        int subscriptionId = 0;
-        int till = 0;
-        for (OfferPOJO pojo :
-                pojoList) {
-            if (pojo.getAmount().equals(matchedAmount)){
-                ussdCode = pojo.getUssdCode();
-                till = Integer.parseInt(pojo.getOfferTill());
-                subscriptionId = Integer.parseInt(pojo.getSubscriptionId());
-                break;
-            }
-        }
-        if (ussdCode.contains("pppp")){
-            newUssd = ussdCode.replace("pppp",phoneNumber);
-            Toast.makeText(context, "new ussd code: "+phoneNumber, Toast.LENGTH_SHORT).show();
-            Toast.makeText(context, "dialed number: "+phoneNumber, Toast.LENGTH_SHORT).show();
-        }
-        offerFound = true;
-        dialUssdCode(context, subscriptionId, newUssd,till);
-    }
- */
 public String token(){
     helper2 = new DBHelper(zContext);
     Cursor cursor = helper2.getToken();

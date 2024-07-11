@@ -31,21 +31,23 @@ import com.google.android.material.textfield.TextInputLayout;
 import com.google.android.material.timepicker.MaterialTimePicker;
 import com.google.android.material.timepicker.TimeFormat;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 public class CreateRenewalActivity extends AppCompatActivity {
 
     private DBHelper helper;
-    private String frequency,period,ussdCode,dialId;
+    private String frequency,period,ussdCode,dialId,money,dateCreation,dateExpiry;
     private Button btnSave;
-    private TextInputLayout enterUssdCode, enterPeriod;
+    private TextInputLayout enterUssdCode, enterPeriod,enterMoney;
     private Spinner spinner;
     RequestManager manager;
     private ArrayList<String> frequencies;
-    private EditText one,two;
+    private EditText one,two,three;
 
     private Map<Integer, Integer> simMap;
     private ArrayList<String> simNames;
@@ -105,31 +107,6 @@ public class CreateRenewalActivity extends AppCompatActivity {
         slotIndex = new ArrayList<>();
     }
 
-    private void getRenewalTime() {
-        timePicker = new MaterialTimePicker.Builder()
-                .setTimeFormat(TimeFormat.CLOCK_12H)
-                .setHour(12)
-                .setMinute(0)
-                .setTitleText("Set auto renewal")
-                .build();
-        timePicker.show(getSupportFragmentManager(), "Alarm Manager");
-        timePicker.addOnPositiveButtonClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (timePicker.getHour()>12){
-                }
-                else{
-
-                }
-                calendar = Calendar.getInstance();
-                calendar.set(Calendar.HOUR_OF_DAY, timePicker.getHour());
-                calendar.set(Calendar.MINUTE, timePicker.getMinute());
-                calendar.set(Calendar.SECOND, 0);
-                calendar.set(Calendar.MILLISECOND, 0);
-            }
-        });
-    }
-
     private void proceed() {
         if (fetchData() == null){
             Toast.makeText(CreateRenewalActivity.this, "Unable to create renewal", Toast.LENGTH_SHORT).show();
@@ -143,21 +120,32 @@ public class CreateRenewalActivity extends AppCompatActivity {
         LayoutInflater inflater = getLayoutInflater();
         View dialogView = inflater.inflate(R.layout.renewal_dialog_layout,null);
         TextView one = dialogView.findViewById(R.id.txtDialogRenewalFrequency);
-        TextView two = dialogView.findViewById(R.id.txtDialogRenewalPeriod);
-        TextView three = dialogView.findViewById(R.id.txtDialogRenewalUssdCode);
+        TextView two = dialogView.findViewById(R.id.txtDialogRenewalUssdCode);
+        TextView three = dialogView.findViewById(R.id.txtDialogRenewalPeriod);
         TextView four = dialogView.findViewById(R.id.txtDialogRenewalTill);
         TextView five = dialogView.findViewById(R.id.txtDialogRenewalTime);
+        TextView six = dialogView.findViewById(R.id.txtDialogRenewalMoney);
+        TextView seven = dialogView.findViewById(R.id.txtDialogRenewalStartDate);
+        TextView eight = dialogView.findViewById(R.id.txtDialogRenewalEndDate);
         one.setText(fetchData().getFrequency());
-        three.setText(fetchData().getUssdCode());
+        three.setText(String.valueOf(fetchData().getPeriod()));
         four.setText(fetchData().getTill());
-        two.setText(fetchData().getPeriod());
+        two.setText(fetchData().getUssdCode());
         five.setText(fetchData().getDialSimCard());
+        six.setText(fetchData().getMoney());
+        seven.setText(fetchData().getDateCreation());
+        eight.setText(fetchData().getDateExpiry());
         builder.setView(dialogView);
 
         builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                boolean checkInsertData = helper.insertRenewals(fetchData().getFrequency(),fetchData().getUssdCode(),fetchData().getPeriod(), fetchData().getTill(), fetchData().getSubId(), fetchData().getDialSimCard());
+                boolean checkInsertData = helper.insertRenewals(
+                        fetchData().getFrequency(), fetchData().getUssdCode(),
+                        fetchData().getPeriod(), fetchData().getTill(),
+                        fetchData().getSubId(), fetchData().getDialSimCard(), fetchData().getMoney(),
+                        fetchData().getDateCreation(),fetchData().getDateExpiry()
+                );
                 if (checkInsertData){
                     Toast.makeText(CreateRenewalActivity.this, "data inserted", Toast.LENGTH_SHORT).show();
                 }else {
@@ -178,31 +166,50 @@ public class CreateRenewalActivity extends AppCompatActivity {
     }
 
     private void initEditTexts() {
-        one = enterPeriod.getEditText();
-        two = enterUssdCode.getEditText();
+        one = enterUssdCode.getEditText();
+        two = enterPeriod.getEditText();
+        three = enterMoney.getEditText();
     }
 
 
 
     public RenewalPOJO fetchData(){
         boolean complete = true;
-        period = one.getText().toString();
-        ussdCode = two.getText().toString();
+        period = two.getText().toString();
+        ussdCode = one.getText().toString();
+        money = three.getText().toString();
         if (period.isEmpty()){
-            one.setError("Field cannot be empty");
-            complete = false;
-        }
-        if (ussdCode.isEmpty()){
             two.setError("Field cannot be empty");
             complete = false;
         }
+        if (ussdCode.isEmpty()){
+            one.setError("Field cannot be empty");
+            complete = false;
+        }
+        if (money.isEmpty()){
+            three.setError("Field cannot be empty");
+            complete = false;
+        }
+
+        long current = getDateCreation();
+        long periodMillis = Long.parseLong(period) * 24 * 60 * 60 * 1000; // Convert period from days to milliseconds
+        long future = current + periodMillis;
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
+        dateCreation = sdf.format(current);
+        dateExpiry = sdf.format(future);
+
         if (complete){
-            return new RenewalPOJO("Daily",period,ussdCode,tillNumber(),dialId,getDialSimCard());
+            int per = Integer.parseInt(period);
+            return new RenewalPOJO("Daily",ussdCode,per,tillNumber(),dialId,getDialSimCard(),money,dateCreation,dateExpiry);
         }else{
             return null;
         }
 
     }
+    private long getDateCreation(){
+        return System.currentTimeMillis();
+    }
+
 
     public String getDialSimCard(){
         String dialSim1;
@@ -234,6 +241,7 @@ public class CreateRenewalActivity extends AppCompatActivity {
         btnSave = findViewById(R.id.btnSaveRenewal);
         enterPeriod = findViewById(R.id.edtEnterPeriod);
         enterUssdCode = findViewById(R.id.edtUssdRenewal);
+        enterMoney = findViewById(R.id.edtMoneyRenewal);
         spinner = findViewById(R.id.frequencySpinner);
     }
 }

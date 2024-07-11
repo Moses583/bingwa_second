@@ -8,6 +8,7 @@
 
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.READ_SMS" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="android.permission.RECEIVE_SMS" />
     <uses-permission android:name="android.permission.CALL_PHONE" />
     <uses-permission android:name="android.permission.INTERNET" />
@@ -96,13 +97,21 @@
         <!-- <action android:name="android.provider.Telephony.SMS_RECEIVED" /> -->
         <!-- </intent-filter> -->
         <!-- </receiver> -->
-        <receiver android:name=".AlarmReceiver"/>
+
         <service
             android:name=".services.MyService"
             android:foregroundServiceType="specialUse" />
         <service
             android:name=".services.RetryService"
             android:foregroundServiceType="specialUse" />
+        <service
+            android:name=".services.RenewalsService"
+            android:foregroundServiceType="specialUse" />
+        <service
+            android:name=".services.RenewalsJobService"
+            android:enabled="true"
+            android:exported="false"
+            android:permission="android.permission.BIND_JOB_SERVICE"/>
     </application>
 
 </manifest>

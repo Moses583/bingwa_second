@@ -20,7 +20,7 @@
         android:layout_margin="10dp"
         app:endIconMode="clear_text"
         app:helperTextEnabled="true"
-        app:helperText="Enter the phone number you signed up with"
+        app:helperText="Enter the till number you signed up with"
         app:counterEnabled="true"
         app:counterMaxLength="10"
         app:errorEnabled="true"
@@ -29,8 +29,8 @@
         <com.google.android.material.textfield.TextInputEditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="07 *** or 01 ***"
-            android:inputType="phone"/>
+            android:hint="Till number"
+            android:inputType="number"/>
 
     </com.google.android.material.textfield.TextInputLayout>
 

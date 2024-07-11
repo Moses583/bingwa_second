@@ -40,6 +40,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -99,6 +100,8 @@ public class MainContentFragment extends Fragment {
 
     private Button button;
 
+    private ImageView img;
+
     private Map<Integer, Integer> simMap;
     private ArrayList<String> simNames;
     private ArrayList<Integer> slotIndex;
@@ -111,7 +114,7 @@ public class MainContentFragment extends Fragment {
     String till = "";
     private AlertDialog offerCreationDialog,firstTimePayDialog,renewPlanDialog,dialog,requestPermissionDialog;
     private BroadcastReceiver dateBroadCast;
-
+    private AlertDialog confirmDeletionDialog;
 
 
     public MainContentFragment() {
@@ -176,6 +179,13 @@ public class MainContentFragment extends Fragment {
             }
         });
 
+        img.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showDeletionDialog();
+            }
+        });
+
         executeFailedTransactions.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -228,6 +238,37 @@ public class MainContentFragment extends Fragment {
         };
 
         return view;
+    }
+    private void showDeletionDialog(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        LayoutInflater inflater = getLayoutInflater();
+        View view = inflater.inflate(R.layout.dialog_delete_transactions,null);
+        Button btn = view.findViewById(R.id.btnDeleteTransactions);
+        builder.setView(view);
+        confirmDeletionDialog = builder.create();
+        confirmDeletionDialog.show();
+        btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                deleteData();
+            }
+        });
+    }
+    private void deleteData(){
+        boolean deleteData = helper.deleteSuccessfulTransactions();
+        if (deleteData){
+            Log.d("TAG","Data deleted");
+        }
+        else{
+            Log.d("TAG", "Data not deleted");
+        }
+        pojoList.clear();
+        totalTransactions.setText(String.valueOf(pojoList.size()));
+        adapter.setPojoList(pojoList);
+        recyclerView.setAdapter(adapter);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        recyclerView.setHasFixedSize(true);
+        confirmDeletionDialog.dismiss();
     }
 
     private void showAlertDialog() {
@@ -656,5 +697,6 @@ public class MainContentFragment extends Fragment {
         failedTransactions = view.findViewById(R.id.txtFailedTransactions);
         checkBalance = view.findViewById(R.id.txtCheckAirtimeBalance);
         chipGroup = view.findViewById(R.id.chipGroup);
+        img = view.findViewById(R.id.imgClearTransactions);
     }
 }

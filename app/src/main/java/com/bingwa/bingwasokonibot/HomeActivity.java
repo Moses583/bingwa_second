@@ -72,8 +72,8 @@ public class HomeActivity extends AppCompatActivity{
         manager = new RequestManager(this);
 
 
-        myAlarmManager = new MyAlarmManager(this);
-        myAlarmManager.setAlarm(19,02);
+//        myAlarmManager = new MyAlarmManager(this);
+//        myAlarmManager.setAlarm(11,31);
         countDownTimer = new CountDownTimer(5000,1000) {
             @Override
             public void onTick(long millisUntilFinished) {
