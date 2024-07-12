@@ -78,15 +78,22 @@ public class RenewalsJobService extends JobService {
                             String phoneNumber = extractNumber(ussd);
                             String amount = pojo.getMoney();
                             int till = Integer.parseInt(pojo.getTill());
+                            long today = System.currentTimeMillis();
                             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
-                            Date current, expiry;
+                            String todayTime = sdf.format(today);
+                            Date start, expiry, todayDate;
                             try {
-                                current =  sdf.parse(pojo.getDateCreation());
+                                start =  sdf.parse(pojo.getDateCreation());
                                 expiry = sdf.parse(pojo.getDateExpiry());
-                                if (current.compareTo(expiry) == 0) {
-                                    deleteRenewal(ussd);
-                                } else if (current.compareTo(expiry) < 0) {
-                                    dialUssdCode(getApplicationContext(),subId,ussd,till,phoneNumber, amount);
+                                todayDate = sdf.parse(todayTime);
+                                if (todayDate.compareTo(start)>= 0){
+                                    if (start.compareTo(expiry) > 0) {
+                                        deleteRenewal(ussd);
+                                    } else if (start.compareTo(expiry) < 0) {
+                                        dialUssdCode(getApplicationContext(),subId,ussd,till,phoneNumber, amount);
+                                    }
+                                }else{
+                                    Log.d("Renewals","Start date not yet satisfied");
                                 }
                             } catch (ParseException e) {
                                 throw new RuntimeException(e);

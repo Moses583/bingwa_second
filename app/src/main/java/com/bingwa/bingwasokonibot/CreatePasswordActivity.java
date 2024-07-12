@@ -176,7 +176,7 @@ public class CreatePasswordActivity extends AppCompatActivity {
             else{
                 dialog1.dismiss();
                 edtTxtConfirmPassword.setHelperTextEnabled(true);
-                edtTxtConfirmPassword.setHelperText("Please connect to the internet");
+                edtTxtConfirmPassword.setHelperText(message);
             }
 
         }
@@ -217,9 +217,7 @@ public class CreatePasswordActivity extends AppCompatActivity {
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putBoolean("hasAccount", true);
         editor.apply();
-
         login1();
-
 
     }
     private void login1(){
