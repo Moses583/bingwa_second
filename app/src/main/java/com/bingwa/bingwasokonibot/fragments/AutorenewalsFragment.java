@@ -168,7 +168,7 @@ public class AutorenewalsFragment extends Fragment {
 
     private void showOfferCreationDialog(){
         offerCreationDialog = new Dialog(getActivity());
-        View view = LayoutInflater.from(getActivity()).inflate(R.layout.dialog_create_offer,null);
+        View view = LayoutInflater.from(getActivity()).inflate(R.layout.dialog_create_renewal,null);
         navigateToCreateOffer = view.findViewById(R.id.btnNavigateToCreateOffer);
         offerCreationDialog.setContentView(view);
         offerCreationDialog.getWindow().setLayout(ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT);

@@ -92,7 +92,7 @@ public class MainContentFragment extends Fragment {
     private SwipeRefreshLayout swipeRefreshLayout;
 
     private TextView airtimeBalance,totalTransactions,failedTransactions,txtLoading;
-    private Button executeFailedTransactions,checkAirtimeBalance,RetryFailedTransactions;
+    private Button executeFailedTransactions,checkAirtimeBalance;
     private Button cancel, okay,btnContinue;
     Spinner spinner;
     private ChipGroup chipGroup;
@@ -144,9 +144,11 @@ public class MainContentFragment extends Fragment {
         simNames = new ArrayList<>();
         slotIndex = new ArrayList<>();
         till = tillNumber();
+
         checkOffersOne();
         showProgressDialog();
         showContinueDialog();
+
         btnContinue.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
