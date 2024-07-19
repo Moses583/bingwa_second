@@ -5,44 +5,48 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".HomeActivity"
-    android:orientation="vertical">
-    <androidx.appcompat.widget.Toolbar
+    android:orientation="vertical"
+    android:paddingBottom="0dp"
+    tools:context=".HomeActivity">
+    <LinearLayout
+        android:id="@+id/toolBarLayout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:menu="@menu/menu"
-        android:id="@+id/mainToolBar"
-        app:title="Bingwa"
-        app:titleTextColor="@color/green"/>
+        android:layout_height="?android:actionBarSize"
+        android:layout_alignParentTop="true"
+        android:orientation="vertical">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/mainToolBar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:menu="@menu/menu"
+            app:title="Bingwa"
+            app:titleTextColor="@color/black" />
+    </LinearLayout>
+
 
     <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/myViewPager"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/mainToolBar"
-        android:layout_above="@id/btCardView"/>
+        android:layout_above="@id/layoutBottom"
+        android:layout_below="@id/toolBarLayout" />
 
-
-
-    <androidx.cardview.widget.CardView
+    <RelativeLayout
+        android:id="@+id/layoutBottom"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:id="@+id/btCardView"
-        android:layout_margin="10dp"
-        app:cardCornerRadius="30dp">
-        <RelativeLayout
+        android:background="@color/white"
+        android:paddingBottom="0dp">
+
+        <com.google.android.material.bottomnavigation.BottomNavigationView
+            android:id="@+id/bottomNavigationView"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
-            <com.google.android.material.bottomnavigation.BottomNavigationView
-                android:id="@+id/bottomNavigationView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:menu="@menu/bottom_nav_menu"
-                android:layout_centerInParent="true"/>
-        </RelativeLayout>
-    </androidx.cardview.widget.CardView>
-
-
-
+            android:layout_height="wrap_content"
+            android:paddingBottom="0dp"
+            app:labelVisibilityMode="labeled"
+            app:menu="@menu/bottom_nav_menu" />
+    </RelativeLayout>
 </RelativeLayout>
+

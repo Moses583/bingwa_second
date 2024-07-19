@@ -2,6 +2,7 @@ package com.bingwa.bingwasokonibot;
 
 import android.Manifest;
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -12,6 +13,7 @@ import android.telephony.SubscriptionInfo;
 import android.telephony.SubscriptionManager;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -55,6 +57,7 @@ public class CreateRenewalActivity extends AppCompatActivity {
 
     private MaterialTimePicker timePicker;
     private Calendar calendar;
+    private Dialog dialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -116,9 +119,8 @@ public class CreateRenewalActivity extends AppCompatActivity {
     }
 
     private void showAlertDialog() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(CreateRenewalActivity.this);
-        LayoutInflater inflater = getLayoutInflater();
-        View dialogView = inflater.inflate(R.layout.renewal_dialog_layout,null);
+        dialog = new Dialog(this);
+        View dialogView = LayoutInflater.from(this).inflate(R.layout.renewal_dialog_layout,null);
         TextView one = dialogView.findViewById(R.id.txtDialogRenewalFrequency);
         TextView two = dialogView.findViewById(R.id.txtDialogRenewalUssdCode);
         TextView three = dialogView.findViewById(R.id.txtDialogRenewalPeriod);
@@ -127,6 +129,8 @@ public class CreateRenewalActivity extends AppCompatActivity {
         TextView six = dialogView.findViewById(R.id.txtDialogRenewalMoney);
         TextView seven = dialogView.findViewById(R.id.txtDialogRenewalStartDate);
         TextView eight = dialogView.findViewById(R.id.txtDialogRenewalEndDate);
+        Button edit = dialogView.findViewById(R.id.btnRenewalEdit);
+        Button okay = dialogView.findViewById(R.id.btnRenewalOkay);
         one.setText(fetchData().getFrequency());
         three.setText(String.valueOf(fetchData().getPeriod()));
         four.setText(fetchData().getTill());
@@ -135,11 +139,14 @@ public class CreateRenewalActivity extends AppCompatActivity {
         six.setText(fetchData().getMoney());
         seven.setText(fetchData().getDateCreation());
         eight.setText(fetchData().getDateExpiry());
-        builder.setView(dialogView);
-
-        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+        dialog.setContentView(dialogView);
+        dialog.getWindow().setLayout(ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT);
+        dialog.getWindow().setBackgroundDrawable(getDrawable(R.drawable.dialog_background));
+        dialog.setCancelable(false);
+        dialog.show();
+        okay.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(DialogInterface dialog, int which) {
+            public void onClick(View v) {
                 boolean checkInsertData = helper.insertRenewals(
                         fetchData().getFrequency(), fetchData().getUssdCode(),
                         fetchData().getPeriod(), fetchData().getTill(),
@@ -155,14 +162,12 @@ public class CreateRenewalActivity extends AppCompatActivity {
                 finish();
             }
         });
-        builder.setNegativeButton("Edit", new DialogInterface.OnClickListener() {
+        edit.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(DialogInterface dialog, int which) {
-
+            public void onClick(View v) {
+                dialog.dismiss();
             }
         });
-        AlertDialog dialog = builder.create();
-        dialog.show();
     }
 
     private void initEditTexts() {

@@ -13,7 +13,7 @@ import java.util.List;
 public class DBHelper extends SQLiteOpenHelper {
 
     public DBHelper( Context context) {
-        super(context, "RealDbTwelve.db",null,1);
+        super(context, "RealDbFifteen.db",null,1);
     }
 
     @Override
@@ -190,8 +190,6 @@ public class DBHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.rawQuery("SELECT name FROM sqlite_master WHERE type='table'", null);
         List<String> tables = new ArrayList<>();
-
-
         while (cursor.moveToNext()) {
             tables.add(cursor.getString(0));
         }

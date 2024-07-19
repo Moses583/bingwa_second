@@ -90,7 +90,6 @@ public class InboxFragment extends Fragment {
             @Override
             public void onRefresh() {
                 refresh();
-
             }
         });
         return view;

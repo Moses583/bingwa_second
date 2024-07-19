@@ -1,8 +1,7 @@
 package com.bingwa.bingwasokonibot;
 
 import android.Manifest;
-import android.app.AlertDialog;
-import android.content.DialogInterface;
+import android.app.Dialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
@@ -12,6 +11,7 @@ import android.telephony.SubscriptionInfo;
 import android.telephony.SubscriptionManager;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -47,6 +47,7 @@ public class CreateOfferActivity extends AppCompatActivity {
     private ArrayList<String> simNames;
     private ArrayList<Integer> slotIndex;
     private EditText one,two,three,four;
+    private Dialog dialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,7 +65,6 @@ public class CreateOfferActivity extends AppCompatActivity {
         two = enterUssdCode.getEditText();
         three = enterTill.getEditText();
         four = enterName.getEditText();
-
 
         simMap = new HashMap<>();
         simNames = new ArrayList<>();
@@ -87,7 +87,6 @@ public class CreateOfferActivity extends AppCompatActivity {
         txtSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                manager.postOffer(listener,offerPOJO);
                 proceed();
             }
         });
@@ -100,29 +99,34 @@ public class CreateOfferActivity extends AppCompatActivity {
         }
     }
     private void showAlertDialog() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(CreateOfferActivity.this);
-        LayoutInflater inflater = getLayoutInflater();
-        View dialogView = inflater.inflate(R.layout.offer_dialog_layout,null);
+        dialog = new Dialog(this);
+        View dialogView = LayoutInflater.from(this).inflate(R.layout.offer_dialog_layout,null);
         TextView one = dialogView.findViewById(R.id.txtDialogAmount);
         TextView three = dialogView.findViewById(R.id.txtDialogUssdCode);
         TextView four = dialogView.findViewById(R.id.txtDialogDialSim);
         TextView two = dialogView.findViewById(R.id.txtDialogPaySim);
         TextView five = dialogView.findViewById(R.id.txtDialogDialogTill);
         TextView six = dialogView.findViewById(R.id.txtDialogName);
+        Button edit = dialogView.findViewById(R.id.btnOfferEdit);
+        Button okay = dialogView.findViewById(R.id.btnOfferOkay);
         one.setText(fetchData().getAmount());
-        three.setText(fetchData().getUssdCode());
+        three.setText(fetchData().getUssd());
         four.setText(fetchData().getDialSim());
         two.setText(fetchData().getPaymentSim());
         five.setText(fetchData().getOfferTill());
         six.setText(fetchData().getName());
-        builder.setView(dialogView);
+        dialog.setContentView(dialogView);
+        dialog.getWindow().setLayout(ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT);
+        dialog.getWindow().setBackgroundDrawable(getDrawable(R.drawable.dialog_background));
+        dialog.setCancelable(false);
+        dialog.show();
 
-        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+        okay.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(DialogInterface dialog, int which) {
-                boolean checkInsertData = helper.insertOffer(fetchData().getName(),fetchData().getAmount(),fetchData().getUssdCode(),fetchData().getDialSim(),fetchData().getSubscriptionId(),fetchData().getPaymentSim(), fetchData().getPaymentSimId(),fetchData().getOfferTill());
+            public void onClick(View v) {
+                boolean checkInsertData = helper.insertOffer(fetchData().getName(),fetchData().getAmount(),fetchData().getUssd(),fetchData().getDialSim(),fetchData().getSubscriptionId(),fetchData().getPaymentSim(), fetchData().getPaymentSimId(),fetchData().getOfferTill());
                 if (checkInsertData){
-                    Toast.makeText(CreateOfferActivity.this, "data inserted", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(CreateOfferActivity.this, "Success!", Toast.LENGTH_SHORT).show();
                 }else {
                     Toast.makeText(CreateOfferActivity.this, "data not inserted", Toast.LENGTH_SHORT).show();
                 }
@@ -130,13 +134,12 @@ public class CreateOfferActivity extends AppCompatActivity {
                 finish();
             }
         });
-        builder.setNegativeButton("Edit", new DialogInterface.OnClickListener() {
+        edit.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(DialogInterface dialog, int which) {
-
+            public void onClick(View v) {
+                dialog.dismiss();
             }
         });
-        AlertDialog dialog = builder.create();
         dialog.show();
     }
     public OfferPOJO fetchData(){

@@ -1,81 +1,68 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical">
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:layout_width="300dp"
-        android:layout_height="wrap_content"
-        android:id="@+id/enterSubNumber"
-        app:startIconDrawable="@drawable/ic_number"
-        app:helperTextEnabled="true"
-        app:helperText="Enter your phone number"
-        android:layout_gravity="center"
-        android:layout_marginBottom="20dp"
-        >
-        <com.google.android.material.textfield.TextInputEditText
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:hint="07... or 01..."
-            android:inputType="phone"/>
-
-    </com.google.android.material.textfield.TextInputLayout>
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Till number: "
-        android:textColor="@color/green"
-        android:fontFamily="@font/oxygen_bold"
-        android:layout_margin="8dp"/>
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Till number: "
-        android:textColor="@color/black"
-        android:layout_margin="8dp"
-        android:textAlignment="viewStart"
-        android:id="@+id/txtCheckoutTill"/>
+    android:orientation="vertical"
+    app:cardCornerRadius="20dp">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:weightSum="2">
-        <RelativeLayout
-            android:layout_width="0dp"
-            android:layout_height="50dp"
-            android:layout_weight="1"
-            android:id="@+id/planCancel"
-            android:clickable="true"
-            android:focusable="true"
-            android:foreground="?android:attr/selectableItemBackground">
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="250dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/enterSubNumber"
+            app:startIconDrawable="@drawable/ic_number"
+            app:helperTextEnabled="true"
+            app:helperText="Enter your phone number"
+            android:layout_gravity="center"
+            android:layout_margin="15dp"
+            >
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:hint="07... or 01..."
+                android:inputType="phone"/>
 
-            <TextView
-                android:layout_width="wrap_content"
+        </com.google.android.material.textfield.TextInputLayout>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Till number: "
+            android:textColor="@color/green"
+            android:fontFamily="@font/oxygen_bold"
+            android:layout_margin="8dp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Till number: "
+            android:textColor="@color/black"
+            android:layout_margin="8dp"
+            android:textAlignment="viewStart"
+            android:id="@+id/txtCheckoutTill"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <Button
+                android:layout_width="100dp"
                 android:layout_height="wrap_content"
-                android:text="Cancel"
-                android:layout_centerInParent="true"/>
-
-        </RelativeLayout>
-        <RelativeLayout
-            android:layout_width="0dp"
-            android:layout_height="50dp"
-            android:layout_weight="1"
-            android:id="@+id/planConfirm"
-            android:clickable="true"
-            android:focusable="true"
-            android:foreground="?android:attr/selectableItemBackground">
-
-            <TextView
-                android:layout_width="wrap_content"
+                android:layout_weight="1"
+                android:id="@+id/planCancel"
+                android:layout_margin="20dp"
+                android:text="Cancel"/>
+            <Button
+                android:layout_width="100dp"
                 android:layout_height="wrap_content"
-                android:text="Confirm"
-                android:layout_centerInParent="true"/>
-
-        </RelativeLayout>
+                android:layout_weight="1"
+                android:id="@+id/planConfirm"
+                android:layout_margin="20dp"
+                android:text="Confirm"/>
+        </LinearLayout>
     </LinearLayout>
 
-</LinearLayout>
+</androidx.cardview.widget.CardView>

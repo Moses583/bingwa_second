@@ -53,7 +53,6 @@ public class HomeActivity extends AppCompatActivity{
     public CountDownTimer countDownTimer;
 
     MyAlarmManager myAlarmManager;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

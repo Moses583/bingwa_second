@@ -42,7 +42,6 @@ public class RetryService extends Service {
     private Handler handler;
     private Runnable runnableCode;
     private Queue<TransactionPOJO> queue;
-    private Queue<String> queue1;
     private DBHelper dbHelper,helper2;
 
     TelephonyManager manager;
@@ -63,7 +62,6 @@ public class RetryService extends Service {
 
         handler = new Handler();
         queue = new LinkedList<>();
-        queue1 = new LinkedList<>();
         dbHelper = new DBHelper(this);
         requestManager = new RequestManager(this);
         requestManager2 = new RequestManager(this);
@@ -71,7 +69,6 @@ public class RetryService extends Service {
         manager = (TelephonyManager) getSystemService(TELEPHONY_SERVICE);
 
         queue = getFailedTransactions();
-        queue1 = getStrings();
         runnableCode = new Runnable() {
             @Override
             public void run() {

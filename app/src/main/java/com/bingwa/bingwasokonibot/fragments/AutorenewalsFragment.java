@@ -1,8 +1,10 @@
 package com.bingwa.bingwasokonibot.fragments;
 
+import static androidx.core.content.ContextCompat.getDrawable;
 import static androidx.core.content.ContextCompat.getSystemService;
 
 import android.app.ActivityManager;
+import android.app.Dialog;
 import android.app.job.JobInfo;
 import android.app.job.JobScheduler;
 import android.content.ComponentName;
@@ -76,8 +78,9 @@ public class AutorenewalsFragment extends Fragment {
     private DBHelper dbHelper;
     private RenewalsListAdapter listAdapter;
 
-    private AlertDialog offerCreationDialog,firstTimePayDialog,renewPlanDialog;
+    private Dialog offerCreationDialog,firstTimePayDialog,renewPlanDialog;
     private RequestManager requestManager;
+    private Button navigateToCreateOffer,checkAvailablePlans,renewPlan;
 
 
     public AutorenewalsFragment() {
@@ -164,19 +167,20 @@ public class AutorenewalsFragment extends Fragment {
     }
 
     private void showOfferCreationDialog(){
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        LayoutInflater inflater = getLayoutInflater();
-        View view = inflater.inflate(R.layout.dialog_create_offer,null);
-        Button btn = view.findViewById(R.id.btnNavigateToCreateOffer);
-        builder.setView(view);
-        offerCreationDialog = builder.create();
-        offerCreationDialog.show();
-        btn.setOnClickListener(new View.OnClickListener() {
+        offerCreationDialog = new Dialog(getActivity());
+        View view = LayoutInflater.from(getActivity()).inflate(R.layout.dialog_create_offer,null);
+        navigateToCreateOffer = view.findViewById(R.id.btnNavigateToCreateOffer);
+        offerCreationDialog.setContentView(view);
+        offerCreationDialog.getWindow().setLayout(ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT);
+        offerCreationDialog.getWindow().setBackgroundDrawable(getDrawable(getActivity(),R.drawable.dialog_background));
+        offerCreationDialog.setCancelable(false);
+        navigateToCreateOffer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 navigateToCreateOfferActivity();
             }
         });
+        offerCreationDialog.show();
     }
 
     private void navigateToCreateOfferActivity() {
@@ -211,19 +215,20 @@ public class AutorenewalsFragment extends Fragment {
     }
 
     private void showFirstTimePayDialog() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        LayoutInflater inflater = getLayoutInflater();
-        View view = inflater.inflate(R.layout.dialog_first_time_pay,null);
-        Button btn = view.findViewById(R.id.btnCheckAvailablePlans);
-        builder.setView(view);
-        firstTimePayDialog = builder.create();
-        firstTimePayDialog.show();
-        btn.setOnClickListener(new View.OnClickListener() {
+        firstTimePayDialog = new Dialog(getActivity());
+        View view = LayoutInflater.from(getActivity()).inflate(R.layout.dialog_first_time_pay,null);
+        checkAvailablePlans = view.findViewById(R.id.btnCheckAvailablePlans);
+        firstTimePayDialog.setContentView(view);
+        firstTimePayDialog.getWindow().setLayout(ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT);
+        firstTimePayDialog.getWindow().setBackgroundDrawable(getDrawable(getActivity(),R.drawable.dialog_background));
+        firstTimePayDialog.setCancelable(false);
+        checkAvailablePlans.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 navigateToPlansActivity();
             }
         });
+        firstTimePayDialog.show();
     }
 
     private void navigateToPlansActivity() {
@@ -250,19 +255,20 @@ public class AutorenewalsFragment extends Fragment {
     }
 
     private void showRenewPlanDialog() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        LayoutInflater inflater = getLayoutInflater();
-        View view = inflater.inflate(R.layout.dialog_subscription_expired,null);
-        Button btn = view.findViewById(R.id.btnRenewPlan);
-        builder.setView(view);
-        renewPlanDialog = builder.create();
-        renewPlanDialog.show();
-        btn.setOnClickListener(new View.OnClickListener() {
+        renewPlanDialog = new Dialog(getActivity());
+        View view = LayoutInflater.from(getActivity()).inflate(R.layout.dialog_subscription_expired,null);
+        renewPlan = view.findViewById(R.id.btnRenewPlan);
+        renewPlanDialog.setContentView(view);
+        renewPlanDialog.getWindow().setLayout(ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT);
+        renewPlanDialog.getWindow().setBackgroundDrawable(getDrawable(getActivity(),R.drawable.dialog_background));
+        renewPlanDialog.setCancelable(false);
+        renewPlan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 navigateToPlansActivity2();
             }
         });
+        renewPlanDialog.show();
     }
 
     private void navigateToPlansActivity2() {

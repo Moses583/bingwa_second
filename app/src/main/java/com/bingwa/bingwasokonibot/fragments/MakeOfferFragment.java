@@ -20,7 +20,10 @@ import com.bingwa.bingwasokonibot.CreateOfferActivity;
 import com.bingwa.bingwasokonibot.DBHelper;
 import com.bingwa.bingwasokonibot.R;
 import com.bingwa.bingwasokonibot.RequestManager;
+import com.bingwa.bingwasokonibot.listeners.GetOffersListener;
 import com.bingwa.bingwasokonibot.listeners.PostOfferListener;
+import com.bingwa.bingwasokonibot.models.GetOffersBody;
+import com.bingwa.bingwasokonibot.models.GetOffersResponse;
 import com.bingwa.bingwasokonibot.models.OfferListResponse;
 import com.bingwa.bingwasokonibot.models.OfferPOJO;
 import com.bingwa.bingwasokonibot.models.PostOfferApiResponse;
@@ -105,6 +108,7 @@ public class MakeOfferFragment extends Fragment {
         dbHelper = new DBHelper(getActivity());
         callPostOfferApi();
 
+
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -172,9 +176,9 @@ public class MakeOfferFragment extends Fragment {
         List<PostOfferTwo> list = new ArrayList<>();
         for (OfferPOJO pojo :
                 pojos) {
-            list.add(new PostOfferTwo(pojo.getName(), pojo.getAmount(), pojo.getUssdCode()));
+            list.add(new PostOfferTwo(pojo.getName(),pojo.getAmount(),pojo.getUssd(), pojo.getDialSim(), pojo.getDeviceId(),
+                    pojo.getSubscriptionId(),pojo.getPaymentSim(),pojo.getPaymentSimId(),pojo.getOfferTill()));
         }
-
         return new PostOfferOne(till, list);
     }
 

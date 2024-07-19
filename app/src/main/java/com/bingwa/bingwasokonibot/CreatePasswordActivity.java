@@ -1,5 +1,6 @@
 package com.bingwa.bingwasokonibot;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -8,6 +9,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
@@ -30,12 +32,12 @@ public class CreatePasswordActivity extends AppCompatActivity {
     private TextInputLayout edtTxtEnterPassword, edtTxtConfirmPassword;
     private Button btnContinue,btnBack;
     private EditText one,two;
-    private AlertDialog dialog1;
     private TextView txtLoading;
     ProgressBar progressBar;
     DBHelper dbHelper;
 
     RequestManager manager;
+    private Dialog dialog,dialog2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,14 +75,19 @@ public class CreatePasswordActivity extends AppCompatActivity {
     }
 
     private void showDialog3() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        LayoutInflater inflater = getLayoutInflater();
-        View dialogView = inflater.inflate(R.layout.dialog_progress_layout,null);
-        txtLoading = dialogView.findViewById(R.id.txtProgress);
-        progressBar = dialogView.findViewById(R.id.myProgressBar);
-        txtLoading.setText("Creating your account...");
-        builder.setView(dialogView);
-        dialog1 = builder.create();
+        dialog2 = new Dialog(this);
+        View view = LayoutInflater.from(this).inflate(R.layout.dialog_progress_layout,null);
+        progressBar = view.findViewById(R.id.myProgressBar);
+        txtLoading = view.findViewById(R.id.txtProgress);
+        dialog2.setContentView(view);
+        int widthInDp = 250;
+
+        final float scale = getResources().getDisplayMetrics().density;
+        int widthInPx = (int) (widthInDp * scale + 0.5f);
+
+        dialog2.getWindow().setLayout(widthInPx, ViewGroup.LayoutParams.WRAP_CONTENT);
+        dialog2.getWindow().setBackgroundDrawable(getDrawable(R.drawable.dialog_background));
+        dialog2.setCancelable(false);
     }
 
 
@@ -88,7 +95,7 @@ public class CreatePasswordActivity extends AppCompatActivity {
         String passOne = one.getText().toString();
         String passTwo = two.getText().toString();
         if (checkEmpty(passOne,passTwo)){
-            dialog1.dismiss();
+            dialog2.dismiss();
             edtTxtConfirmPassword.setHelperTextEnabled(true);
             edtTxtConfirmPassword.setHelperText("Fields cannot be empty!!");
         }
@@ -99,7 +106,7 @@ public class CreatePasswordActivity extends AppCompatActivity {
                 recreatePersona(passTwo);
             }
             else {
-                dialog1.dismiss();
+                dialog2.dismiss();
                 edtTxtConfirmPassword.setHelperTextEnabled(true);
                 edtTxtConfirmPassword.setHelperText("Passwords do not match!!");
             }
@@ -128,35 +135,39 @@ public class CreatePasswordActivity extends AppCompatActivity {
         showAlertDialog(persona);
     }
     public void showAlertDialog(Persona persona){
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        LayoutInflater inflater = getLayoutInflater();
-        View dialogView = inflater.inflate(R.layout.persona_dialog_layout,null);
+        dialog = new Dialog(this);
+        View dialogView = LayoutInflater.from(this).inflate(R.layout.persona_dialog_layout,null);
         TextView two = dialogView.findViewById(R.id.personaNumber);
         TextView three = dialogView.findViewById(R.id.txtPersonaTill);
         TextView four = dialogView.findViewById(R.id.txtPersonaStoreName);
         TextView six = dialogView.findViewById(R.id.PersonaPassword);
+        Button edit = dialogView.findViewById(R.id.btnPersonaEdit);
+        Button okay = dialogView.findViewById(R.id.btnPersonaOkay);
         two.setText(persona.getPhoneNumber());
         three.setText(persona.getTillNumber());
         four.setText(persona.getStoreName());
         six.setText(persona.getPassWord());
-        builder.setView(dialogView);
+        dialog.setContentView(dialogView);
+        dialog.getWindow().setLayout(ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT);
+        dialog.getWindow().setBackgroundDrawable(getDrawable(R.drawable.dialog_background));
+        dialog.setCancelable(false);
+        dialog.show();
 
-        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+        okay.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(DialogInterface dialog, int which) {
+            public void onClick(View v) {
                 txtLoading.setText("Creating your account...");
-                dialog1.show();
+                dialog.dismiss();
+                dialog2.show();
                 manager.postPersona(listener,persona);
             }
         });
-        builder.setNegativeButton("Edit", new DialogInterface.OnClickListener() {
+        edit.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(DialogInterface dialog, int which) {
-
+            public void onClick(View v) {
+                dialog.dismiss();
             }
         });
-        AlertDialog dialog = builder.create();
-        dialog.show();
     }
 
     private final PostPersonaListener listener = new PostPersonaListener() {
@@ -169,12 +180,12 @@ public class CreatePasswordActivity extends AppCompatActivity {
         @Override
         public void didError(String message) {
             if (message.contains("Unable to resolve host")){
-                dialog1.dismiss();
+                dialog2.dismiss();
                 edtTxtConfirmPassword.setHelperTextEnabled(true);
                 edtTxtConfirmPassword.setHelperText("Please connect to the internet");
             }
             else{
-                dialog1.dismiss();
+                dialog2.dismiss();
                 edtTxtConfirmPassword.setHelperTextEnabled(true);
                 edtTxtConfirmPassword.setHelperText(message);
             }
@@ -184,12 +195,12 @@ public class CreatePasswordActivity extends AppCompatActivity {
 
     private void completeLogin(PostPersonaApiResponse response) {
         if (response.message1.equals("Successful account creation")){
-            dialog1.dismiss();
+            dialog2.dismiss();
             edtTxtConfirmPassword.setHelperTextEnabled(false);
             insertTill(response);
             insertToken(response);
         }else{
-            dialog1.dismiss();
+            dialog2.dismiss();
             edtTxtConfirmPassword.setHelperTextEnabled(true);
             edtTxtConfirmPassword.setHelperText(response.message1);
         }

@@ -21,6 +21,7 @@ import com.bingwa.bingwasokonibot.models.DeleteAccountApiResponse;
 import com.bingwa.bingwasokonibot.models.DeleteAccountPojo;
 import com.bingwa.bingwasokonibot.models.GetOffersBody;
 import com.bingwa.bingwasokonibot.models.GetOffersList;
+import com.bingwa.bingwasokonibot.models.GetOffersResponse;
 import com.bingwa.bingwasokonibot.models.Payment;
 import com.bingwa.bingwasokonibot.models.PostOfferOne;
 import com.bingwa.bingwasokonibot.models.PostPersonaApiResponse;
@@ -37,6 +38,8 @@ import com.bingwa.bingwasokonibot.models.STKPushResponse;
 import com.bingwa.bingwasokonibot.models.TariffApiResponse;
 import com.bingwa.bingwasokonibot.models.Transaction;
 import com.bingwa.bingwasokonibot.models.TransactionApiResponse;
+
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -275,23 +278,22 @@ public class RequestManager {
             }
         });
     }
-    public void getOffers (GetOffersListener listener, GetOffersBody getOffersBody){
-        GetOffers  getOffers = retrofit.create(GetOffers.class);
-        Call<GetOffersList> call = getOffers.getOffers(getOffersBody);
-        call.enqueue(new Callback<GetOffersList>() {
+    public void getOffers (GetOffersListener listener, GetOffersBody getOffersBody, String authHeader){
+        GetOffers getOffers = retrofit.create(GetOffers.class);
+        Call<List<GetOffersResponse>> call = getOffers.getOffers(authHeader,getOffersBody);
+        call.enqueue(new Callback<List<GetOffersResponse>>() {
             @Override
-            public void onResponse(Call<GetOffersList> call, Response<GetOffersList> response) {
+            public void onResponse(Call<List<GetOffersResponse>> call, Response<List<GetOffersResponse>> response) {
                 if (!response.isSuccessful()){
-                    listener.didError(response.message()+" failed from on response");
+                    listener.didError(response.message()+" error from on response");
                     return;
                 }
-                listener.didFetch(response.body(), response.message());
-
+                listener.didFetch(response.body(),response.message());
             }
 
             @Override
-            public void onFailure(Call<GetOffersList> call, Throwable throwable) {
-                listener.didError(throwable.getMessage()+" failed from on failure");
+            public void onFailure(Call<List<GetOffersResponse>> call, Throwable throwable) {
+                listener.didError(throwable.getMessage());
             }
         });
     }
@@ -310,7 +312,8 @@ public class RequestManager {
     }
     private interface GetOffers{
         @POST("api/view-offers")
-        Call<GetOffersList> getOffers(
+        Call<List<GetOffersResponse>> getOffers(
+                @Header("Authorization") String authHeader,
                 @Body GetOffersBody getOffersBody
         );
     }

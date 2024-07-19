@@ -1,10 +1,12 @@
 package com.bingwa.bingwasokonibot;
 
+import android.app.Dialog;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
@@ -33,7 +35,7 @@ public class EditAccountActivity extends AppCompatActivity {
     RequestManager manager;
     DBHelper helper,helper2;
     public String till;
-    private AlertDialog dialog,dialog2;
+    private Dialog dialog,dialog2;
     private Button btnResetExit;
 
     @Override
@@ -68,28 +70,36 @@ public class EditAccountActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 dialog2.dismiss();
+                finish();
             }
         });
     }
 
     private void showGoToLoginDialog() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        LayoutInflater inflater = getLayoutInflater();
-        View dialogView = inflater.inflate(R.layout.dialog_reset_password,null);
-        btnResetExit = dialogView.findViewById(R.id.btnExitReset);
-        builder.setView(dialogView);
-        dialog2 = builder.create();
+        dialog2 = new Dialog(this);
+        View view = LayoutInflater.from(this).inflate(R.layout.dialog_reset_password,null);
+        btnResetExit = view.findViewById(R.id.btnExitReset);
+        dialog2.setContentView(view);
+        dialog2.getWindow().setLayout(ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT);
+        dialog2.getWindow().setBackgroundDrawable(getDrawable(R.drawable.dialog_background));
+        dialog2.setCancelable(false);
     }
 
     private void showDialog3() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        LayoutInflater inflater = getLayoutInflater();
-        View dialogView = inflater.inflate(R.layout.dialog_progress_layout,null);
-        txtLoading = dialogView.findViewById(R.id.txtProgress);
-        progressBar = dialogView.findViewById(R.id.myProgressBar);
-        txtLoading.setText("Changing your password...");
-        builder.setView(dialogView);
-        dialog = builder.create();
+        dialog = new Dialog(this);
+        View view = LayoutInflater.from(this).inflate(R.layout.dialog_progress_layout,null);
+        progressBar = view.findViewById(R.id.myProgressBar);
+        txtLoading = view.findViewById(R.id.txtProgress);
+        dialog.setContentView(view);
+        int widthInDp = 250;
+
+        final float scale = getResources().getDisplayMetrics().density;
+        int widthInPx = (int) (widthInDp * scale + 0.5f);
+
+        dialog.getWindow().setLayout(widthInPx, ViewGroup.LayoutParams.WRAP_CONTENT);
+        dialog.getWindow().setBackgroundDrawable(getDrawable(R.drawable.dialog_background));
+        dialog.setCancelable(false);
+        txtLoading.setText("Updating password...");
     }
 
     private void initEditTexts(){

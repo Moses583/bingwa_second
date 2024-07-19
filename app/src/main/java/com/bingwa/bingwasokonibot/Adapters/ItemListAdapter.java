@@ -42,13 +42,13 @@ public class ItemListAdapter extends RecyclerView.Adapter<OfferViewHolder> {
         holder.name.setText(offerList.get(holder.getAdapterPosition()).getName());
         holder.amount.setText(offerList.get(holder.getAdapterPosition()).getAmount());
         holder.dial.setText(offerList.get(holder.getAdapterPosition()).getDialSim());
-        holder.ussdCode.setText(offerList.get(holder.getAdapterPosition()).getUssdCode());
+        holder.ussdCode.setText(offerList.get(holder.getAdapterPosition()).getUssd());
         holder.paySim.setText(offerList.get(holder.getAdapterPosition()).getPaymentSim());
         holder.till.setText(offerList.get(holder.getAdapterPosition()).getOfferTill());
         holder.btnEdit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                delete(holder.getAdapterPosition(), offerList.get(holder.getAdapterPosition()).getUssdCode());
+                delete(holder.getAdapterPosition(), offerList.get(holder.getAdapterPosition()).getUssd());
             }
         });
 

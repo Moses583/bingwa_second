@@ -67,11 +67,11 @@ public class SmsReceiver extends BroadcastReceiver {
 
         mContext = context;
         zContext = context;
-            if (Telephony.Sms.Intents.SMS_RECEIVED_ACTION.equals(intent.getAction())) {
+        if (Telephony.Sms.Intents.SMS_RECEIVED_ACTION.equals(intent.getAction())) {
             StringBuilder stringBuilder = new StringBuilder();
             for (SmsMessage smsMessage : Telephony.Sms.Intents.getMessagesFromIntent(intent)) {
-                    stringBuilder.append(smsMessage.getDisplayMessageBody());
-                    messageSender = smsMessage.getDisplayOriginatingAddress();
+                stringBuilder.append(smsMessage.getDisplayMessageBody());
+                messageSender = smsMessage.getDisplayOriginatingAddress();
             }
             messageBody = stringBuilder.toString();
             long time = System.currentTimeMillis();
@@ -197,7 +197,7 @@ public class SmsReceiver extends BroadcastReceiver {
                 String offerTill = cursor.getString(8);
                 pojo = new OfferPOJO(name,amount1,ussdCode,dialSim,Build.ID,dialSimId,paymentSim,paymentSimId,offerTill);
             }
-            code = pojo.getUssdCode();
+            code = pojo.getUssd();
             subscriptionId = Integer.parseInt(pojo.getSubscriptionId());
             till = Integer.parseInt(pojo.getOfferTill());
             if (code.contains("pppp")){
@@ -291,20 +291,20 @@ public class SmsReceiver extends BroadcastReceiver {
     public void insert(Context context,DBHelper helper, String message, String time){
         boolean checkInsertData = helper.insertData(message, time, messageSender);
     }
-public String token(){
-    helper2 = new DBHelper(zContext);
-    Cursor cursor = helper2.getToken();
-    String token = "";
-    if (cursor.getCount() == 0){
-        Toast.makeText(mContext, "token not found", Toast.LENGTH_SHORT).show();
-    }else{
-        while (cursor.moveToNext()){
-            token = cursor.getString(0);
+    public String token(){
+        helper2 = new DBHelper(zContext);
+        Cursor cursor = helper2.getToken();
+        String token = "";
+        if (cursor.getCount() == 0){
+            Toast.makeText(mContext, "token not found", Toast.LENGTH_SHORT).show();
+        }else{
+            while (cursor.moveToNext()){
+                token = cursor.getString(0);
+            }
         }
+        cursor.close();
+        return "Bearer "+token;
     }
-    cursor.close();
-    return "Bearer "+token;
-}
 
 
 

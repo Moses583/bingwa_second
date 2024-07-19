@@ -1,6 +1,9 @@
 package com.bingwa.bingwasokonibot;
 
+import static androidx.core.content.ContextCompat.getDrawable;
+
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.database.Cursor;
@@ -9,6 +12,7 @@ import android.os.CountDownTimer;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
@@ -38,7 +42,7 @@ public class PaymentPlanActivity extends AppCompatActivity implements View.OnCli
     private RequestManager manager;
     private TextView txtPaymentPlan, txtExpiryDate,txtPlanOne,txtPlanTwo,txtPlanThree,txtCheckoutTill,tariffNameOne,tariffNameTwo,tariffNameThree;
     private CheckBox checkPayment1,checkPayment2,checkPayment3;
-    private RelativeLayout cancel,okay;
+    private Button cancel,okay;
     private TextInputLayout enterNumber;
     private int amount1 = 0;
     private int amount2 = 0;
@@ -49,13 +53,14 @@ public class PaymentPlanActivity extends AppCompatActivity implements View.OnCli
     private DBHelper helper,helper2;
     public CountDownTimer countDownTimer;
 
-    private AlertDialog dialog;
-    private AlertDialog dialog2;
-    private AlertDialog dialog3;
-    ProgressBar progressBar;
-    private TextView txtLoading;
+    private Dialog dialog;
+    private Dialog dialog2;
+    private Dialog dialog3;
+    ProgressBar progressBar,progressBar2;
+    private TextView txtLoading,txtLoading2;
 
-    private ProgressDialog progressDialog;
+    private Dialog progressDialog;
+
 
 
 
@@ -72,11 +77,7 @@ public class PaymentPlanActivity extends AppCompatActivity implements View.OnCli
         initViews();
 
         manager = new RequestManager(this);
-
-        progressDialog = new ProgressDialog(this);
-        progressDialog.setTitle("Loading...");
-        progressDialog.setMessage("Please wait");
-        progressDialog.show();
+        showLoadingDialog();
 
 
         helper = new DBHelper(this);
@@ -113,6 +114,23 @@ public class PaymentPlanActivity extends AppCompatActivity implements View.OnCli
         });
 
     }
+    private void showLoadingDialog(){
+        progressDialog = new Dialog(this);
+        View view = LayoutInflater.from(this).inflate(R.layout.dialog_progress_layout,null);
+        progressBar2 = view.findViewById(R.id.myProgressBar);
+        txtLoading2 = view.findViewById(R.id.txtProgress);
+        progressDialog.setContentView(view);
+        int widthInDp = 250;
+
+        final float scale = getResources().getDisplayMetrics().density;
+        int widthInPx = (int) (widthInDp * scale + 0.5f);
+
+        progressDialog.getWindow().setLayout(widthInPx, ViewGroup.LayoutParams.WRAP_CONTENT);
+        progressDialog.getWindow().setBackgroundDrawable(getDrawable(R.drawable.dialog_background));
+        progressDialog.setCancelable(false);
+        txtLoading2.setText("Payment in progress...");
+        progressDialog.show();
+    }
 
 
     @Override
@@ -125,7 +143,6 @@ public class PaymentPlanActivity extends AppCompatActivity implements View.OnCli
                 txtPlanTwo.setTextColor(getResources().getColor(R.color.black));
                 txtPlanThree.setTextColor(getResources().getColor(R.color.black));
                 amount = amount1;
-
             }
         } else if (v.getId() == R.id.checkSubPlan2) {
             if (checkPayment2.isChecked()){
@@ -184,17 +201,18 @@ public class PaymentPlanActivity extends AppCompatActivity implements View.OnCli
 
 
     private void showAlertDialog() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(PaymentPlanActivity.this);
-        LayoutInflater inflater = getLayoutInflater();
-        View dialogView = inflater.inflate(R.layout.checkout_dialog_layout,null);
-        enterNumber = dialogView.findViewById(R.id.enterSubNumber);
-        txtCheckoutTill = dialogView.findViewById(R.id.txtCheckoutTill);
-        cancel = dialogView.findViewById(R.id.planCancel);
-        okay = dialogView.findViewById(R.id.planConfirm);
+        dialog = new Dialog(this);
+        View view = LayoutInflater.from(this).inflate(R.layout.checkout_dialog_layout,null);
+        enterNumber = view.findViewById(R.id.enterSubNumber);
+        txtCheckoutTill = view.findViewById(R.id.txtCheckoutTill);
+        cancel = view.findViewById(R.id.planCancel);
+        okay = view.findViewById(R.id.planConfirm);
         editText = enterNumber.getEditText();
         txtCheckoutTill.setText(till);
-        builder.setView(dialogView);
-        dialog = builder.create();
+        dialog.setContentView(view);
+        dialog.getWindow().setLayout(ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT);
+        dialog.getWindow().setBackgroundDrawable(getDrawable(R.drawable.dialog_background));
+        dialog.setCancelable(false);
         dialog.show();
 
         cancel.setOnClickListener(new View.OnClickListener() {
@@ -238,12 +256,13 @@ public class PaymentPlanActivity extends AppCompatActivity implements View.OnCli
     };
 
     private void showAlertDialog2(){
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        LayoutInflater inflater = getLayoutInflater();
-        View dialogView = inflater.inflate(R.layout.dialog_payment_proceed,null);
-        paymentProceed = dialogView.findViewById(R.id.paymentProceed);
-        builder.setView(dialogView);
-        dialog3 = builder.create();
+        dialog3 = new Dialog(this);
+        View view = LayoutInflater.from(this).inflate(R.layout.dialog_payment_proceed,null);
+        paymentProceed = view.findViewById(R.id.paymentProceed);
+        dialog3.setContentView(view);
+        dialog3.getWindow().setLayout(ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT);
+        dialog3.getWindow().setBackgroundDrawable(getDrawable(R.drawable.dialog_background));
+        dialog3.setCancelable(false);
         dialog3.show();
         paymentProceed.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -254,15 +273,20 @@ public class PaymentPlanActivity extends AppCompatActivity implements View.OnCli
     }
 
     private void showDialog3(){
-        AlertDialog.Builder builder = new AlertDialog.Builder(PaymentPlanActivity.this);
-        LayoutInflater inflater = getLayoutInflater();
-        View dialogView = inflater.inflate(R.layout.dialog_progress_layout,null);
-        txtLoading = dialogView.findViewById(R.id.txtProgress);
-        progressBar = dialogView.findViewById(R.id.myProgressBar);
-        txtLoading.setText("Payment in progress, this may take a minute or so...");
-        builder.setView(dialogView);
-        dialog2 = builder.create();
+        dialog2 = new Dialog(this);
+        View view = LayoutInflater.from(this).inflate(R.layout.dialog_progress_layout,null);
+        progressBar = view.findViewById(R.id.myProgressBar);
+        txtLoading = view.findViewById(R.id.txtProgress);
+        dialog2.setContentView(view);
+        int widthInDp = 250;
 
+        final float scale = getResources().getDisplayMetrics().density;
+        int widthInPx = (int) (widthInDp * scale + 0.5f);
+
+        dialog2.getWindow().setLayout(widthInPx, ViewGroup.LayoutParams.WRAP_CONTENT);
+        dialog2.getWindow().setBackgroundDrawable(getDrawable(R.drawable.dialog_background));
+        dialog2.setCancelable(false);
+        txtLoading.setText("Loading...");
     }
 
     private void callPaymentApi(String till) {
@@ -338,7 +362,6 @@ public class PaymentPlanActivity extends AppCompatActivity implements View.OnCli
             Toast.makeText(this, "token not found", Toast.LENGTH_SHORT).show();
         }else{
             while (cursor.moveToNext()){
-                Toast.makeText(this, "token found", Toast.LENGTH_SHORT).show();
                 token = cursor.getString(0);
             }
         }

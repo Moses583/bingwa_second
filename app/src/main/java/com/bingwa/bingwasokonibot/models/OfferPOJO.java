@@ -3,12 +3,12 @@ package com.bingwa.bingwasokonibot.models;
 import java.io.Serializable;
 
 public class OfferPOJO implements Serializable {
-    private String name,amount,UssdCode, dialSim,deviceId,subscriptionId,paymentSim,paymentSimId,offerTill;
+    private String offer,cost, ussd, dialSim,deviceId,subscriptionId,paymentSim,paymentSimId,offerTill;
 
-    public OfferPOJO(String name, String amount, String ussdCode, String dialSim, String deviceId, String subscriptionId, String paymentSim, String paymentSimId,String offerTill) {
-        this.name = name;
-        this.amount = amount;
-        this.UssdCode = ussdCode;
+    public OfferPOJO(String offer, String cost, String ussdCode, String dialSim, String deviceId, String subscriptionId, String paymentSim, String paymentSimId,String offerTill) {
+        this.offer = offer;
+        this.cost = cost;
+        this.ussd = ussdCode;
         this.dialSim = dialSim;
         this.deviceId = deviceId;
         this.subscriptionId = subscriptionId;
@@ -18,15 +18,15 @@ public class OfferPOJO implements Serializable {
     }
 
     public String getName(){
-        return name;
+        return offer;
     }
 
     public String getAmount() {
-        return amount;
+        return cost;
     }
 
-    public String getUssdCode() {
-        return UssdCode;
+    public String getUssd() {
+        return ussd;
     }
 
     public String getDialSim() {

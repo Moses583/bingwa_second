@@ -1,11 +1,13 @@
 package com.bingwa.bingwasokonibot;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
@@ -30,7 +32,7 @@ public class LoginActivity extends AppCompatActivity {
     private TextInputLayout enterName,enterPassword;
     private EditText one, two;
     RequestManager manager;
-    private AlertDialog dialog;
+    private Dialog dialog;
     ProgressBar progressBar;
     private TextView txtLoading,txtForgotPassword;
     DBHelper helper;
@@ -59,7 +61,6 @@ public class LoginActivity extends AppCompatActivity {
             public void onClick(View v) {
                 dialog.show();
                 fetchDetails();
-//                createAccount();
             }
         });
         txtForgotPassword.setOnClickListener(new View.OnClickListener() {
@@ -73,14 +74,20 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void showDialog3() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        LayoutInflater inflater = getLayoutInflater();
-        View dialogView = inflater.inflate(R.layout.dialog_progress_layout,null);
-        txtLoading = dialogView.findViewById(R.id.txtProgress);
-        progressBar = dialogView.findViewById(R.id.myProgressBar);
+        dialog = new Dialog(this);
+        View view = LayoutInflater.from(this).inflate(R.layout.dialog_progress_layout,null);
+        progressBar = view.findViewById(R.id.myProgressBar);
+        txtLoading = view.findViewById(R.id.txtProgress);
+        dialog.setContentView(view);
+        int widthInDp = 250;
+
+        final float scale = getResources().getDisplayMetrics().density;
+        int widthInPx = (int) (widthInDp * scale + 0.5f);
+
+        dialog.getWindow().setLayout(widthInPx, ViewGroup.LayoutParams.WRAP_CONTENT);
+        dialog.getWindow().setBackgroundDrawable(getDrawable(R.drawable.dialog_background));
+        dialog.setCancelable(false);
         txtLoading.setText("Logging you in...");
-        builder.setView(dialogView);
-        dialog = builder.create();
     }
 
     private void fetchDetails(){
@@ -157,7 +164,7 @@ public class LoginActivity extends AppCompatActivity {
     private void insertLink(String link) {
         boolean insertTill = helper.insertLink(link);
         if (insertTill){
-            Toast.makeText(this, link, Toast.LENGTH_SHORT).show();
+
         }
         else{
             Toast.makeText(this, "link not saved", Toast.LENGTH_SHORT).show();
@@ -167,7 +174,6 @@ public class LoginActivity extends AppCompatActivity {
     public void insertToken(String token){
         boolean checkInsertToken = helper.insertToken(token);
         if (checkInsertToken){
-            Toast.makeText(this, "Token saved", Toast.LENGTH_SHORT).show();
             createAccount();
         }else{
             Toast.makeText(this, "Token not saved", Toast.LENGTH_SHORT).show();

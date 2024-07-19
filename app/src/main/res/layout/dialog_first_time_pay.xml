@@ -1,33 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Subscription required!"
-        android:layout_gravity="start"
-        android:textAlignment="viewStart"
-        android:textColor="@color/green"
-        android:textSize="20sp"
-        android:fontFamily="@font/oxygen_bold"
-        android:layout_margin="8dp"/>
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="You need to choose a plan for use the app."
-        android:layout_gravity="start"
-        android:textAlignment="viewStart"
-        android:textColor="@color/black"
-        android:layout_margin="8dp"/>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    app:cardCornerRadius="16dp"
+    app:cardElevation="20dp">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Subscription required!"
+            android:layout_gravity="start"
+            android:textAlignment="viewStart"
+            android:textColor="@color/green"
+            android:textSize="20sp"
+            android:fontFamily="@font/oxygen_bold"
+            android:layout_margin="8dp"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="You need to choose a plan for use the app."
+            android:layout_gravity="start"
+            android:textAlignment="viewStart"
+            android:textColor="@color/black"
+            android:layout_margin="8dp"/>
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:text="Check available plans"
-        android:id="@+id/btnCheckAvailablePlans"
-        android:layout_margin="8dp"/>
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="Check available plans"
+            android:id="@+id/btnCheckAvailablePlans"
+            android:layout_margin="8dp"/>
+    </LinearLayout>
 
-</LinearLayout>
+</androidx.cardview.widget.CardView>

@@ -88,6 +88,8 @@
             android:layout_gravity="end"
             android:layout_margin="10dp"
             android:text="Next"
+            android:textAllCaps="false"
+            android:background="@drawable/button_custom_one"
             android:id="@+id/btnCreatePersona1"/>
     </LinearLayout>
 

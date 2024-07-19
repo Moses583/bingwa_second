@@ -1,10 +1,14 @@
 package com.bingwa.bingwasokonibot;
 
+import static androidx.core.content.ContextCompat.getDrawable;
+
+import android.app.Dialog;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
@@ -29,7 +33,7 @@ public class RequestTokenActivity extends AppCompatActivity {
     private Button goToResetPassword,btnGoToLogin;
     private EditText editText;
     private RequestManager manager;
-    private AlertDialog dialog,dialog2;
+    private Dialog dialog,dialog2;
     ProgressBar progressBar;
     private TextView txtLoading;
     private DBHelper dbHelper,helper2;
@@ -68,30 +72,35 @@ public class RequestTokenActivity extends AppCompatActivity {
     }
     private void login(){
         Intent intent = new Intent(RequestTokenActivity.this, LoginActivity.class);
-//        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-//        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
         finish();
     }
 
     private void showGoToLoginDialog() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        LayoutInflater inflater = getLayoutInflater();
-        View dialogView = inflater.inflate(R.layout.dialog_go_to_login,null);
-        btnGoToLogin = dialogView.findViewById(R.id.btnGoToLogin);
-        builder.setView(dialogView);
-        dialog2 = builder.create();
+        dialog2 = new Dialog(this);
+        View view = LayoutInflater.from(this).inflate(R.layout.dialog_go_to_login,null);
+        btnGoToLogin = view.findViewById(R.id.btnGoToLogin);
+        dialog2.setContentView(view);
+        dialog2.getWindow().setLayout(ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT);
+        dialog2.getWindow().setBackgroundDrawable(getDrawable(R.drawable.dialog_background));
+        dialog2.setCancelable(false);
     }
 
     private void showDialog3() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        LayoutInflater inflater = getLayoutInflater();
-        View dialogView = inflater.inflate(R.layout.dialog_progress_layout,null);
-        txtLoading = dialogView.findViewById(R.id.txtProgress);
-        progressBar = dialogView.findViewById(R.id.myProgressBar);
-        txtLoading.setText("Requesting new token");
-        builder.setView(dialogView);
-        dialog = builder.create();
+        dialog = new Dialog(this);
+        View view = LayoutInflater.from(this).inflate(R.layout.dialog_progress_layout,null);
+        progressBar = view.findViewById(R.id.myProgressBar);
+        txtLoading = view.findViewById(R.id.txtProgress);
+        dialog.setContentView(view);
+        int widthInDp = 250;
+
+        final float scale = getResources().getDisplayMetrics().density;
+        int widthInPx = (int) (widthInDp * scale + 0.5f);
+
+        dialog.getWindow().setLayout(widthInPx, ViewGroup.LayoutParams.WRAP_CONTENT);
+        dialog.getWindow().setBackgroundDrawable(getDrawable(R.drawable.dialog_background));
+        dialog.setCancelable(false);
+        txtLoading.setText("Requesting token...");
     }
 
     private void fetchData() {
