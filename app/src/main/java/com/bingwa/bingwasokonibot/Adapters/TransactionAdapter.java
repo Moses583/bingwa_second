@@ -6,11 +6,15 @@ import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.transition.AutoTransition;
+import androidx.transition.TransitionManager;
 
 import com.bingwa.bingwasokonibot.R;
 import com.bingwa.bingwasokonibot.models.TransactionPOJO;
@@ -27,6 +31,10 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionViewHold
 
     public void setPojoList(List<TransactionPOJO> pojoList) {
         this.pojoList = pojoList;
+        notifyDataSetChanged();
+    }
+    public void setFilteredList(List<TransactionPOJO> filteredList) {
+        this.pojoList = filteredList;
         notifyDataSetChanged();
     }
 
@@ -64,6 +72,34 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionViewHold
                 context.startActivity(intent);
             }
         });
+        holder.dropDown.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (holder.ussdDummy.getVisibility() == View.GONE){
+                    holder.dropDown.setVisibility(View.GONE);
+                    holder.dropUp.setVisibility(View.VISIBLE);
+                    holder.ussdDummy.setVisibility(View.VISIBLE);
+                    holder.responseLayout.setVisibility(View.VISIBLE);
+                    holder.amountLayout.setVisibility(View.VISIBLE);
+                    holder.timeLayout.setVisibility(View.VISIBLE);
+                    TransitionManager.beginDelayedTransition(holder.transactionPojoLayout,new AutoTransition());
+                }
+            }
+        });
+        holder.dropUp.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (holder.ussdDummy.getVisibility() == View.VISIBLE){
+                    holder.dropDown.setVisibility(View.VISIBLE);
+                    holder.dropUp.setVisibility(View.GONE);
+                    holder.ussdDummy.setVisibility(View.GONE);
+                    holder.responseLayout.setVisibility(View.GONE);
+                    holder.amountLayout.setVisibility(View.GONE);
+                    holder.timeLayout.setVisibility(View.GONE);
+                    TransitionManager.beginDelayedTransition(holder.transactionPojoLayout,new AutoTransition());
+                }
+            }
+        });
     }
 
     @Override
@@ -72,8 +108,10 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionViewHold
     }
 }
 class TransactionViewHolder extends RecyclerView.ViewHolder {
-    LinearLayout transactionCardView;
-    TextView txtUssdResponse, txtTransactionAmount, txtTransactionTimeStamp, txtTransactionRecipient,txtTransactionStatus;
+    CardView transactionCardView;
+    TextView txtUssdResponse, txtTransactionAmount, txtTransactionTimeStamp, txtTransactionRecipient,txtTransactionStatus,ussdDummy;
+    LinearLayout responseLayout,amountLayout,timeLayout,transactionPojoLayout;
+    ImageView dropDown,dropUp;
     public TransactionViewHolder(@NonNull View itemView) {
         super(itemView);
         transactionCardView = itemView.findViewById(R.id.transactionCardView);
@@ -82,5 +120,12 @@ class TransactionViewHolder extends RecyclerView.ViewHolder {
         txtTransactionTimeStamp = itemView.findViewById(R.id.txtTransactionTimeStamp);
         txtTransactionRecipient = itemView.findViewById(R.id.txtTransactionRecepient);
         txtTransactionStatus = itemView.findViewById(R.id.txtTransactionStatus);
+        ussdDummy = itemView.findViewById(R.id.ussdDummy);
+        responseLayout = itemView.findViewById(R.id.responseLayout);
+        amountLayout = itemView.findViewById(R.id.amountLayout);
+        transactionPojoLayout = itemView.findViewById(R.id.transactionPojoLayout);
+        timeLayout = itemView.findViewById(R.id.timeLayout);
+        dropDown = itemView.findViewById(R.id.dropDown);
+        dropUp = itemView.findViewById(R.id.dropUp);
     }
 }

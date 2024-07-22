@@ -10,7 +10,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.transition.AutoTransition;
+import androidx.transition.TransitionManager;
 
 import com.bingwa.bingwasokonibot.DBHelper;
 import com.bingwa.bingwasokonibot.R;
@@ -53,6 +56,42 @@ public class RenewalsListAdapter extends RecyclerView.Adapter<RenewalsViewHolder
                 delete(holder.getAdapterPosition(), offerList.get(holder.getAdapterPosition()).getUssdCode());
             }
         });
+        holder.renewalDown.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (holder.ussdDummy.getVisibility() == View.GONE){
+                    holder.renewalDown.setVisibility(View.GONE);
+                    holder.renewalUp.setVisibility(View.VISIBLE);
+                    holder.ussdDummy.setVisibility(View.VISIBLE);
+                    holder.perLay.setVisibility(View.VISIBLE);
+                    holder.tillLay.setVisibility(View.VISIBLE);
+                    holder.dialLay.setVisibility(View.VISIBLE);
+                    holder.moneyLay.setVisibility(View.VISIBLE);
+                    holder.startLay.setVisibility(View.VISIBLE);
+                    holder.endLay.setVisibility(View.VISIBLE);
+                    holder.btnEdit.setVisibility(View.VISIBLE);
+                    TransitionManager.beginDelayedTransition(holder.mainLay,new AutoTransition());
+                }
+            }
+        });
+        holder.renewalUp.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (holder.ussdDummy.getVisibility() == View.VISIBLE){
+                    holder.renewalDown.setVisibility(View.VISIBLE);
+                    holder.renewalUp.setVisibility(View.GONE);
+                    holder.ussdDummy.setVisibility(View.GONE);
+                    holder.perLay.setVisibility(View.GONE);
+                    holder.tillLay.setVisibility(View.GONE);
+                    holder.dialLay.setVisibility(View.GONE);
+                    holder.moneyLay.setVisibility(View.GONE);
+                    holder.startLay.setVisibility(View.GONE);
+                    holder.endLay.setVisibility(View.GONE);
+                    holder.btnEdit.setVisibility(View.GONE);
+                    TransitionManager.beginDelayedTransition(holder.mainLay,new AutoTransition());
+                }
+            }
+        });
 
     }
 
@@ -75,9 +114,10 @@ public class RenewalsListAdapter extends RecyclerView.Adapter<RenewalsViewHolder
     }
 }
 class RenewalsViewHolder extends RecyclerView.ViewHolder {
-    TextView frequency, ussdCode, period,till,time,money,startDate,endDate;
-    LinearLayout selectOffer;
-    ImageView btnEdit;
+    TextView frequency, ussdCode, period,till,time,money,startDate,endDate,ussdDummy;
+    CardView selectOffer;
+    ImageView btnEdit,renewalUp,renewalDown;
+    LinearLayout mainLay,perLay,tillLay,dialLay,moneyLay,startLay,endLay;
     public RenewalsViewHolder(@NonNull View itemView) {
         super(itemView);
         frequency = itemView.findViewById(R.id.renewalFrequency);
@@ -90,6 +130,16 @@ class RenewalsViewHolder extends RecyclerView.ViewHolder {
         endDate = itemView.findViewById(R.id.renewalEndDate);
         selectOffer = itemView.findViewById(R.id.selectRenewal);
         btnEdit = itemView.findViewById(R.id.btnEditRenewal);
+        ussdDummy = itemView.findViewById(R.id.renewalUssdDummy);
+        mainLay = itemView.findViewById(R.id.mainRenewalLayout);
+        renewalDown = itemView.findViewById(R.id.renewalsDropDown);
+        renewalUp = itemView.findViewById(R.id.renewalsDropUp);
+        perLay = itemView.findViewById(R.id.renewalPerLay);
+        tillLay = itemView.findViewById(R.id.renewalTillLay);
+        dialLay = itemView.findViewById(R.id.renewalDialLay);
+        startLay = itemView.findViewById(R.id.renewalStartLay);
+        endLay = itemView.findViewById(R.id.renewalEndLay);
+        moneyLay = itemView.findViewById(R.id.renewalMoneyLay);
     }
 }
 

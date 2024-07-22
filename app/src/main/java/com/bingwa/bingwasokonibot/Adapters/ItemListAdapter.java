@@ -1,6 +1,7 @@
 package com.bingwa.bingwasokonibot.Adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,9 +11,13 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.transition.AutoTransition;
+import androidx.transition.TransitionManager;
 
 import com.bingwa.bingwasokonibot.DBHelper;
+import com.bingwa.bingwasokonibot.EditOfferActivity;
 import com.bingwa.bingwasokonibot.R;
 import com.bingwa.bingwasokonibot.models.OfferPOJO;
 
@@ -39,16 +44,71 @@ public class ItemListAdapter extends RecyclerView.Adapter<OfferViewHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull OfferViewHolder holder, int position) {
-        holder.name.setText(offerList.get(holder.getAdapterPosition()).getName());
-        holder.amount.setText(offerList.get(holder.getAdapterPosition()).getAmount());
-        holder.dial.setText(offerList.get(holder.getAdapterPosition()).getDialSim());
-        holder.ussdCode.setText(offerList.get(holder.getAdapterPosition()).getUssd());
-        holder.paySim.setText(offerList.get(holder.getAdapterPosition()).getPaymentSim());
-        holder.till.setText(offerList.get(holder.getAdapterPosition()).getOfferTill());
+        String name = offerList.get(holder.getAdapterPosition()).getName();
+        String amount = offerList.get(holder.getAdapterPosition()).getAmount();
+        String ussd = offerList.get(holder.getAdapterPosition()).getUssd();
+        String dialSim = offerList.get(holder.getAdapterPosition()).getDialSim();
+        String deviceId = offerList.get(holder.getAdapterPosition()).getDeviceId();
+        String subscriptionId = offerList.get(holder.getAdapterPosition()).getSubscriptionId();
+        String paymentSim = offerList.get(holder.getAdapterPosition()).getPaymentSim();
+        String paymentSimId = offerList.get(holder.getAdapterPosition()).getPaymentSimId();
+        String offerTill = offerList.get(holder.getAdapterPosition()).getOfferTill();
+
+
+        holder.name.setText(name);
+        holder.amount.setText(amount);
+        holder.dial.setText(ussd);
+        holder.ussdCode.setText(dialSim);
+        holder.paySim.setText(paymentSim);
+        holder.till.setText(offerTill);
         holder.btnEdit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Intent intent = new Intent(context, EditOfferActivity.class);
+                intent.putExtra("name",name);
+                intent.putExtra("amount",amount);
+                intent.putExtra("ussd",ussd);
+                context.startActivity(intent);
+            }
+        });
+        holder.btnDeleteOffer.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
                 delete(holder.getAdapterPosition(), offerList.get(holder.getAdapterPosition()).getUssd());
+            }
+        });
+        holder.offerDropDown.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (holder.amountDummy.getVisibility() == View.GONE){
+                    holder.offerDropDown.setVisibility(View.GONE);
+                    holder.offerDropUp.setVisibility(View.VISIBLE);
+                    holder.amountDummy.setVisibility(View.VISIBLE);
+                    holder.ussdLayout.setVisibility(View.VISIBLE);
+                    holder.paymentLayout.setVisibility(View.VISIBLE);
+                    holder.dialLayout.setVisibility(View.VISIBLE);
+                    holder.tillLayout.setVisibility(View.VISIBLE);
+                    holder.btnEdit.setVisibility(View.VISIBLE);
+                    holder.btnDeleteOffer.setVisibility(View.VISIBLE);
+                    TransitionManager.beginDelayedTransition(holder.mainOfferLayout,new AutoTransition());
+                }
+            }
+        });
+        holder.offerDropUp.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (holder.amountDummy.getVisibility() == View.VISIBLE){
+                    holder.offerDropDown.setVisibility(View.VISIBLE);
+                    holder.offerDropUp.setVisibility(View.GONE);
+                    holder.amountDummy.setVisibility(View.GONE);
+                    holder.ussdLayout.setVisibility(View.GONE);
+                    holder.paymentLayout.setVisibility(View.GONE);
+                    holder.dialLayout.setVisibility(View.GONE);
+                    holder.tillLayout.setVisibility(View.GONE);
+                    holder.btnEdit.setVisibility(View.GONE);
+                    holder.btnDeleteOffer.setVisibility(View.GONE);
+                    TransitionManager.beginDelayedTransition(holder.mainOfferLayout,new AutoTransition());
+                }
             }
         });
 
@@ -73,9 +133,10 @@ public class ItemListAdapter extends RecyclerView.Adapter<OfferViewHolder> {
     }
 }
 class OfferViewHolder extends RecyclerView.ViewHolder {
-    TextView amount, dial, ussdCode, paySim, till,name;
-    LinearLayout selectOffer;
-    ImageView btnEdit;
+    TextView amount, dial, ussdCode, paySim, till,name,amountDummy;
+    CardView selectOffer;
+    ImageView btnEdit,btnDeleteOffer,offerDropDown,offerDropUp;
+    LinearLayout ussdLayout,paymentLayout,dialLayout,tillLayout,mainOfferLayout;
     public OfferViewHolder(@NonNull View itemView) {
         super(itemView);
         name = itemView.findViewById(R.id.recyclerName);
@@ -86,6 +147,15 @@ class OfferViewHolder extends RecyclerView.ViewHolder {
         till = itemView.findViewById(R.id.recyclerDialTill);
         selectOffer = itemView.findViewById(R.id.selectOffer);
         btnEdit = itemView.findViewById(R.id.btnEditOffer);
+        btnDeleteOffer = itemView.findViewById(R.id.btnDeleteOffer);
+        offerDropDown = itemView.findViewById(R.id.offersDropDown);
+        offerDropUp = itemView.findViewById(R.id.offersDropUp);
+        mainOfferLayout = itemView.findViewById(R.id.mainOfferLayout);
+        ussdLayout = itemView.findViewById(R.id.offerUssdLayout);
+        paymentLayout = itemView.findViewById(R.id.offerPaymentLayout);
+        dialLayout = itemView.findViewById(R.id.offerDialLayout);
+        tillLayout = itemView.findViewById(R.id.offerTillLayout);
+        amountDummy = itemView.findViewById(R.id.offerAmountDummy);
     }
 }
 

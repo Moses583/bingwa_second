@@ -199,7 +199,7 @@ public class RenewalsService extends Service {
 
     }
     public void insertTransaction(Context context,DBHelper helper,String ussdResponse, String amount, String transactionTimeStamp, String recipient,int till, String status,int subId,String ussd, String messageFull){
-        boolean checkInsertData = helper.insertTransaction(ussdResponse,amount,transactionTimeStamp,recipient,status,subId,ussd,till,messageFull);
+        boolean checkInsertData = helper.insertSuccess(ussdResponse,amount,transactionTimeStamp,recipient,status,subId,ussd,till,messageFull);
         if (checkInsertData){
             Toast.makeText(context, "Transaction recorded", Toast.LENGTH_SHORT).show();
 //            postTransaction(context,Double.parseDouble(matchedAmount),phoneNumber,till,"messageBody");

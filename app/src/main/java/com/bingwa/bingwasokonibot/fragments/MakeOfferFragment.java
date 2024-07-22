@@ -109,6 +109,7 @@ public class MakeOfferFragment extends Fragment {
         callPostOfferApi();
 
 
+
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -139,6 +140,9 @@ public class MakeOfferFragment extends Fragment {
             }
         });
         showData();
+        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setAdapter(listAdapter);
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -207,9 +211,7 @@ public class MakeOfferFragment extends Fragment {
         cursor.close();
         listAdapter = new ItemListAdapter(getActivity());
         listAdapter.setOfferList(pojos);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        recyclerView.setHasFixedSize(true);
-        recyclerView.setAdapter(listAdapter);
+
     }
 
     public String tillNumber(){

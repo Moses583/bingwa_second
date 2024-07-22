@@ -9,6 +9,7 @@ import com.bingwa.bingwasokonibot.fragments.AutorenewalsFragment;
 import com.bingwa.bingwasokonibot.fragments.InboxFragment;
 import com.bingwa.bingwasokonibot.fragments.MainContentFragment;
 import com.bingwa.bingwasokonibot.fragments.MakeOfferFragment;
+import com.bingwa.bingwasokonibot.fragments.TransactionsFragment;
 
 public class ViewPagerAdapter extends FragmentStateAdapter {
 
@@ -22,10 +23,12 @@ public class ViewPagerAdapter extends FragmentStateAdapter {
     public Fragment createFragment(int position) {
         switch (position){
             case 1:
-                return new MakeOfferFragment();
+                return new TransactionsFragment();
             case 2:
-                return new AutorenewalsFragment();
+                return new MakeOfferFragment();
             case 3:
+                return new AutorenewalsFragment();
+            case 4:
                 return new InboxFragment();
             default:
                 return new MainContentFragment();
@@ -34,6 +37,6 @@ public class ViewPagerAdapter extends FragmentStateAdapter {
 
     @Override
     public int getItemCount() {
-        return 4;
+        return 5;
     }
 }

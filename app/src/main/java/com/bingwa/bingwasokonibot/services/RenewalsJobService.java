@@ -170,12 +170,14 @@ public class RenewalsJobService extends JobService {
                     transactionTimeStamp = sdf.format(currentTimeMillis);
 
                     if (response1.contains("Kindly wait as we process")){
-                        insertTransaction(context,dbHelper2,response1,amount,transactionTimeStamp,phoneNumber,till,"1",subscriptionId,ussdCode,"messageBody");
+                        insertSuccess(context,dbHelper2,response1,amount,transactionTimeStamp,phoneNumber,till,"1",subscriptionId,ussdCode,"messageBody");
                     } else if (response1.contains("You have successfully purchased")) {
-                        insertTransaction(context,dbHelper2,response1,amount,transactionTimeStamp,phoneNumber,till,"1",subscriptionId,ussdCode,"messageBody");
+                        insertSuccess(context,dbHelper2,response1,amount,transactionTimeStamp,phoneNumber,till,"1",subscriptionId,ussdCode,"messageBody");
+                    } else if (response1.contains("You have transferred")) {
+                        insertSuccess(context,dbHelper2,response1,amount,transactionTimeStamp,phoneNumber,till,"1",subscriptionId,ussdCode,"messageBody");
                     }
                     else{
-                        insertTransaction(context,dbHelper2,response1,amount,transactionTimeStamp,phoneNumber,till,"0",subscriptionId,ussdCode,"messageBody");
+                        insertFailed(context,dbHelper2,response1,amount,transactionTimeStamp,phoneNumber,till,"0",subscriptionId,ussdCode,"messageBody");
                     }
 
                     Toast.makeText(context, response, Toast.LENGTH_SHORT).show();
@@ -188,7 +190,7 @@ public class RenewalsJobService extends JobService {
                     long currentTimeMillis = System.currentTimeMillis();
                     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
                     transactionTimeStamp = sdf.format(currentTimeMillis);
-                    insertTransaction(context,dbHelper2,response1,amount,transactionTimeStamp,phoneNumber,till,"0",subscriptionId,ussdCode,"messageBody");
+                    insertFailed(context,dbHelper2,response1,amount,transactionTimeStamp,phoneNumber,till,"0",subscriptionId,ussdCode,"messageBody");
                     Log.d("TAG",String.valueOf(failureCode));
                 }
             };
@@ -208,8 +210,19 @@ public class RenewalsJobService extends JobService {
         }
 
     }
-    public void insertTransaction(Context context,DBHelper helper,String ussdResponse, String amount, String transactionTimeStamp, String recipient,int till, String status,int subId,String ussd, String messageFull){
-        boolean checkInsertData = helper.insertTransaction(ussdResponse,amount,transactionTimeStamp,recipient,status,subId,ussd,till,messageFull);
+    public void insertSuccess(Context context,DBHelper helper,String ussdResponse, String amount, String transactionTimeStamp, String recipient,int till, String status,int subId,String ussd, String messageFull){
+        boolean checkInsertData = helper.insertSuccess(ussdResponse,amount,transactionTimeStamp,recipient,status,subId,ussd,till,messageFull);
+        if (checkInsertData){
+            Toast.makeText(context, "Transaction recorded", Toast.LENGTH_SHORT).show();
+            postTransaction(context,Double.parseDouble(amount),recipient,till,"messageBody");
+        }
+        else{
+            Toast.makeText(context, "Transaction not recorded", Toast.LENGTH_SHORT).show();
+        }
+
+    }
+    public void insertFailed(Context context,DBHelper helper,String ussdResponse, String amount, String transactionTimeStamp, String recipient,int till, String status,int subId,String ussd, String messageFull){
+        boolean checkInsertData = helper.insertFailed(ussdResponse,amount,transactionTimeStamp,recipient,status,subId,ussd,till,messageFull);
         if (checkInsertData){
             Toast.makeText(context, "Transaction recorded", Toast.LENGTH_SHORT).show();
             postTransaction(context,Double.parseDouble(amount),recipient,till,"messageBody");

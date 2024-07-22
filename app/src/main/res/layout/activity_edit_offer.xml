@@ -5,8 +5,8 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".CreateOfferActivity">
-
+    tools:context=".EditOfferActivity"
+    android:orientation="vertical">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -15,7 +15,7 @@
         <androidx.appcompat.widget.Toolbar
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:title="Create new offer"/>
+            app:title="Edit offer"/>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -25,7 +25,7 @@
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/edtLayoutEnterName"
+            android:id="@+id/edtLayoutEditName"
             android:layout_marginStart="10dp"
             android:layout_marginEnd="10dp"
             app:errorEnabled="true">
@@ -47,7 +47,7 @@
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/edtLayoutEnterAmount"
+            android:id="@+id/edtLayoutEditAmount"
             android:layout_marginStart="10dp"
             android:layout_marginEnd="10dp"
             app:errorEnabled="true">
@@ -69,7 +69,7 @@
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/edtLayoutTillOffer"
+            android:id="@+id/edtLayoutEditTillOffer"
             android:layout_marginStart="10dp"
             android:layout_marginEnd="10dp"
             app:errorEnabled="true">
@@ -90,7 +90,7 @@
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/edtLayoutEnterCode"
+            android:id="@+id/edtLayoutEditCode"
             android:layout_marginStart="10dp"
             android:layout_marginEnd="10dp"
             app:errorEnabled="true">
@@ -113,7 +113,7 @@
             android:layout_height="50dp">
 
             <Spinner
-                android:id="@+id/spinner1"
+                android:id="@+id/editOfferSpinner1"
                 android:layout_width="250dp"
                 android:layout_height="wrap_content"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -134,7 +134,7 @@
             android:layout_height="50dp">
 
             <Spinner
-                android:id="@+id/spinner2"
+                android:id="@+id/EditOfferSpinner2"
                 android:layout_width="250dp"
                 android:layout_height="wrap_content"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -163,7 +163,7 @@
                 app:layout_constraintGuide_percent="0.7" />
 
             <Button
-                android:id="@+id/txtHelp"
+                android:id="@+id/btnOfferEditHelp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Help"
@@ -175,7 +175,7 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <Button
-                android:id="@+id/txtSave"
+                android:id="@+id/btnOfferEditSave"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Save"
@@ -187,6 +187,5 @@
                 app:layout_constraintTop_toTopOf="parent" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </LinearLayout>
-
 
 </ScrollView>

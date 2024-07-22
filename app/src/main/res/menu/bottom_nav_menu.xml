@@ -7,6 +7,11 @@
         android:icon="@drawable/ic_home"
         />
     <item
+        android:title="Transactions"
+        android:id="@+id/idTransactions"
+        android:icon="@drawable/ic_transactions"
+        />
+    <item
         android:title="Offers"
         android:id="@+id/idCreateOffer"
         android:icon="@drawable/ic_offers" />

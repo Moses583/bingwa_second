@@ -87,9 +87,6 @@ public class MainContentFragment extends Fragment {
     private String mParam2;
     private DBHelper helper,helper2;
     List<TransactionPOJO> pojoList = new ArrayList<>();
-    TransactionAdapter adapter;
-    private RecyclerView recyclerView;
-    private SwipeRefreshLayout swipeRefreshLayout;
 
     private TextView airtimeBalance,totalTransactions,failedTransactions,txtLoading;
     private Button executeFailedTransactions,checkAirtimeBalance;
@@ -138,8 +135,6 @@ public class MainContentFragment extends Fragment {
         initViews(view);
         helper = new DBHelper(getActivity());
         requestManager = new RequestManager(getActivity());
-        showData();
-        getFailedTransactions();
         simMap = new HashMap<>();
         simNames = new ArrayList<>();
         slotIndex = new ArrayList<>();
@@ -156,22 +151,10 @@ public class MainContentFragment extends Fragment {
                 offerContinuationDialog.dismiss();
             }
         });
-        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                refresh();
-            }
-        });
         checkAirtimeBalance.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 showAlertDialog();
-            }
-        });
-        img.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showDeletionDialog();
             }
         });
         executeFailedTransactions.setOnClickListener(new View.OnClickListener() {
@@ -188,32 +171,6 @@ public class MainContentFragment extends Fragment {
                 }
             }
         });
-        chipGroup.setOnCheckedStateChangeListener(new ChipGroup.OnCheckedStateChangeListener() {
-            @Override
-            public void onCheckedChanged(@NonNull ChipGroup group, @NonNull List<Integer> checkedIds) {
-                if (checkedIds.isEmpty()){
-                    showData();
-                }else{
-                    for (int i:
-                            checkedIds) {
-                        switch (i){
-                            case R.id.chipAllTransactions:
-                                showData();
-                                break;
-                            case R.id.chipSuccessfulTransactions:
-                                showSuccess();
-                                break;
-                            case R.id.chipFailedTransactions:
-                                showFailed();
-                                break;
-                            default:
-                                showData();
-                                break;
-                        }
-                    }
-                }
-            }
-        });
         dateBroadCast = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
@@ -225,39 +182,39 @@ public class MainContentFragment extends Fragment {
 
         return view;
     }
-    private void showDeletionDialog(){
-        confirmDeletionDialog = new Dialog(getActivity());
-        View view = LayoutInflater.from(getActivity()).inflate(R.layout.dialog_delete_transactions,null);
-        deleteTransaction = view.findViewById(R.id.btnDeleteTransactions);
-        confirmDeletionDialog.setContentView(view);
-        confirmDeletionDialog.getWindow().setLayout(ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT);
-        confirmDeletionDialog.getWindow().setBackgroundDrawable(getDrawable(getActivity(),R.drawable.dialog_background));
-        confirmDeletionDialog.setCancelable(false);
-        deleteTransaction.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                deleteData();
-            }
-        });
-        confirmDeletionDialog.show();
-
-    }
-    private void deleteData(){
-        boolean deleteData = helper.deleteSuccessfulTransactions();
-        if (deleteData){
-            Log.d("TAG","Data deleted");
-        }
-        else{
-            Log.d("TAG", "Data not deleted");
-        }
-        pojoList.clear();
-        totalTransactions.setText(String.valueOf(pojoList.size()));
-        adapter.setPojoList(pojoList);
-        recyclerView.setAdapter(adapter);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        recyclerView.setHasFixedSize(true);
-        confirmDeletionDialog.dismiss();
-    }
+//    private void showDeletionDialog(){
+//        confirmDeletionDialog = new Dialog(getActivity());
+//        View view = LayoutInflater.from(getActivity()).inflate(R.layout.dialog_delete_transactions,null);
+//        deleteTransaction = view.findViewById(R.id.btnDeleteTransactions);
+//        confirmDeletionDialog.setContentView(view);
+//        confirmDeletionDialog.getWindow().setLayout(ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT);
+//        confirmDeletionDialog.getWindow().setBackgroundDrawable(getDrawable(getActivity(),R.drawable.dialog_background));
+//        confirmDeletionDialog.setCancelable(false);
+//        deleteTransaction.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                deleteData();
+//            }
+//        });
+//        confirmDeletionDialog.show();
+//
+//    }
+//    private void deleteData(){
+//        boolean deleteData = helper.deleteSuccessfulTransactions();
+//        if (deleteData){
+//            Log.d("TAG","Data deleted");
+//        }
+//        else{
+//            Log.d("TAG", "Data not deleted");
+//        }
+//        pojoList.clear();
+//        totalTransactions.setText(String.valueOf(pojoList.size()));
+//        adapter.setPojoList(pojoList);
+//        recyclerView.setAdapter(adapter);
+//        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+//        recyclerView.setHasFixedSize(true);
+//        confirmDeletionDialog.dismiss();
+//    }
     private void showAlertDialog() {
         dialog = new Dialog(getActivity());
         View view = LayoutInflater.from(getActivity()).inflate(R.layout.dialog_choose_sim,null);
@@ -284,108 +241,6 @@ public class MainContentFragment extends Fragment {
         });
 
 
-    }
-    private void getFailedTransactions(){
-        Cursor cursor = helper.getFailedResponses();
-        List<TransactionPOJO> queue1 = new ArrayList<>();
-        if (cursor.getCount() == 0){
-            Log.d("TAG","There are no failed transactions");
-        }else{
-            while (cursor.moveToNext()){
-                String ussdResponse = cursor.getString(1);
-                String amount = cursor.getString(2);
-                String timeStamp = cursor.getString(3);
-                String recipient = cursor.getString(4);
-                String status = cursor.getString(5);
-                int subId = cursor.getInt(6);
-                String ussd = cursor.getString(7);
-                int till = cursor.getInt(8);
-                String messageFull = cursor.getString(9);
-                queue1.add(new TransactionPOJO(ussdResponse,amount,timeStamp,recipient,status,subId,ussd,till,messageFull));
-            }
-        }
-        failedTransactions.setText(String.valueOf(queue1.size()));
-    }
-    public void refresh(){
-        showData();
-        getFailedTransactions();
-    }
-    private void showData(){
-        pojoList.clear();
-        Cursor cursor = helper.getTransactions();
-        if (cursor.getCount() == 0){
-            swipeRefreshLayout.setRefreshing(false);
-        }else{
-            while (cursor.moveToNext()){
-                String ussdResponse = cursor.getString(1);
-                String amount = cursor.getString(2);
-                String timeStamp = cursor.getString(3);
-                String recipient = cursor.getString(4);
-                String status = cursor.getString(5);
-                int subId = cursor.getInt(6);
-                String ussd = cursor.getString(7);
-                int till = cursor.getInt(8);
-                String messageFull = cursor.getString(9);
-                pojoList.add(new TransactionPOJO(ussdResponse,amount,timeStamp,recipient,status,subId,ussd,till,messageFull));
-            }
-            swipeRefreshLayout.setRefreshing(false);
-        }
-        cursor.close();
-        showRecycler(pojoList);
-    }
-    private void showSuccess(){
-        pojoList.clear();
-        Cursor cursor = helper.getYesTransactions();
-        if (cursor.getCount() == 0){
-            swipeRefreshLayout.setRefreshing(false);
-        }else{
-            while (cursor.moveToNext()){
-                String ussdResponse = cursor.getString(1);
-                String amount = cursor.getString(2);
-                String timeStamp = cursor.getString(3);
-                String recipient = cursor.getString(4);
-                String status = cursor.getString(5);
-                int subId = cursor.getInt(6);
-                String ussd = cursor.getString(7);
-                int till = cursor.getInt(8);
-                String messageFull = cursor.getString(9);
-                pojoList.add(new TransactionPOJO(ussdResponse,amount,timeStamp,recipient,status,subId,ussd,till,messageFull));
-            }
-            swipeRefreshLayout.setRefreshing(false);
-        }
-        cursor.close();
-        showRecycler(pojoList);
-    }
-    private void showFailed(){
-        pojoList.clear();
-        Cursor cursor = helper.getFailedResponses();
-        if (cursor.getCount() == 0){
-            swipeRefreshLayout.setRefreshing(false);
-        }else{
-            while (cursor.moveToNext()){
-                String ussdResponse = cursor.getString(1);
-                String amount = cursor.getString(2);
-                String timeStamp = cursor.getString(3);
-                String recipient = cursor.getString(4);
-                String status = cursor.getString(5);
-                int subId = cursor.getInt(6);
-                String ussd = cursor.getString(7);
-                int till = cursor.getInt(8);
-                String messageFull = cursor.getString(9);
-                pojoList.add(new TransactionPOJO(ussdResponse,amount,timeStamp,recipient,status,subId,ussd,till,messageFull));
-            }
-            swipeRefreshLayout.setRefreshing(false);
-        }
-        cursor.close();
-        showRecycler(pojoList);
-    }
-    private void showRecycler(List<TransactionPOJO> list){
-        totalTransactions.setText(String.valueOf(list.size()));
-        adapter = new TransactionAdapter(getActivity());
-        adapter.setPojoList(list);
-        recyclerView.setAdapter(adapter);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        recyclerView.setHasFixedSize(true);
     }
     public void listSimInfo(){
         simMap.clear();
@@ -469,7 +324,6 @@ public class MainContentFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        showData();
         getActivity().registerReceiver(dateBroadCast, new IntentFilter(Intent.ACTION_DATE_CHANGED));
 
     }
@@ -537,7 +391,6 @@ public class MainContentFragment extends Fragment {
             Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
         }
     };
-
     private void createOffersFromList(List<GetOffersResponse> responses) {
         boolean checkInsertOffer = true;
         for (GetOffersResponse response :
@@ -568,7 +421,6 @@ public class MainContentFragment extends Fragment {
         offerContinuationDialog.getWindow().setBackgroundDrawable(getDrawable(getActivity(),R.drawable.dialog_background));
         offerContinuationDialog.setCancelable(false);
     }
-
     private void showProgressDialog() {
         progressDialog = new Dialog(getActivity());
         View view = LayoutInflater.from(getActivity()).inflate(R.layout.dialog_progress_layout,null);
@@ -727,14 +579,10 @@ public class MainContentFragment extends Fragment {
         return "Bearer "+token;
     }
     private void initViews(View view) {
-        recyclerView = view.findViewById(R.id.transactionsRecycler);
-        swipeRefreshLayout = view.findViewById(R.id.swipeRefreshTransactions);
         airtimeBalance = view.findViewById(R.id.txtAirtimeBalance);
         totalTransactions = view.findViewById(R.id.txtTransactionsToday);
         executeFailedTransactions = view.findViewById(R.id.retryFailedTransactions);
         failedTransactions = view.findViewById(R.id.txtFailedTransactions);
         checkAirtimeBalance = view.findViewById(R.id.checkAirtimeBalance);
-        chipGroup = view.findViewById(R.id.chipGroup);
-        img = view.findViewById(R.id.imgClearTransactions);
     }
 }
