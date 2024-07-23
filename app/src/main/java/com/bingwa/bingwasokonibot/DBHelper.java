@@ -13,7 +13,7 @@ import java.util.List;
 public class DBHelper extends SQLiteOpenHelper {
 
     public DBHelper( Context context) {
-        super(context, "RealDbSixteen.db",null,1);
+        super(context, "RealDbSeventeen.db",null,1);
     }
 
     @Override
@@ -52,6 +52,7 @@ public class DBHelper extends SQLiteOpenHelper {
     public boolean insertOffer(String name, String amount, String ussdCode, String dialSim, String dialSimId,String paymentSim,String paymentSimId,String offerTill){
         SQLiteDatabase database = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
+
         contentValues.put("name",name);
         contentValues.put("amount",amount);
         contentValues.put("ussdCode",ussdCode);
@@ -63,26 +64,6 @@ public class DBHelper extends SQLiteOpenHelper {
         long result = database.insert("Offers",null,contentValues);
         return result != -1;
     }
-    public boolean updateOffer(String name, String amount, String ussdCode, String dialSim, String dialSimId, String paymentSim, String paymentSimId, String offerTill) {
-        SQLiteDatabase database = this.getWritableDatabase();
-        ContentValues contentValues = new ContentValues();
-        contentValues.put("name", name);
-        contentValues.put("amount", amount);
-        contentValues.put("ussdCode", ussdCode);
-        contentValues.put("dialSim", dialSim);
-        contentValues.put("dialSimId", dialSimId);
-        contentValues.put("paymentSim", paymentSim);
-        contentValues.put("paymentSimId", paymentSimId);
-        contentValues.put("offerTill", offerTill);
-
-        // Assuming you are updating based on a unique identifier like 'id'
-        String selection = "ussdCode = ?";
-        String[] selectionArgs = { ussdCode };
-
-        int result = database.update("Offers", contentValues, selection, selectionArgs);
-        return result != -1;
-    }
-
     public boolean insertRenewals( String frequency, String codeUssd, int period, String numberTill, String time, String simDial,String money, String dateCreation, String dateExpiry){
         SQLiteDatabase database = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
@@ -98,11 +79,31 @@ public class DBHelper extends SQLiteOpenHelper {
         long result = database.insert("Renewals",null,contentValues);
         return result != -1;
     }
-    public boolean updateRenewals( String frequency, String codeUssd, int period, String numberTill, String time, String simDial,String money, String dateCreation, String dateExpiry){
+    public boolean updateOffer(String name, String amount, String oldUssdCode, String newUssdCode, String dialSim, String dialSimId, String paymentSim, String paymentSimId, String offerTill) {
+        SQLiteDatabase database = this.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+
+        contentValues.put("name", name);
+        contentValues.put("amount", amount);
+        contentValues.put("ussdCode", newUssdCode);
+        contentValues.put("dialSim", dialSim);
+        contentValues.put("dialSimId", dialSimId);
+        contentValues.put("paymentSim", paymentSim);
+        contentValues.put("paymentSimId", paymentSimId);
+        contentValues.put("offerTill", offerTill);
+
+        // Assuming you are updating based on a unique identifier like 'id'
+        String selection = " ussdCode = ?";
+        String[] selectionArgs = { oldUssdCode };
+
+        int result = database.update("Offers", contentValues, selection, selectionArgs);
+        return result != -1;
+    }
+    public boolean updateRenewals( String frequency,String oldCodeUssd, String newCodeUssd, int period, String numberTill, String time, String simDial,String money, String dateCreation, String dateExpiry){
         SQLiteDatabase database = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put("frequency",frequency);
-        contentValues.put("codeUssd",codeUssd);
+        contentValues.put("codeUssd",newCodeUssd);
         contentValues.put("period",period);
         contentValues.put("numberTill",numberTill);
         contentValues.put("theTime",time);
@@ -110,9 +111,9 @@ public class DBHelper extends SQLiteOpenHelper {
         contentValues.put("money",money);
         contentValues.put("dateCreation",dateCreation);
         contentValues.put("dateExpiry",dateExpiry);
-        // Assuming you are updating based on a unique identifier like 'id'
+
         String selection = "codeUssd = ?";
-        String[] selectionArgs = { codeUssd };
+        String[] selectionArgs = { oldCodeUssd };
 
         int result = database.update("Renewals", contentValues, selection, selectionArgs);
         return result != -1;
@@ -242,11 +243,23 @@ public class DBHelper extends SQLiteOpenHelper {
         while (cursor.moveToNext()) {
             tables.add(cursor.getString(0));
         }
-
         for (String table : tables) {
             String deleteQuery = "DELETE FROM " + table;
             db.execSQL(deleteQuery);
         }
         cursor.close();
     }
+    public void clearSpecificTables() {
+        List<String> tablesToClear = new ArrayList<>();
+        tablesToClear.add("User");
+        tablesToClear.add("Link");
+        tablesToClear.add("AuthenticationToken");
+
+        SQLiteDatabase db = this.getWritableDatabase(); // Use getWritableDatabase for delete operations
+        for (String table : tablesToClear) {
+            String deleteQuery = "DELETE FROM " + table;
+            db.execSQL(deleteQuery);
+        }
+    }
+
 }

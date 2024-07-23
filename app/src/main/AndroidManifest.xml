@@ -27,6 +27,9 @@
         android:theme="@style/Theme.MeisterBot"
         tools:targetApi="31">
         <activity
+            android:name=".EditRenewalActivity"
+            android:exported="false" />
+        <activity
             android:name=".EditOfferActivity"
             android:exported="false" />
         <activity

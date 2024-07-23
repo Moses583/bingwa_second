@@ -1,6 +1,7 @@
 package com.bingwa.bingwasokonibot.Adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +17,7 @@ import androidx.transition.AutoTransition;
 import androidx.transition.TransitionManager;
 
 import com.bingwa.bingwasokonibot.DBHelper;
+import com.bingwa.bingwasokonibot.EditRenewalActivity;
 import com.bingwa.bingwasokonibot.R;
 import com.bingwa.bingwasokonibot.models.RenewalPOJO;
 
@@ -42,18 +44,33 @@ public class RenewalsListAdapter extends RecyclerView.Adapter<RenewalsViewHolder
 
     @Override
     public void onBindViewHolder(@NonNull RenewalsViewHolder holder, int position) {
+        String ussdCode = offerList.get(holder.getAdapterPosition()).getUssdCode();
+        String money = offerList.get(holder.getAdapterPosition()).getMoney();
+        String period = String.valueOf(offerList.get(holder.getAdapterPosition()).getPeriod());
         holder.frequency.setText(offerList.get(holder.getAdapterPosition()).getFrequency());
-        holder.ussdCode.setText(offerList.get(holder.getAdapterPosition()).getUssdCode());
-        holder.period.setText(String.valueOf(offerList.get(holder.getAdapterPosition()).getPeriod()));
+        holder.ussdCode.setText(ussdCode);
+        holder.period.setText(period);
         holder.till.setText(offerList.get(holder.getAdapterPosition()).getTill());
         holder.time.setText(offerList.get(holder.getAdapterPosition()).getDialSimCard());
-        holder.money.setText(offerList.get(holder.getAdapterPosition()).getMoney());
+        holder.money.setText(money);
         holder.startDate.setText(offerList.get(holder.getAdapterPosition()).getDateCreation());
         holder.endDate.setText(offerList.get(holder.getAdapterPosition()).getDateExpiry());
-        holder.btnEdit.setOnClickListener(new View.OnClickListener() {
+        holder.btnDelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 delete(holder.getAdapterPosition(), offerList.get(holder.getAdapterPosition()).getUssdCode());
+            }
+        });
+        holder.btnEdit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(context, EditRenewalActivity.class);
+                intent.putExtra("ussdCode",ussdCode);
+                intent.putExtra("period",period);
+                intent.putExtra("money",money);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                context.startActivity(intent);
             }
         });
         holder.renewalDown.setOnClickListener(new View.OnClickListener() {
@@ -70,6 +87,7 @@ public class RenewalsListAdapter extends RecyclerView.Adapter<RenewalsViewHolder
                     holder.startLay.setVisibility(View.VISIBLE);
                     holder.endLay.setVisibility(View.VISIBLE);
                     holder.btnEdit.setVisibility(View.VISIBLE);
+                    holder.btnDelete.setVisibility(View.VISIBLE);
                     TransitionManager.beginDelayedTransition(holder.mainLay,new AutoTransition());
                 }
             }
@@ -88,6 +106,7 @@ public class RenewalsListAdapter extends RecyclerView.Adapter<RenewalsViewHolder
                     holder.startLay.setVisibility(View.GONE);
                     holder.endLay.setVisibility(View.GONE);
                     holder.btnEdit.setVisibility(View.GONE);
+                    holder.btnDelete.setVisibility(View.GONE);
                     TransitionManager.beginDelayedTransition(holder.mainLay,new AutoTransition());
                 }
             }
@@ -116,7 +135,7 @@ public class RenewalsListAdapter extends RecyclerView.Adapter<RenewalsViewHolder
 class RenewalsViewHolder extends RecyclerView.ViewHolder {
     TextView frequency, ussdCode, period,till,time,money,startDate,endDate,ussdDummy;
     CardView selectOffer;
-    ImageView btnEdit,renewalUp,renewalDown;
+    ImageView btnEdit,renewalUp,renewalDown,btnDelete;
     LinearLayout mainLay,perLay,tillLay,dialLay,moneyLay,startLay,endLay;
     public RenewalsViewHolder(@NonNull View itemView) {
         super(itemView);
@@ -130,6 +149,7 @@ class RenewalsViewHolder extends RecyclerView.ViewHolder {
         endDate = itemView.findViewById(R.id.renewalEndDate);
         selectOffer = itemView.findViewById(R.id.selectRenewal);
         btnEdit = itemView.findViewById(R.id.btnEditRenewal);
+        btnDelete = itemView.findViewById(R.id.btnDeleteRenewal);
         ussdDummy = itemView.findViewById(R.id.renewalUssdDummy);
         mainLay = itemView.findViewById(R.id.mainRenewalLayout);
         renewalDown = itemView.findViewById(R.id.renewalsDropDown);

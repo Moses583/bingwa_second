@@ -213,13 +213,25 @@
 
         </LinearLayout>
 
-        <ImageView
-            android:layout_width="20dp"
-            android:layout_height="20dp"
-            android:src="@drawable/ic_delete"
-            android:id="@+id/btnEditRenewal"
-            android:layout_margin="3dp"
-            android:layout_gravity="start"
-            android:visibility="gone"/>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:src="@drawable/ic_edit_offer"
+                android:id="@+id/btnEditRenewal"
+                android:layout_margin="10dp"
+                android:layout_alignParentStart="true"
+                android:visibility="gone"/>
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:src="@drawable/ic_delete"
+                android:id="@+id/btnDeleteRenewal"
+                android:layout_margin="10dp"
+                android:layout_toEndOf="@id/btnEditRenewal"
+                android:visibility="gone"/>
+        </RelativeLayout>
     </LinearLayout>
 </androidx.cardview.widget.CardView>

@@ -38,7 +38,7 @@ import java.util.Map;
 
 public class EditOfferActivity extends AppCompatActivity {
 
-    private String name,amount,ussdCode,dialId,paymentId,offerTill;
+    private String name,amount,ussdCode,dialId,paymentId,offerTill,oldUssdCode;
     private Button txtHelp,txtSave;
     private TextInputLayout enterName, enterAmount,enterUssdCode, enterTill;
     private Spinner spinner1,spinner2;
@@ -65,7 +65,7 @@ public class EditOfferActivity extends AppCompatActivity {
         Intent intent = getIntent();
         String un = intent.getStringExtra("name");
         String deux = intent.getStringExtra("amount");
-        String trois = intent.getStringExtra("ussd");
+        oldUssdCode = intent.getStringExtra("ussd");
 
 
         one = enterAmount.getEditText();
@@ -81,7 +81,7 @@ public class EditOfferActivity extends AppCompatActivity {
         helper = new DBHelper(this);
 
         three.setText(tillNumber());
-        two.setText(trois);
+        two.setText(oldUssdCode);
         four.setText(un);
         one.setText(deux);
 
@@ -129,12 +129,11 @@ public class EditOfferActivity extends AppCompatActivity {
         dialog.getWindow().setLayout(ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT);
         dialog.getWindow().setBackgroundDrawable(getDrawable(R.drawable.dialog_background));
         dialog.setCancelable(false);
-        dialog.show();
 
         okay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                boolean checkInsertData = helper.updateOffer(fetchData().getName(),fetchData().getAmount(),fetchData().getUssd(),fetchData().getDialSim(),fetchData().getSubscriptionId(),fetchData().getPaymentSim(), fetchData().getPaymentSimId(),fetchData().getOfferTill());
+                boolean checkInsertData = helper.updateOffer(fetchData().getName(),fetchData().getAmount(),oldUssdCode,fetchData().getUssd(),fetchData().getDialSim(),fetchData().getSubscriptionId(),fetchData().getPaymentSim(), fetchData().getPaymentSimId(),fetchData().getOfferTill());
                 if (checkInsertData){
                     Toast.makeText(EditOfferActivity.this, "Offer updated!", Toast.LENGTH_SHORT).show();
                 }else {

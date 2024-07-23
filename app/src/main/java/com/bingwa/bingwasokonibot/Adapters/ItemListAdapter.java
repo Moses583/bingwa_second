@@ -68,6 +68,8 @@ public class ItemListAdapter extends RecyclerView.Adapter<OfferViewHolder> {
                 intent.putExtra("name",name);
                 intent.putExtra("amount",amount);
                 intent.putExtra("ussd",ussd);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 context.startActivity(intent);
             }
         });
