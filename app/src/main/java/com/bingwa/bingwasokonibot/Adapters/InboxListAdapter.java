@@ -8,6 +8,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bingwa.bingwasokonibot.R;
@@ -50,7 +51,7 @@ public class InboxListAdapter extends RecyclerView.Adapter<InboxListViewHolder> 
     }
 }
 class InboxListViewHolder extends RecyclerView.ViewHolder {
-    LinearLayout layout;
+    CardView layout;
     TextView txtInboxMessage;
     TextView txtInboxTimeStamp;
     TextView txtSender;

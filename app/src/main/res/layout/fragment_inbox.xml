@@ -18,13 +18,11 @@
    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
        android:layout_width="match_parent"
        android:layout_height="wrap_content"
-       android:id="@+id/swipeRefreshInbox"
-       android:layout_margin="15dp">
+       android:id="@+id/swipeRefreshInbox">
        <androidx.recyclerview.widget.RecyclerView
            android:layout_width="match_parent"
            android:layout_height="match_parent"
-           android:id="@+id/inboxRecycler"
-           android:layout_margin="10dp"/>
+           android:id="@+id/inboxRecycler"/>
    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
 </LinearLayout>
