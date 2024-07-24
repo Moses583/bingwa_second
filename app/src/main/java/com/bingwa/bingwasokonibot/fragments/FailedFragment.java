@@ -1,6 +1,10 @@
 package com.bingwa.bingwasokonibot.fragments;
 
+import android.app.ActivityManager;
+import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
+import android.os.Build;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -19,6 +23,8 @@ import com.bingwa.bingwasokonibot.Adapters.TransactionAdapter;
 import com.bingwa.bingwasokonibot.DBHelper;
 import com.bingwa.bingwasokonibot.R;
 import com.bingwa.bingwasokonibot.models.TransactionPOJO;
+import com.bingwa.bingwasokonibot.services.RetryService;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,6 +37,7 @@ public class FailedFragment extends Fragment {
     private DBHelper helper;
     private TransactionAdapter adapter;
     private SearchView searchView;
+    private FloatingActionButton retry;
 
     public FailedFragment() {
         // Required empty public constructor
@@ -71,7 +78,34 @@ public class FailedFragment extends Fragment {
             }
         });
         showRecycler();
+
+        retry.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(getActivity(), "Retrying failed transactions", Toast.LENGTH_SHORT).show();
+                if (myService(getActivity())) {
+                    Intent intent = new Intent(getActivity(), RetryService.class);
+                    getActivity().stopService(intent);
+                } else {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                        Intent intent = new Intent(getActivity(), RetryService.class);
+                        getActivity().startForegroundService(intent);
+                    }
+                }
+            }
+        });
+
         return view;
+    }
+    public boolean myService(Context context){
+        ActivityManager manager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
+        for (ActivityManager.RunningServiceInfo info :
+                manager.getRunningServices(Integer.MAX_VALUE)) {
+            if (RetryService.class.getName().equalsIgnoreCase(info.service.getClassName())){
+                return true;
+            }
+        }
+        return false;
     }
 
     private void showRecycler() {
@@ -167,5 +201,6 @@ public class FailedFragment extends Fragment {
         swipeRefreshLayout = view.findViewById(R.id.swipeRefreshFailed);
         recyclerView = view.findViewById(R.id.failedRecycler);
         searchView = view.findViewById(R.id.searchFailed);
+        retry = view.findViewById(R.id.btnRetryFailedTransactions);
     }
 }

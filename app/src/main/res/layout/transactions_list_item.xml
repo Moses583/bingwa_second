@@ -64,7 +64,7 @@
                 android:layout_width="30dp"
                 android:layout_height="30dp"
                 android:src="@drawable/ic_drop_down"
-                android:layout_margin="8dp"
+                android:layout_marginEnd="20dp"
                 android:layout_alignParentEnd="true"
                 android:layout_centerInParent="true"
                 android:id="@+id/dropDown"/>
@@ -72,7 +72,7 @@
                 android:layout_width="30dp"
                 android:layout_height="30dp"
                 android:src="@drawable/ic_drop_up"
-                android:layout_margin="8dp"
+                android:layout_marginEnd="20dp"
                 android:layout_gravity="end"
                 android:id="@+id/dropUp"
                 android:layout_centerInParent="true"

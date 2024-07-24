@@ -1,5 +1,8 @@
 package com.bingwa.bingwasokonibot.fragments;
 
+import static androidx.core.content.ContextCompat.getDrawable;
+
+import android.app.Dialog;
 import android.database.Cursor;
 import android.os.Bundle;
 
@@ -13,6 +16,7 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.SearchView;
 import android.widget.Toast;
 
@@ -20,25 +24,12 @@ import com.bingwa.bingwasokonibot.Adapters.TransactionAdapter;
 import com.bingwa.bingwasokonibot.DBHelper;
 import com.bingwa.bingwasokonibot.R;
 import com.bingwa.bingwasokonibot.models.TransactionPOJO;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link SuccessfulFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class SuccessfulFragment extends Fragment {
-
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
 
     private RecyclerView recyclerView;
     private SwipeRefreshLayout swipeRefreshLayout;
@@ -46,36 +37,17 @@ public class SuccessfulFragment extends Fragment {
     private List<TransactionPOJO> pojoList;
     private DBHelper helper;
     private TransactionAdapter adapter;
+    private FloatingActionButton delete;
+    private Dialog confirmDeletionDialog;
+    private Button deleteTransaction;
 
     public SuccessfulFragment() {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment SuccessfulFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static SuccessfulFragment newInstance(String param1, String param2) {
-        SuccessfulFragment fragment = new SuccessfulFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
     }
 
     @Override
@@ -97,7 +69,45 @@ public class SuccessfulFragment extends Fragment {
         searchView.clearFocus();
         searchView.setOnQueryTextListener(searchViewListener);
         showRecycler();
+        delete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showDeletionDialog();
+            }
+        });
         return view;
+    }
+    private void showDeletionDialog(){
+        confirmDeletionDialog = new Dialog(getActivity());
+        View view = LayoutInflater.from(getActivity()).inflate(R.layout.dialog_delete_transactions,null);
+        deleteTransaction = view.findViewById(R.id.btnDeleteTransactions);
+        confirmDeletionDialog.setContentView(view);
+        confirmDeletionDialog.getWindow().setLayout(ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT);
+        confirmDeletionDialog.getWindow().setBackgroundDrawable(getDrawable(getActivity(),R.drawable.dialog_background));
+        confirmDeletionDialog.setCancelable(false);
+        deleteTransaction.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                deleteData();
+            }
+        });
+        confirmDeletionDialog.show();
+
+    }
+    private void deleteData(){
+        boolean deleteData = helper.deleteSuccessfulTransactions();
+        if (deleteData){
+            Log.d("TAG","Data deleted");
+        }
+        else{
+            Log.d("TAG", "Data not deleted");
+        }
+        pojoList.clear();
+        adapter.setPojoList(pojoList);
+        recyclerView.setAdapter(adapter);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        recyclerView.setHasFixedSize(true);
+        confirmDeletionDialog.dismiss();
     }
 
     private final SearchView.OnQueryTextListener searchViewListener = new SearchView.OnQueryTextListener() {
@@ -179,5 +189,6 @@ public class SuccessfulFragment extends Fragment {
         swipeRefreshLayout = view.findViewById(R.id.swipeRefreshSuccess);
         recyclerView = view.findViewById(R.id.successRecycler);
         searchView = view.findViewById(R.id.searchSuccessful);
+        delete = view.findViewById(R.id.btnDeleteSuccessfulTransactions);
     }
 }

@@ -81,7 +81,7 @@ public class MainContentFragment extends Fragment {
     List<TransactionPOJO> pojoList = new ArrayList<>();
 
     private TextView airtimeBalance,totalTransactions,failedTransactions,txtLoading;
-    private Button executeFailedTransactions,checkAirtimeBalance;
+    private Button checkAirtimeBalance;
     private Button cancel, okay,btnContinue;
     Spinner spinner;
     private ChipGroup chipGroup;
@@ -146,20 +146,7 @@ public class MainContentFragment extends Fragment {
                 showAlertDialog();
             }
         });
-        executeFailedTransactions.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (myService(getActivity())) {
-                    Intent intent = new Intent(getActivity(), RetryService.class);
-                    getActivity().stopService(intent);
-                } else {
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                        Intent intent = new Intent(getActivity(), RetryService.class);
-                        getActivity().startForegroundService(intent);
-                    }
-                }
-            }
-        });
+
         dateBroadCast = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
@@ -168,42 +155,8 @@ public class MainContentFragment extends Fragment {
                 }
             }
         };
-
         return view;
     }
-//    private void showDeletionDialog(){
-//        confirmDeletionDialog = new Dialog(getActivity());
-//        View view = LayoutInflater.from(getActivity()).inflate(R.layout.dialog_delete_transactions,null);
-//        deleteTransaction = view.findViewById(R.id.btnDeleteTransactions);
-//        confirmDeletionDialog.setContentView(view);
-//        confirmDeletionDialog.getWindow().setLayout(ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT);
-//        confirmDeletionDialog.getWindow().setBackgroundDrawable(getDrawable(getActivity(),R.drawable.dialog_background));
-//        confirmDeletionDialog.setCancelable(false);
-//        deleteTransaction.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                deleteData();
-//            }
-//        });
-//        confirmDeletionDialog.show();
-//
-//    }
-//    private void deleteData(){
-//        boolean deleteData = helper.deleteSuccessfulTransactions();
-//        if (deleteData){
-//            Log.d("TAG","Data deleted");
-//        }
-//        else{
-//            Log.d("TAG", "Data not deleted");
-//        }
-//        pojoList.clear();
-//        totalTransactions.setText(String.valueOf(pojoList.size()));
-//        adapter.setPojoList(pojoList);
-//        recyclerView.setAdapter(adapter);
-//        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-//        recyclerView.setHasFixedSize(true);
-//        confirmDeletionDialog.dismiss();
-//    }
     private void showAlertDialog() {
         dialog = new Dialog(getActivity());
         View view = LayoutInflater.from(getActivity()).inflate(R.layout.dialog_choose_sim,null);
@@ -321,16 +274,7 @@ public class MainContentFragment extends Fragment {
         super.onPause();
         getActivity().registerReceiver(dateBroadCast, new IntentFilter(Intent.ACTION_DATE_CHANGED));
     }
-    public boolean myService(Context context){
-        ActivityManager manager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
-        for (ActivityManager.RunningServiceInfo info :
-                manager.getRunningServices(Integer.MAX_VALUE)) {
-            if (RetryService.class.getName().equalsIgnoreCase(info.service.getClassName())){
-                return true;
-            }
-        }
-        return false;
-    }
+
     public void checkOffersOne(){
         Cursor cursor = helper.getOffers();
         if(cursor.getCount() == 0){
@@ -569,7 +513,6 @@ public class MainContentFragment extends Fragment {
     private void initViews(View view) {
         airtimeBalance = view.findViewById(R.id.txtAirtimeBalance);
         totalTransactions = view.findViewById(R.id.txtTransactionsToday);
-        executeFailedTransactions = view.findViewById(R.id.retryFailedTransactions);
         failedTransactions = view.findViewById(R.id.txtFailedTransactions);
         checkAirtimeBalance = view.findViewById(R.id.checkAirtimeBalance);
     }

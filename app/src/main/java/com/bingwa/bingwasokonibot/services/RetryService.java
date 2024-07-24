@@ -78,6 +78,7 @@ public class RetryService extends Service {
                         if (queue.isEmpty()){
                             isRunning = false;
                             Log.d(TAG,"queue is empty");
+                            deleteData();
                             stopSelf();
                         }
                         else{

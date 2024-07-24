@@ -216,8 +216,12 @@ public class DBHelper extends SQLiteOpenHelper {
     }
     public Boolean deleteTransaction () {
         SQLiteDatabase DB = this.getWritableDatabase();
-        String pattern = "0";
-        long result = DB.delete("Transactions", "status=?", new String[]{pattern});
+        long result = DB.delete("FailedTransactions", null, null);
+        return result != -1;
+    }
+    public Boolean deleteSuccessfulTransactions() {
+        SQLiteDatabase DB = this.getWritableDatabase();
+        long result = DB.delete("SuccessfulTransactions", null, null);
         return result != -1;
     }
     public Boolean deleteData (String ussdCode) {
@@ -228,11 +232,6 @@ public class DBHelper extends SQLiteOpenHelper {
     public Boolean deleteRenewal (String ussdCode) {
         SQLiteDatabase DB = this.getWritableDatabase();
         long result = DB.delete("Renewals", "codeUssd=?", new String[]{ussdCode});
-        return result != -1;
-    }
-    public Boolean deleteSuccessfulTransactions() {
-        SQLiteDatabase DB = this.getWritableDatabase();
-        long result = DB.delete("Transactions", null, null);
         return result != -1;
     }
 
