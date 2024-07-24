@@ -1,139 +1,330 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".fragments.MainContentFragment"
     android:orientation="vertical">
-
-    <androidx.cardview.widget.CardView
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="5dp"
-        app:cardCornerRadius="15dp">
-        <LinearLayout
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+        <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:layout_height="wrap_content"
+            android:layout_marginStart="15dp"
+            android:layout_marginEnd="15dp"
+            android:layout_marginBottom="15dp"
+            app:cardCornerRadius="20dp">
 
-            <TextView
-                android:id="@+id/textView5"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Transactions"
-                android:textAlignment="center"
-                android:textColor="@color/black"
-                android:textSize="12sp"
-                android:layout_gravity="center"
-                android:layout_margin="10dp"/>
-
-            <TextView
-                android:id="@+id/txtTransactionsToday"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:fontFamily="@font/oxygen_bold"
-                android:text="0"
-                android:textAlignment="center"
-                android:textColor="@color/black"
-                android:textSize="30sp"
-                android:layout_margin="10dp" />
-
-        </LinearLayout>
-    </androidx.cardview.widget.CardView>
-    <androidx.cardview.widget.CardView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:cardCornerRadius="15dp"
-        android:layout_margin="5dp">
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                android:orientation="horizontal"
-                android:weightSum="2">
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="20sp"
+                    android:textColor="@color/green"
+                    android:fontFamily="@font/oxygen_bold"
+                    android:layout_gravity="center"
+                    android:padding="8dp"
+                    android:id="@+id/txtDashStoreName"
+                    android:text="Bingwa Store Name"
+                    android:layout_margin="5dp"/>
                 <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
                     android:orientation="vertical">
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:clickable="true"
-                        android:focusable="true"
-                        android:foreground="?android:attr/selectableItemBackground"
-                        android:text="Airtime balance"
-                        android:textAlignment="center"
                         android:textColor="@color/black"
-                        android:textSize="12sp"
-                        android:layout_margin="10dp"/>
-
+                        android:text="Phone number"
+                        android:padding="5dp"
+                        android:layout_margin="5dp"/>
                     <TextView
-                        android:id="@+id/txtAirtimeBalance"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:fontFamily="@font/oxygen_bold"
-                        android:text="0"
-                        android:textColor="@color/black"
-                        android:textSize="30sp"
-                        android:layout_margin="10dp"/>
-                    <Button
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Check"
-                        android:layout_gravity="center"
-                        android:layout_margin="10dp"
-                        android:id="@+id/checkAirtimeBalance"/>
+                        android:textColor="@color/green"
+                        android:id="@+id/txtDashPhoneNumber"
+                        android:layout_margin="5dp"
+                        android:padding="5dp"
+                        android:text="+254 746 029 603"/>
                 </LinearLayout>
                 <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
                     android:orientation="vertical">
-
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:clickable="true"
-                        android:focusable="true"
-                        android:foreground="?android:attr/selectableItemBackground"
-                        android:text="Failed"
-                        android:textAlignment="center"
                         android:textColor="@color/black"
-                        android:textSize="12sp"
-                        android:layout_margin="10dp" />
-
+                        android:text="Link"
+                        android:padding="5dp"
+                        android:layout_margin="5dp"/>
                     <TextView
-                        android:id="@+id/txtFailedTransactions"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:fontFamily="@font/oxygen_bold"
-                        android:text="0"
-                        android:textColor="@color/black"
-                        android:textSize="30sp"
-                        android:layout_margin="10dp"/>
-                    <Button
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Retry"
-                        android:layout_gravity="center"
-                        android:layout_margin="10dp"
-                        android:id="@+id/retryFailedTransactions"/>
+                        android:textColor="@color/green"
+                        android:id="@+id/txtDashLink"
+                        android:layout_margin="5dp"
+                        android:padding="5dp"
+                        android:text="https://example.com/"/>
                 </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/black"
+                        android:text="Till number"
+                        android:padding="5dp"
+                        android:layout_margin="5dp"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/green"
+                        android:id="@+id/txtDashTillNumber"
+                        android:layout_margin="5dp"
+                        android:padding="5dp"
+                        android:text="965511"/>
+                </LinearLayout>
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:cardCornerRadius="20dp"
+            android:layout_marginStart="15dp"
+            android:layout_marginEnd="15dp"
+            android:layout_marginBottom="15dp">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="20sp"
+                    android:textColor="@color/green"
+                    android:fontFamily="@font/oxygen_bold"
+                    android:layout_gravity="center"
+                    android:padding="8dp"
+                    android:text="Statistics"
+                    android:layout_margin="5dp"/>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/black"
+                        android:text="Transactions"
+                        android:padding="5dp"
+                        android:layout_margin="5dp"
+                        android:layout_gravity="center"/>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:weightSum="3">
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:orientation="vertical">
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:padding="5dp"
+                                android:layout_margin="5dp"
+                                android:layout_gravity="center"
+                                android:text="Total"
+                                android:textColor="@color/black"
+                                android:id="@+id/dummyTextOne"/>
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:padding="5dp"
+                                android:layout_margin="5dp"
+                                android:layout_gravity="center"
+                                android:text="30"
+                                android:textColor="@color/green"
+                                android:id="@+id/txtDashTotalTransactions"/>
+                        </LinearLayout>
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:orientation="vertical">
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_margin="5dp"
+                                android:padding="5dp"
+                                android:layout_gravity="center"
+                                android:text="Successful"
+                                android:textColor="@color/black"
+                                android:id="@+id/dummyTextTwo" />
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:padding="5dp"
+                                android:layout_margin="5dp"
+                                android:layout_gravity="center"
+                                android:text="30"
+                                android:textColor="@color/green"
+                                android:id="@+id/txtDashSuccessfulTransactions" />
+                        </LinearLayout>
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:orientation="vertical">
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:layout_margin="5dp"
+                                android:padding="5dp"
+                                android:text="Failed"
+                                android:textColor="@color/black"
+                                android:id="@+id/dummyTextThree"/>
 
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_margin="5dp"
+                                android:padding="5dp"
+                                android:layout_gravity="center"
+                                android:text="30"
+                                android:textColor="@color/green"
+                                android:id="@+id/txtDashFailedTransactions"/>
+                        </LinearLayout>
+                    </LinearLayout>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="5dp"
+                        android:padding="5dp"
+                        android:layout_gravity="center"
+                        android:textColor="@color/black"
+                        android:text="Total amount transactions"/>
+
+                    <TextView
+                        android:id="@+id/txtDashAmountTotal"
+                        android:layout_width="28dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_margin="5dp"
+                        android:padding="5dp"
+                        android:text="30"
+                        android:textColor="@color/green" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="5dp"
+                        android:padding="5dp"
+                        android:layout_gravity="center"
+                        android:textColor="@color/black"
+                        android:text="Airtime balance"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="5dp"
+                        android:padding="5dp"
+                        android:layout_gravity="center"
+                        android:textColor="@color/green"
+                        android:text="30"
+                        android:id="@+id/txtDashAirtimeBalance"/>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:weightSum="3">
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:orientation="vertical">
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:padding="5dp"
+                                android:layout_margin="5dp"
+                                android:layout_gravity="center"
+                                android:text="Offers"
+                                android:textColor="@color/black"
+                                android:id="@+id/dummyTextFour"/>
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:padding="5dp"
+                                android:layout_margin="5dp"
+                                android:layout_gravity="center"
+                                android:text="30"
+                                android:textColor="@color/green"
+                                android:id="@+id/txtDashOffers"/>
+                        </LinearLayout>
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:orientation="vertical">
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_margin="5dp"
+                                android:padding="5dp"
+                                android:layout_gravity="center"
+                                android:text="Renewals"
+                                android:textColor="@color/black"
+                                android:id="@+id/dummyTextFive" />
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:padding="5dp"
+                                android:layout_margin="5dp"
+                                android:layout_gravity="center"
+                                android:text="30"
+                                android:textColor="@color/green"
+                                android:id="@+id/txtDashRenewals" />
+                        </LinearLayout>
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:orientation="vertical">
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:layout_margin="5dp"
+                                android:padding="5dp"
+                                android:text="Messages"
+                                android:textColor="@color/black"
+                                android:id="@+id/dummyTextSix"/>
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_margin="5dp"
+                                android:padding="5dp"
+                                android:layout_gravity="center"
+                                android:text="30"
+                                android:textColor="@color/green"
+                                android:id="@+id/txtDashMessages"/>
+                        </LinearLayout>
+                    </LinearLayout>
+                </LinearLayout>
             </LinearLayout>
 
-        </LinearLayout>
+        </androidx.cardview.widget.CardView>
+    </LinearLayout>
 
-    </androidx.cardview.widget.CardView>
-</LinearLayout>
+</ScrollView>

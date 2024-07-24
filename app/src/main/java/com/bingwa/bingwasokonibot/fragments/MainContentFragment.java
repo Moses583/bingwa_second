@@ -80,11 +80,9 @@ public class MainContentFragment extends Fragment {
     private DBHelper helper,helper2;
     List<TransactionPOJO> pojoList = new ArrayList<>();
 
-    private TextView airtimeBalance,totalTransactions,failedTransactions,txtLoading;
-    private Button checkAirtimeBalance;
+    private TextView txtStoreName,txtPhoneNumber,txtLink,txtTillNumber,txtTotal,txtSuccess,txtFailed,txtAmount,txtAirtime,txtOffers,txtRenewals,txtMessages,txtLoading;
     private Button cancel, okay,btnContinue;
     Spinner spinner;
-    private ChipGroup chipGroup;
 
     private Button deleteTransaction,navigateToCreateOffer,checkAvailablePlans,renewPlan,loadExistingOffers;
 
@@ -140,12 +138,7 @@ public class MainContentFragment extends Fragment {
                 offerContinuationDialog.dismiss();
             }
         });
-        checkAirtimeBalance.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showAlertDialog();
-            }
-        });
+//        showAlertDialog();
 
         dateBroadCast = new BroadcastReceiver() {
             @Override
@@ -155,7 +148,13 @@ public class MainContentFragment extends Fragment {
                 }
             }
         };
+        showDashStatistics();
         return view;
+    }
+
+    private void showDashStatistics(){
+        txtTillNumber.setText(till);
+
     }
     private void showAlertDialog() {
         dialog = new Dialog(getActivity());
@@ -231,7 +230,7 @@ public class MainContentFragment extends Fragment {
                 public void onReceiveUssdResponseFailed(TelephonyManager telephonyManager, String request, int failureCode) {
                     super.onReceiveUssdResponseFailed(telephonyManager, request, failureCode);
                     if (failureCode == -1){
-                        airtimeBalance.setText("0");
+                        txtAirtime.setText("0");
                         dialog.dismiss();
                     }
                     dialog.dismiss();
@@ -260,7 +259,7 @@ public class MainContentFragment extends Fragment {
         Matcher matcher = pattern.matcher(response);
 
         if (matcher.find()) {
-            airtimeBalance.setText(matcher.group(1));
+            txtAirtime.setText(matcher.group(1));
         }
     }
     @Override
@@ -511,9 +510,17 @@ public class MainContentFragment extends Fragment {
         return "Bearer "+token;
     }
     private void initViews(View view) {
-        airtimeBalance = view.findViewById(R.id.txtAirtimeBalance);
-        totalTransactions = view.findViewById(R.id.txtTransactionsToday);
-        failedTransactions = view.findViewById(R.id.txtFailedTransactions);
-        checkAirtimeBalance = view.findViewById(R.id.checkAirtimeBalance);
+        txtStoreName = view.findViewById(R.id.txtDashStoreName);
+        txtPhoneNumber = view.findViewById(R.id.txtDashPhoneNumber);
+        txtLink = view.findViewById(R.id.txtDashLink);
+        txtTillNumber = view.findViewById(R.id.txtDashTillNumber);
+        txtTotal = view.findViewById(R.id.txtDashTotalTransactions);
+        txtSuccess = view.findViewById(R.id.txtDashSuccessfulTransactions);
+        txtFailed = view.findViewById(R.id.txtDashFailedTransactions);
+        txtAmount = view.findViewById(R.id.txtDashAmountTotal);
+        txtAirtime = view.findViewById(R.id.txtDashAirtimeBalance);
+        txtOffers = view.findViewById(R.id.txtDashOffers);
+        txtRenewals = view.findViewById(R.id.txtDashRenewals);
+        txtMessages = view.findViewById(R.id.txtDashMessages);
     }
 }

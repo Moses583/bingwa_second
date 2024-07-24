@@ -142,7 +142,6 @@ public class RenewalsJobService extends JobService {
         boolean checkDelete = dbHelper4.deleteRenewal(ussd);
     }
     private String extractNumber(String number){
-        number = "*189*7*8*0746029603*12*76#";
         String phoneNumber = "";
         Pattern pattern = Pattern.compile("\\*0\\d{9}\\*");
         Matcher matcher = pattern.matcher(number);
