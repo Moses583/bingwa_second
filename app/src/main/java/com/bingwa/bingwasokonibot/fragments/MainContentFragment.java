@@ -140,8 +140,8 @@ public class MainContentFragment extends Fragment {
         slotIndex = new ArrayList<>();
         till = tillNumber();
 
-        checkOffersOne();
         showProgressDialog();
+        checkOffersOne();
         showContinueDialog();
 
         btnContinue.setOnClickListener(new View.OnClickListener() {
@@ -345,7 +345,7 @@ public class MainContentFragment extends Fragment {
     public void checkOffersOne(){
         Cursor cursor = helper.getOffers();
         if(cursor.getCount() == 0){
-            showOfferCreationDialog();
+            callGetOffersApi();
         }else{
             callPaymentApi(till);
         }
@@ -374,7 +374,6 @@ public class MainContentFragment extends Fragment {
         offerCreationDialog.show();
     }
     private void callGetOffersApi() {
-        offerCreationDialog.dismiss();
         progressDialog.show();
         requestManager.getOffers(getOffersListener,new GetOffersBody(tillNumber()),token());
     }

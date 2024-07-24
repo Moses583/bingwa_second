@@ -169,19 +169,19 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
             <ImageView
-                android:layout_width="20dp"
-                android:layout_height="20dp"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
                 android:src="@drawable/ic_edit_offer"
                 android:id="@+id/btnEditOffer"
-                android:layout_margin="10dp"
+                android:layout_marginStart="3dp"
                 android:layout_alignParentStart="true"
                 android:visibility="gone"/>
             <ImageView
-                android:layout_width="20dp"
-                android:layout_height="20dp"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
                 android:src="@drawable/ic_delete"
                 android:id="@+id/btnDeleteOffer"
-                android:layout_margin="10dp"
+                android:layout_marginStart="10dp"
                 android:layout_toEndOf="@id/btnEditOffer"
                 android:visibility="gone"/>
         </RelativeLayout>

@@ -72,7 +72,7 @@
             <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="e.g.,188*6*1*1*07xx xxx xxx*1*1#"
+                android:hint="e.g.,*180*6*1*1*07xx xxx xxx*1*1#"
                 android:inputType="text"/>
 
         </com.google.android.material.textfield.TextInputLayout>
