@@ -10,8 +10,8 @@ android {
         applicationId "com.bingwa.bingwasokonibot"
         minSdk 24
         targetSdk 34
-        versionCode 27
-        versionName "2.00"
+        versionCode 28
+        versionName "2.01"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
