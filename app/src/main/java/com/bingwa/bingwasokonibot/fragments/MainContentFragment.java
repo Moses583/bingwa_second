@@ -49,7 +49,11 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bingwa.bingwasokonibot.Adapters.InboxListAdapter;
+import com.bingwa.bingwasokonibot.Adapters.ItemListAdapter;
+import com.bingwa.bingwasokonibot.Adapters.RenewalsListAdapter;
 import com.bingwa.bingwasokonibot.Adapters.TransactionAdapter;
+import com.bingwa.bingwasokonibot.BingwaLinkActivity;
 import com.bingwa.bingwasokonibot.CreateOfferActivity;
 import com.bingwa.bingwasokonibot.DBHelper;
 import com.bingwa.bingwasokonibot.PaymentPlanActivity;
@@ -59,7 +63,10 @@ import com.bingwa.bingwasokonibot.listeners.GetOffersListener;
 import com.bingwa.bingwasokonibot.listeners.PaymentListener;
 import com.bingwa.bingwasokonibot.models.GetOffersBody;
 import com.bingwa.bingwasokonibot.models.GetOffersResponse;
+import com.bingwa.bingwasokonibot.models.InboxListPOJO;
+import com.bingwa.bingwasokonibot.models.OfferPOJO;
 import com.bingwa.bingwasokonibot.models.Payment;
+import com.bingwa.bingwasokonibot.models.RenewalPOJO;
 import com.bingwa.bingwasokonibot.models.TransactionPOJO;
 import com.bingwa.bingwasokonibot.services.MyService;
 import com.bingwa.bingwasokonibot.services.RetryService;
@@ -79,8 +86,12 @@ public class MainContentFragment extends Fragment {
 
     private DBHelper helper,helper2;
     List<TransactionPOJO> pojoList = new ArrayList<>();
+    List<TransactionPOJO> pojoList2 = new ArrayList<>();
+    List<OfferPOJO> pojos = new ArrayList<>();
+    List<RenewalPOJO> pojos2 = new ArrayList<>();
+    List<InboxListPOJO> inboxListPOJOList = new ArrayList<>();
 
-    private TextView txtStoreName,txtPhoneNumber,txtLink,txtTillNumber,txtTotal,txtSuccess,txtFailed,txtAmount,txtAirtime,txtOffers,txtRenewals,txtMessages,txtLoading;
+    private TextView txtStoreName,txtPhoneNumber,txtLink,txtTillNumber,txtTotal,txtSuccess,txtFailed,txtAmount,txtAirtime,txtOffers,txtRenewals,txtMessages,txtLoading,refreshAirtimeBalance;
     private Button cancel, okay,btnContinue;
     Spinner spinner;
 
@@ -130,6 +141,11 @@ public class MainContentFragment extends Fragment {
         showProgressDialog();
         checkOffersOne();
         showContinueDialog();
+        showSuccess();
+        showFailed();
+        getOffers();
+        getRenewals();
+        getMessages();
 
         btnContinue.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -139,7 +155,12 @@ public class MainContentFragment extends Fragment {
             }
         });
 //        showAlertDialog();
-
+        refreshAirtimeBalance.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showAlertDialog();
+            }
+        });
         dateBroadCast = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
@@ -148,13 +169,21 @@ public class MainContentFragment extends Fragment {
                 }
             }
         };
+
         showDashStatistics();
         return view;
     }
 
     private void showDashStatistics(){
         txtTillNumber.setText(till);
-
+        txtLink.setText(link());
+        txtSuccess.setText(String.valueOf(pojoList.size()));
+        txtFailed.setText(String.valueOf(pojoList2.size()));
+        int total = pojoList.size()+pojoList2.size();
+        txtTotal.setText(String.valueOf(total));
+        txtOffers.setText(String.valueOf(pojos.size()));
+        txtRenewals.setText(String.valueOf(pojos2.size()));
+        txtMessages.setText(String.valueOf(inboxListPOJOList.size()));
     }
     private void showAlertDialog() {
         dialog = new Dialog(getActivity());
@@ -509,6 +538,122 @@ public class MainContentFragment extends Fragment {
         cursor.close();
         return "Bearer "+token;
     }
+    public String link(){
+        Cursor cursor = helper.getLink();
+        String link = "";
+        if (cursor.getCount() == 0){
+            Log.d("TAG","Till number not found");
+        }else{
+            while (cursor.moveToNext()){
+                link = cursor.getString(0);
+            }
+        }
+        cursor.close();
+        return link;
+    }
+    private void showSuccess(){
+        pojoList.clear();
+        Cursor cursor = helper.getSuccessfulTransactions();
+        if (cursor.getCount() == 0){
+            Log.d("TAG","Success empty");
+        }else{
+            while (cursor.moveToNext()){
+                String ussdResponse = cursor.getString(1);
+                String amount = cursor.getString(2);
+                String timeStamp = cursor.getString(3);
+                String recipient = cursor.getString(4);
+                String status = cursor.getString(5);
+                int subId = cursor.getInt(6);
+                String ussd = cursor.getString(7);
+                int till = cursor.getInt(8);
+                String messageFull = cursor.getString(9);
+                pojoList.add(new TransactionPOJO(ussdResponse,amount,timeStamp,recipient,status,subId,ussd,till,messageFull));
+            }
+        }
+        cursor.close();
+    }
+    private void showFailed(){
+        pojoList2.clear();
+        Cursor cursor = helper.getFailedTransactions();
+        if (cursor.getCount() == 0){
+            Log.d("TAG","Showing failed transactions failed");
+        }else{
+            while (cursor.moveToNext()){
+                String ussdResponse = cursor.getString(1);
+                String amount = cursor.getString(2);
+                String timeStamp = cursor.getString(3);
+                String recipient = cursor.getString(4);
+                String status = cursor.getString(5);
+                int subId = cursor.getInt(6);
+                String ussd = cursor.getString(7);
+                int till = cursor.getInt(8);
+                String messageFull = cursor.getString(9);
+                pojoList2.add(new TransactionPOJO(ussdResponse,amount,timeStamp,recipient,status,subId,ussd,till,messageFull));
+            }
+        }
+        cursor.close();
+    }
+    private void getOffers() {
+        pojos.clear();
+        Cursor cursor = helper.getOffers();
+        if (cursor.getCount() == 0){
+            Log.d("TAG","Loading offers failed");
+        }
+        else {
+            while (cursor.moveToNext()){
+                String name = cursor.getString(1);
+                String amount = cursor.getString(2);
+                String ussdCode = cursor.getString(3);
+                String dialSim = cursor.getString(4);
+                String dialSimId = cursor.getString(5);
+                String paymentSim = cursor.getString(6);
+                String paymentSimId = cursor.getString(7);
+                String offerTill = cursor.getString(8);
+                OfferPOJO pojo = new OfferPOJO(name,amount,ussdCode,dialSim,Build.ID,dialSimId,paymentSim,paymentSimId,offerTill);
+                pojos.add(pojo);
+            }
+        }
+        cursor.close();
+    }
+    private void getRenewals() {
+        pojos2.clear();
+        Cursor cursor = helper.getRenewals();
+        if (cursor.getCount() == 0){
+            Log.d("TAG","Loading renewals failed");
+        }
+        else {
+            while (cursor.moveToNext()){
+                String frequency = cursor.getString(1);
+                String ussdCode = cursor.getString(2);
+                int period = cursor.getInt(3);
+                String tillNumber = cursor.getString(4);
+                String time = cursor.getString(5);
+                String dialSim = cursor.getString(6);
+                String money = cursor.getString(7);
+                String date1 = cursor.getString(8);
+                String date2 = cursor.getString(9);
+                RenewalPOJO pojo = new RenewalPOJO(frequency,ussdCode,period,tillNumber,time,dialSim,money,date1,date2);
+                pojos2.add(pojo);
+            }
+        }
+        cursor.close();
+    }
+    private void getMessages() {
+        inboxListPOJOList.clear();
+        Cursor cursor = helper.getData();
+        if (cursor.getCount() == 0){
+            Log.d("TAG","Loading inbox failed");
+        }
+        else {
+            while (cursor.moveToNext()){
+                String message = cursor.getString(1);
+                String timeStamp = cursor.getString(2);
+                String sender = cursor.getString(3);
+                inboxListPOJOList.add(new InboxListPOJO(message,timeStamp,sender));
+            }
+        }
+        cursor.close();
+    }
     private void initViews(View view) {
         txtStoreName = view.findViewById(R.id.txtDashStoreName);
         txtPhoneNumber = view.findViewById(R.id.txtDashPhoneNumber);
@@ -522,5 +667,6 @@ public class MainContentFragment extends Fragment {
         txtOffers = view.findViewById(R.id.txtDashOffers);
         txtRenewals = view.findViewById(R.id.txtDashRenewals);
         txtMessages = view.findViewById(R.id.txtDashMessages);
+        refreshAirtimeBalance = view.findViewById(R.id.refreshAirtime);
     }
 }

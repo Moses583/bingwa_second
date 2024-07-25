@@ -87,6 +87,7 @@ public class AutorenewalsFragment extends Fragment {
 
         dbHelper = new DBHelper(getActivity());
         requestManager = new RequestManager(getActivity());
+        listAdapter = new RenewalsListAdapter(getActivity());
         showData();
         checkOffersOne();
 
@@ -118,6 +119,9 @@ public class AutorenewalsFragment extends Fragment {
                 refresh();
             }
         });
+        myRecycler.setLayoutManager(new LinearLayoutManager(getActivity()));
+        myRecycler.setHasFixedSize(true);
+        myRecycler.setAdapter(listAdapter);
 
         return view;
     }
@@ -320,11 +324,7 @@ public class AutorenewalsFragment extends Fragment {
             swipeRefreshLayout.setRefreshing(false);
         }
         cursor.close();
-        listAdapter = new RenewalsListAdapter(getActivity());
         listAdapter.setRenewalList(pojos);
-        myRecycler.setLayoutManager(new LinearLayoutManager(getActivity()));
-        myRecycler.setHasFixedSize(true);
-        myRecycler.setAdapter(listAdapter);
     }
 
 

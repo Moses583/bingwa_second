@@ -124,7 +124,15 @@ public class CreateOfferActivity extends AppCompatActivity {
         okay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                boolean checkInsertData = helper.insertOffer(fetchData().getName(),fetchData().getAmount(),fetchData().getUssd(),fetchData().getDialSim(),fetchData().getSubscriptionId(),fetchData().getPaymentSim(), fetchData().getPaymentSimId(),fetchData().getOfferTill());
+                boolean checkInsertData = helper.insertOffer(
+                        fetchData().getName(),
+                        fetchData().getAmount(),
+                        fetchData().getUssd(),
+                        fetchData().getDialSim(),
+                        fetchData().getSubscriptionId(),
+                        fetchData().getPaymentSim(),
+                        fetchData().getPaymentSimId(),
+                        fetchData().getOfferTill());
                 if (checkInsertData){
                     Toast.makeText(CreateOfferActivity.this, "Success!", Toast.LENGTH_SHORT).show();
                 }else {

@@ -84,6 +84,7 @@ public class InboxFragment extends Fragment {
         initViews(view);
 
         helper = new DBHelper(getActivity());
+        adapter = new InboxListAdapter(getActivity());
         showData();
 
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -92,6 +93,9 @@ public class InboxFragment extends Fragment {
                 refresh();
             }
         });
+        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setAdapter(adapter);
         return view;
     }
 
@@ -115,11 +119,7 @@ public class InboxFragment extends Fragment {
             swipeRefreshLayout.setRefreshing(false);
         }
         cursor.close();
-        adapter = new InboxListAdapter(getActivity());
         adapter.setInboxListPOJOList(inboxListPOJOList);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        recyclerView.setHasFixedSize(true);
-        recyclerView.setAdapter(adapter);
     }
 
     private void initViews(View view) {

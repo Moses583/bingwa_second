@@ -51,7 +51,7 @@
                         android:id="@+id/txtDashPhoneNumber"
                         android:layout_margin="5dp"
                         android:padding="5dp"
-                        android:text="+254 746 029 603"/>
+                        android:text="-"/>
                 </LinearLayout>
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -71,7 +71,7 @@
                         android:id="@+id/txtDashLink"
                         android:layout_margin="5dp"
                         android:padding="5dp"
-                        android:text="https://example.com/"/>
+                        android:text="-"/>
                 </LinearLayout>
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -91,7 +91,7 @@
                         android:id="@+id/txtDashTillNumber"
                         android:layout_margin="5dp"
                         android:padding="5dp"
-                        android:text="965511"/>
+                        android:text="-"/>
                 </LinearLayout>
             </LinearLayout>
         </androidx.cardview.widget.CardView>
@@ -153,7 +153,7 @@
                                 android:padding="5dp"
                                 android:layout_margin="5dp"
                                 android:layout_gravity="center"
-                                android:text="30"
+                                android:text="-"
                                 android:textColor="@color/green"
                                 android:id="@+id/txtDashTotalTransactions"/>
                         </LinearLayout>
@@ -177,7 +177,7 @@
                                 android:padding="5dp"
                                 android:layout_margin="5dp"
                                 android:layout_gravity="center"
-                                android:text="30"
+                                android:text="-"
                                 android:textColor="@color/green"
                                 android:id="@+id/txtDashSuccessfulTransactions" />
                         </LinearLayout>
@@ -202,7 +202,7 @@
                                 android:layout_margin="5dp"
                                 android:padding="5dp"
                                 android:layout_gravity="center"
-                                android:text="30"
+                                android:text="-"
                                 android:textColor="@color/green"
                                 android:id="@+id/txtDashFailedTransactions"/>
                         </LinearLayout>
@@ -223,7 +223,7 @@
                         android:layout_gravity="center"
                         android:layout_margin="5dp"
                         android:padding="5dp"
-                        android:text="30"
+                        android:text="-"
                         android:textColor="@color/green" />
                     <TextView
                         android:layout_width="wrap_content"
@@ -232,7 +232,8 @@
                         android:padding="5dp"
                         android:layout_gravity="center"
                         android:textColor="@color/black"
-                        android:text="Airtime balance"/>
+                        android:text="Refresh airtime balance"
+                        android:id="@+id/refreshAirtime"/>
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -240,7 +241,7 @@
                         android:padding="5dp"
                         android:layout_gravity="center"
                         android:textColor="@color/green"
-                        android:text="30"
+                        android:text="-"
                         android:id="@+id/txtDashAirtimeBalance"/>
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -267,7 +268,7 @@
                                 android:padding="5dp"
                                 android:layout_margin="5dp"
                                 android:layout_gravity="center"
-                                android:text="30"
+                                android:text="-"
                                 android:textColor="@color/green"
                                 android:id="@+id/txtDashOffers"/>
                         </LinearLayout>
@@ -291,7 +292,7 @@
                                 android:padding="5dp"
                                 android:layout_margin="5dp"
                                 android:layout_gravity="center"
-                                android:text="30"
+                                android:text="-"
                                 android:textColor="@color/green"
                                 android:id="@+id/txtDashRenewals" />
                         </LinearLayout>
@@ -316,7 +317,7 @@
                                 android:layout_margin="5dp"
                                 android:padding="5dp"
                                 android:layout_gravity="center"
-                                android:text="30"
+                                android:text="-"
                                 android:textColor="@color/green"
                                 android:id="@+id/txtDashMessages"/>
                         </LinearLayout>

@@ -57,8 +57,8 @@ public class ItemListAdapter extends RecyclerView.Adapter<OfferViewHolder> {
 
         holder.name.setText(name);
         holder.amount.setText(amount);
-        holder.dial.setText(ussd);
-        holder.ussdCode.setText(dialSim);
+        holder.dial.setText(dialSim);
+        holder.ussdCode.setText(ussd);
         holder.paySim.setText(paymentSim);
         holder.till.setText(offerTill);
         holder.btnEdit.setOnClickListener(new View.OnClickListener() {

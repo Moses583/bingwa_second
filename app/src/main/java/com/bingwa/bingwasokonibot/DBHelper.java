@@ -52,7 +52,6 @@ public class DBHelper extends SQLiteOpenHelper {
     public boolean insertOffer(String name, String amount, String ussdCode, String dialSim, String dialSimId,String paymentSim,String paymentSimId,String offerTill){
         SQLiteDatabase database = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
-
         contentValues.put("name",name);
         contentValues.put("amount",amount);
         contentValues.put("ussdCode",ussdCode);

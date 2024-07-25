@@ -78,7 +78,6 @@ public class FailedFragment extends Fragment {
             }
         });
         showRecycler();
-
         retry.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -112,32 +111,6 @@ public class FailedFragment extends Fragment {
         recyclerView.setAdapter(adapter);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-    }
-
-    private void addData(){
-        pojoList.add(new TransactionPOJO("James","James","James","James","James",0,"James",9,"James"));
-        pojoList.add(new TransactionPOJO("Alice", "Alice", "Alice", "Alice", "Alice", 0, "Alice", 9, "Alice"));
-        pojoList.add(new TransactionPOJO("Bob", "Bob", "Bob", "Bob", "Bob", 0, "Bob", 9, "Bob"));
-        pojoList.add(new TransactionPOJO("Charlie", "Charlie", "Charlie", "Charlie", "Charlie", 0, "Charlie", 9, "Charlie"));
-        pojoList.add(new TransactionPOJO("David", "David", "David", "David", "David", 0, "David", 9, "David"));
-        pojoList.add(new TransactionPOJO("Eve", "Eve", "Eve", "Eve", "Eve", 0, "Eve", 9, "Eve"));
-        pojoList.add(new TransactionPOJO("Frank", "Frank", "Frank", "Frank", "Frank", 0, "Frank", 9, "Frank"));
-        pojoList.add(new TransactionPOJO("Grace", "Grace", "Grace", "Grace", "Grace", 0, "Grace", 9, "Grace"));
-        pojoList.add(new TransactionPOJO("Hank", "Hank", "Hank", "Hank", "Hank", 0, "Hank", 9, "Hank"));
-        pojoList.add(new TransactionPOJO("Ivy", "Ivy", "Ivy", "Ivy", "Ivy", 0, "Ivy", 9, "Ivy"));
-        pojoList.add(new TransactionPOJO("Jack", "Jack", "Jack", "Jack", "Jack", 0, "Jack", 9, "Jack"));
-        pojoList.add(new TransactionPOJO("Karen", "Karen", "Karen", "Karen", "Karen", 0, "Karen", 9, "Karen"));
-        pojoList.add(new TransactionPOJO("Leo", "Leo", "Leo", "Leo", "Leo", 0, "Leo", 9, "Leo"));
-        pojoList.add(new TransactionPOJO("Mia", "Mia", "Mia", "Mia", "Mia", 0, "Mia", 9, "Mia"));
-        pojoList.add(new TransactionPOJO("Nina", "Nina", "Nina", "Nina", "Nina", 0, "Nina", 9, "Nina"));
-        pojoList.add(new TransactionPOJO("Oscar", "Oscar", "Oscar", "Oscar", "Oscar", 0, "Oscar", 9, "Oscar"));
-        pojoList.add(new TransactionPOJO("Paul", "Paul", "Paul", "Paul", "Paul", 0, "Paul", 9, "Paul"));
-        pojoList.add(new TransactionPOJO("Quinn", "Quinn", "Quinn", "Quinn", "Quinn", 0, "Quinn", 9, "Quinn"));
-        pojoList.add(new TransactionPOJO("Rose", "Rose", "Rose", "Rose", "Rose", 0, "Rose", 9, "Rose"));
-        pojoList.add(new TransactionPOJO("Sam", "Sam", "Sam", "Sam", "Sam", 0, "Sam", 9, "Sam"));
-        pojoList.add(new TransactionPOJO("Tina", "Tina", "Tina", "Tina", "Tina", 0, "Tina", 9, "Tina"));
-        adapter.setPojoList(pojoList);
-
     }
 
     private void setFilteredList(String text) {

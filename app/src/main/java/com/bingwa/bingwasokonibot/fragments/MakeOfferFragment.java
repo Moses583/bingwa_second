@@ -106,6 +106,7 @@ public class MakeOfferFragment extends Fragment {
         manager = new RequestManager(getActivity());
         String id = Build.ID;
         dbHelper = new DBHelper(getActivity());
+        listAdapter = new ItemListAdapter(getActivity());
         callPostOfferApi();
 
 
@@ -209,9 +210,7 @@ public class MakeOfferFragment extends Fragment {
             swipeRefreshLayout.setRefreshing(false);
         }
         cursor.close();
-        listAdapter = new ItemListAdapter(getActivity());
         listAdapter.setOfferList(pojos);
-
     }
 
     public String tillNumber(){
