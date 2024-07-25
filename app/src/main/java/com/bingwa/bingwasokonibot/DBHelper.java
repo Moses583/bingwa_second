@@ -13,7 +13,7 @@ import java.util.List;
 public class DBHelper extends SQLiteOpenHelper {
 
     public DBHelper( Context context) {
-        super(context, "RealDbSeventeen.db",null,1);
+        super(context, "RealDbEighteen.db",null,1);
     }
 
     @Override
@@ -24,6 +24,7 @@ public class DBHelper extends SQLiteOpenHelper {
         db.execSQL("create Table FailedTransactions(id INTEGER PRIMARY KEY AUTOINCREMENT,ussdResponse TEXT,amount TEXT,timeStamp TEXT,recipient TEXT, status TEXT, subId INTEGER,ussd TEXT, till INTEGER, messageFull TEXT)");
         db.execSQL("create Table User(tillNumber TEXT)");
         db.execSQL("create Table Link(link TEXT)");
+        db.execSQL("create Table StoreName(storeName TEXT)");
         db.execSQL("create Table AuthenticationToken(token TEXT)");
         db.execSQL("create Table Renewals(id INTEGER PRIMARY KEY AUTOINCREMENT,frequency TEXT, codeUssd TEXT,period INTEGER,numberTill TEXT,theTime TEXT,simDial TEXT,money TEXT, dateCreation TEXT, dateExpiry TEXT)");
     }
@@ -38,6 +39,7 @@ public class DBHelper extends SQLiteOpenHelper {
         db.execSQL("drop table if exists Link");
         db.execSQL("drop table if exists AuthenticationToken");
         db.execSQL("drop table if exists Renewals");
+        db.execSQL("drop table if exists StoreName");
     }
 
     public boolean insertData( String message, String time, String sender){
@@ -170,6 +172,13 @@ public class DBHelper extends SQLiteOpenHelper {
         long result = database.insert("AuthenticationToken",null,contentValues);
         return result != -1;
     }
+    public boolean insertStoreName(String storeName){
+        SQLiteDatabase database = this.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put("storeName",storeName);
+        long result = database.insert("StoreName",null,contentValues);
+        return result != -1;
+    }
 
     public void updateRenewals() {
         SQLiteDatabase database = this.getWritableDatabase();
@@ -188,6 +197,10 @@ public class DBHelper extends SQLiteOpenHelper {
     public Cursor getLink(){
         SQLiteDatabase database = this.getWritableDatabase();
         return database.rawQuery("Select * from Link",null);
+    }
+    public Cursor getStoreName(){
+        SQLiteDatabase database = this.getWritableDatabase();
+        return database.rawQuery("Select * from StoreName",null);
     }
     public Cursor getData(){
         SQLiteDatabase database = this.getWritableDatabase();
@@ -252,6 +265,7 @@ public class DBHelper extends SQLiteOpenHelper {
         tablesToClear.add("User");
         tablesToClear.add("Link");
         tablesToClear.add("AuthenticationToken");
+        tablesToClear.add("StoreName");
 
         SQLiteDatabase db = this.getWritableDatabase(); // Use getWritableDatabase for delete operations
         for (String table : tablesToClear) {

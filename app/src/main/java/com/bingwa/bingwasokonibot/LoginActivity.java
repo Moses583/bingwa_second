@@ -140,9 +140,11 @@ public class LoginActivity extends AppCompatActivity {
             String till = pojo.tillNumber;
             String link = pojo.bingwaSite;
             String token = pojo.token;
+            String storeName = pojo.storeName;
             insertLink(link);
             insertTill(till);
             insertToken(token);
+            insertStoreName(storeName);
         }
         else{
             dialog.dismiss();
@@ -154,7 +156,6 @@ public class LoginActivity extends AppCompatActivity {
     private void insertTill(String till) {
         boolean insertTill = helper.insertUser(till);
         if (insertTill){
-            createAccount();
         }
         else{
             Toast.makeText(this, "unable to insert till", Toast.LENGTH_SHORT).show();
@@ -173,6 +174,14 @@ public class LoginActivity extends AppCompatActivity {
     }
     public void insertToken(String token){
         boolean checkInsertToken = helper.insertToken(token);
+        if (checkInsertToken){
+
+        }else{
+            Toast.makeText(this, "Token not saved", Toast.LENGTH_SHORT).show();
+        }
+    }
+    public void insertStoreName(String storeName){
+        boolean checkInsertToken = helper.insertStoreName(storeName);
         if (checkInsertToken){
             createAccount();
         }else{

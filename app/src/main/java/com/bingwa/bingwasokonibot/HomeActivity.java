@@ -1,7 +1,10 @@
 package com.bingwa.bingwasokonibot;
 
 
+import static androidx.core.content.ContextCompat.getDrawable;
+
 import android.Manifest;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -10,12 +13,19 @@ import android.content.pm.PackageManager;
 import android.os.Bundle;
 
 import android.os.CountDownTimer;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.Toast;
 
 
 import androidx.activity.EdgeToEdge;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -32,18 +42,13 @@ import com.google.android.material.floatingactionbutton.ExtendedFloatingActionBu
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationBarView;
 
+import java.util.Map;
+
 public class HomeActivity extends AppCompatActivity{
     private BottomNavigationView bottomNavigationView;
     private ViewPager2 viewPager2;
     private Toolbar toolbar;
-    String[] permissions = new String[]{
-            android.Manifest.permission.CALL_PHONE,
-            android.Manifest.permission.SEND_SMS,
-            android.Manifest.permission.READ_PHONE_STATE,
-            android.Manifest.permission.RECEIVE_SMS,
-            Manifest.permission.READ_SMS,
-            Manifest.permission.POST_NOTIFICATIONS
-    };
+
 
     private String till;
     private RequestManager manager;
@@ -51,8 +56,17 @@ public class HomeActivity extends AppCompatActivity{
     private FloatingActionButton button;
     private ExtendedFloatingActionButton start,stop;
     public CountDownTimer countDownTimer;
-
-    MyAlarmManager myAlarmManager;
+    private Dialog permissionsDialog;
+    private Button request;
+    String[] permissions = new String[]{
+            android.Manifest.permission.CALL_PHONE,
+            android.Manifest.permission.SEND_SMS,
+            android.Manifest.permission.READ_PHONE_STATE,
+            android.Manifest.permission.RECEIVE_SMS,
+            Manifest.permission.READ_SMS,
+            Manifest.permission.POST_NOTIFICATIONS,
+            Manifest.permission.RECEIVE_SMS
+    };
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -69,6 +83,7 @@ public class HomeActivity extends AppCompatActivity{
         helper = new DBHelper(this);
 
         manager = new RequestManager(this);
+
 
 
 //        myAlarmManager = new MyAlarmManager(this);
@@ -92,11 +107,6 @@ public class HomeActivity extends AppCompatActivity{
             finish();
         }
 
-
-        if (!hasPermissions(this, permissions)) {
-            requestPermissions(permissions, 101);
-        }
-
         viewPager2.setAdapter(new ViewPagerAdapter(this));
         viewPager2.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
             @Override
@@ -110,15 +120,59 @@ public class HomeActivity extends AppCompatActivity{
             }
         });
         bottomNavigationView.setOnItemSelectedListener(listener);
-    }
-
-    private boolean hasPermissions(Context context, String[] permissions) {
-        for (String permission : permissions) {
-            if (ContextCompat.checkSelfPermission(context, permission) != PackageManager.PERMISSION_GRANTED) {
-                return false;
+        if (hasPermissions()){
+            Toast.makeText(this, "All permissions granted", Toast.LENGTH_SHORT).show();
+        }else{
+            if (      shouldShowRequestPermissionRationale(Manifest.permission.READ_SMS)
+                    ||shouldShowRequestPermissionRationale(Manifest.permission.READ_PHONE_STATE)
+                    ||shouldShowRequestPermissionRationale(Manifest.permission.RECEIVE_SMS)
+                    ||shouldShowRequestPermissionRationale(Manifest.permission.CALL_PHONE)
+                    ||shouldShowRequestPermissionRationale(Manifest.permission.POST_NOTIFICATIONS)
+                    ||shouldShowRequestPermissionRationale(Manifest.permission.FOREGROUND_SERVICE)
+                    ||shouldShowRequestPermissionRationale(Manifest.permission.FOREGROUND_SERVICE_SPECIAL_USE)){
+                showRationaleDialog();
+            }else {
+                requestPermissionLauncher.launch(permissions);
             }
         }
-        return true;
+
+
+    }
+
+    private void showRationaleDialog() {
+        permissionsDialog = new Dialog(this);
+        View view = LayoutInflater.from(this).inflate(R.layout.dialog_request_permissions,null);
+        request = view.findViewById(R.id.btnRequestPermissions);
+        permissionsDialog.setContentView(view);
+        permissionsDialog.getWindow().setLayout(ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT);
+        permissionsDialog.getWindow().setBackgroundDrawable(getDrawable(R.drawable.dialog_background));
+        permissionsDialog.setCancelable(false);
+        request.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                requestPermissionLauncher.launch(permissions);
+                permissionsDialog.dismiss();
+            }
+        });
+        permissionsDialog.show();
+    }
+
+    private ActivityResultLauncher<String[]> requestPermissionLauncher = registerForActivityResult(new ActivityResultContracts.RequestMultiplePermissions(), new ActivityResultCallback<Map<String, Boolean>>() {
+        @Override
+        public void onActivityResult(Map<String, Boolean> o) {
+
+        }
+    });
+
+    private boolean hasPermissions(){
+        return checkSelfPermission(Manifest.permission.READ_SMS) == PackageManager.PERMISSION_GRANTED
+                && checkSelfPermission(Manifest.permission.CALL_PHONE) == PackageManager.PERMISSION_GRANTED
+                && checkSelfPermission(Manifest.permission.READ_PHONE_STATE) == PackageManager.PERMISSION_GRANTED
+                && checkSelfPermission(Manifest.permission.POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED
+                && checkSelfPermission(Manifest.permission.FOREGROUND_SERVICE) == PackageManager.PERMISSION_GRANTED
+                && checkSelfPermission(Manifest.permission.FOREGROUND_SERVICE_SPECIAL_USE) == PackageManager.PERMISSION_GRANTED
+                && checkSelfPermission(Manifest.permission.RECEIVE_SMS) == PackageManager.PERMISSION_GRANTED;
+
     }
 
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -137,10 +191,6 @@ public class HomeActivity extends AppCompatActivity{
         return super.onOptionsItemSelected(item);
     }
 
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-    }
     private final NavigationBarView.OnItemSelectedListener listener = new NavigationBarView.OnItemSelectedListener() {
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {

@@ -41,26 +41,6 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textColor="@color/black"
-                        android:text="Phone number"
-                        android:padding="5dp"
-                        android:layout_margin="5dp"/>
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textColor="@color/green"
-                        android:id="@+id/txtDashPhoneNumber"
-                        android:layout_margin="5dp"
-                        android:padding="5dp"
-                        android:text="-"/>
-                </LinearLayout>
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical">
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textColor="@color/black"
                         android:text="Link"
                         android:padding="5dp"
                         android:layout_margin="5dp"/>
@@ -207,24 +187,6 @@
                                 android:id="@+id/txtDashFailedTransactions"/>
                         </LinearLayout>
                     </LinearLayout>
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="5dp"
-                        android:padding="5dp"
-                        android:layout_gravity="center"
-                        android:textColor="@color/black"
-                        android:text="Total amount transactions"/>
-
-                    <TextView
-                        android:id="@+id/txtDashAmountTotal"
-                        android:layout_width="28dp"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:layout_margin="5dp"
-                        android:padding="5dp"
-                        android:text="-"
-                        android:textColor="@color/green" />
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"

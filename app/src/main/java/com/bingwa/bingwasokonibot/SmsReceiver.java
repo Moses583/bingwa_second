@@ -100,9 +100,6 @@ public class SmsReceiver extends BroadcastReceiver {
                     insert(context,dbHelper,messageBody,timeStamp);
                 }
             }
-            else{
-                insert(context,dbHelper,messageBody,timeStamp);
-            }
         }
 
     }

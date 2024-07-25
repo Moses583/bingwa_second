@@ -1,74 +1,81 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    app:cardCornerRadius="16dp"
+    app:cardElevation="20dp">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Permissions required!"
-        android:layout_gravity="start"
-        android:textAlignment="viewStart"
-        android:textColor="@color/green"
-        android:textSize="20sp"
-        android:fontFamily="@font/oxygen_bold"
-        android:layout_margin="8dp"/>
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="The following permissions are required for the app to function properly:"
-        android:layout_gravity="start"
-        android:textAlignment="viewStart"
-        android:textColor="@color/black"
-        android:layout_margin="8dp"/>
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:text="PHONE"
-        android:textColor="@color/green"/>
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="The app needs this to be able to reccommend airtime to your customers by dialling provided USSD codes."
-        android:layout_gravity="start"
-        android:textAlignment="viewStart"
-        android:textColor="@color/black"
-        android:layout_margin="8dp"/>
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:text="SMS"
-        android:textColor="@color/green"/>
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="The app needs this to be able to read incoming messages in order to proceed with the reccomendation of packages offered."
-        android:layout_gravity="start"
-        android:textAlignment="viewStart"
-        android:textColor="@color/black"
-        android:layout_margin="8dp"/>
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:text="RUN IN BACKGROUND"
-        android:textColor="@color/green"/>
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="The app needs this to be continuously in the background to perform all of the steps mentioned above."
-        android:layout_gravity="start"
-        android:textAlignment="viewStart"
-        android:textColor="@color/black"
-        android:layout_margin="8dp"/>
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:text="Grant permissions"
-        android:id="@+id/btnRequestPermissions"
-        android:layout_margin="8dp"/>
-</LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Permissions required!"
+            android:layout_gravity="start"
+            android:textAlignment="viewStart"
+            android:textColor="@color/green"
+            android:textSize="20sp"
+            android:fontFamily="@font/oxygen_bold"
+            android:layout_margin="8dp"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="The following permissions are required for the app to function properly:"
+            android:layout_gravity="start"
+            android:textAlignment="viewStart"
+            android:textColor="@color/black"
+            android:layout_margin="8dp"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="PHONE"
+            android:textColor="@color/green"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="The app needs this to be able to reccommend airtime to your customers by dialling provided USSD codes."
+            android:layout_gravity="start"
+            android:textAlignment="viewStart"
+            android:textColor="@color/black"
+            android:layout_margin="8dp"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="SMS"
+            android:textColor="@color/green"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="The app needs this to be able to read incoming messages in order to proceed with the reccomendation of packages offered."
+            android:layout_gravity="start"
+            android:textAlignment="viewStart"
+            android:textColor="@color/black"
+            android:layout_margin="8dp"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="RUN IN BACKGROUND"
+            android:textColor="@color/green"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="The app needs this to be continuously in the background to perform all of the steps mentioned above."
+            android:layout_gravity="start"
+            android:textAlignment="viewStart"
+            android:textColor="@color/black"
+            android:layout_margin="8dp"/>
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="Grant permissions"
+            android:id="@+id/btnRequestPermissions"
+            android:layout_margin="8dp"/>
+    </LinearLayout>
+</androidx.cardview.widget.CardView>

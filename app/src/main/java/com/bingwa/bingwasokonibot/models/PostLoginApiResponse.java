@@ -6,4 +6,5 @@ public class PostLoginApiResponse {
     public String token;
     public String tillNumber;
     public String bingwaSite;
+    public String storeName;
 }

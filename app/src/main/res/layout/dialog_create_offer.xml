@@ -25,7 +25,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="start"
-            android:text="Dear user, your list of offers is empty."
+            android:text="Dear user, your list of offers is empty. You will need to create them later."
             android:textColor="@color/black"
             android:textAlignment="viewStart"
             android:layout_margin="8dp"/>
@@ -34,16 +34,9 @@
             android:layout_width="200dp"
             android:layout_height="wrap_content"
             android:id="@+id/btnNavigateToCreateOffer"
-            android:text="Create offers"
+            android:text="Okay"
             android:layout_gravity="center"
-            android:layout_margin="8dp"/>
-        <Button
-            android:layout_width="200dp"
-            android:layout_height="wrap_content"
-            android:id="@+id/btnLoadExistingOffers"
-            android:text="Load existing offers"
-            android:layout_gravity="center"
-            android:layout_margin="8dp"/>
+            android:layout_marginBottom="20dp"/>
     </LinearLayout>
 
 </androidx.cardview.widget.CardView>

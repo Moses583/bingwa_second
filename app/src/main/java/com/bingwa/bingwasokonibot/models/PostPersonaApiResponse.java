@@ -5,4 +5,5 @@ public class PostPersonaApiResponse {
      public String message1;
      public String token;
      public String url;
+     public String storeName;
 }

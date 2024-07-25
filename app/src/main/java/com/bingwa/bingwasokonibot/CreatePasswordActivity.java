@@ -131,6 +131,12 @@ public class CreatePasswordActivity extends AppCompatActivity {
         }else{
             Log.d("TAG", "user not added successfully");
         }
+        boolean insertStoreName = dbHelper.insertStoreName(storeName);
+        if (insertStoreName){
+            Log.d("TAG","Store added successfully");
+        }else{
+            Log.d("TAG", "Store not added successfully");
+        }
         Persona persona = new Persona(name,number,till,storeName,deviceId,password);
         showAlertDialog(persona);
     }
@@ -197,7 +203,7 @@ public class CreatePasswordActivity extends AppCompatActivity {
         if (response.message1.equals("Successful account creation")){
             dialog2.dismiss();
             edtTxtConfirmPassword.setHelperTextEnabled(false);
-            insertTill(response);
+            insertLink(response);
             insertToken(response);
         }else{
             dialog2.dismiss();
@@ -205,7 +211,7 @@ public class CreatePasswordActivity extends AppCompatActivity {
             edtTxtConfirmPassword.setHelperText(response.message1);
         }
     }
-    public void insertTill(PostPersonaApiResponse response){
+    public void insertLink(PostPersonaApiResponse response){
         boolean checkInsertLink = dbHelper.insertLink(response.url);
         if (checkInsertLink){
             Toast.makeText(this, "link saved", Toast.LENGTH_SHORT).show();

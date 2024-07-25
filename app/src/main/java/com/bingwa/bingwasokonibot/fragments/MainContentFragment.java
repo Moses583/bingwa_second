@@ -184,6 +184,7 @@ public class MainContentFragment extends Fragment {
         txtOffers.setText(String.valueOf(pojos.size()));
         txtRenewals.setText(String.valueOf(pojos2.size()));
         txtMessages.setText(String.valueOf(inboxListPOJOList.size()));
+        txtStoreName.setText(storeName());
     }
     private void showAlertDialog() {
         dialog = new Dialog(getActivity());
@@ -315,7 +316,6 @@ public class MainContentFragment extends Fragment {
         offerCreationDialog = new Dialog(getActivity());
         View view = LayoutInflater.from(getActivity()).inflate(R.layout.dialog_create_offer,null);
         navigateToCreateOffer = view.findViewById(R.id.btnNavigateToCreateOffer);
-        loadExistingOffers = view.findViewById(R.id.btnLoadExistingOffers);
         offerCreationDialog.setContentView(view);
         offerCreationDialog.getWindow().setLayout(ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT);
         offerCreationDialog.getWindow().setBackgroundDrawable(getDrawable(getActivity(),R.drawable.dialog_background));
@@ -323,13 +323,8 @@ public class MainContentFragment extends Fragment {
         navigateToCreateOffer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                navigateToCreateOfferActivity();
-            }
-        });
-        loadExistingOffers.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                callGetOffersApi();
+                offerCreationDialog.dismiss();
+                callPaymentApi(till);
             }
         });
         offerCreationDialog.show();
@@ -348,7 +343,9 @@ public class MainContentFragment extends Fragment {
         @Override
         public void didError(String message) {
             progressDialog.dismiss();
-            Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
+            callPaymentApi(till);
+            Toast.makeText(getActivity(),"Offers unavailable, you'll need to create your offers later on...",Toast.LENGTH_SHORT).show();
+
         }
     };
     private void createOffersFromList(List<GetOffersResponse> responses) {
@@ -399,7 +396,6 @@ public class MainContentFragment extends Fragment {
     }
     private void navigateToCreateOfferActivity() {
         startActivity(new Intent(getActivity(), CreateOfferActivity.class));
-        offerCreationDialog.dismiss();
     }
     private void callPaymentApi(String till) {
         requestManager.getPaymentStatus(paymentListener,till,token());
@@ -551,6 +547,19 @@ public class MainContentFragment extends Fragment {
         cursor.close();
         return link;
     }
+    public String storeName(){
+        Cursor cursor = helper.getStoreName();
+        String link = "";
+        if (cursor.getCount() == 0){
+            Log.d("TAG","Till number not found");
+        }else{
+            while (cursor.moveToNext()){
+                link = cursor.getString(0);
+            }
+        }
+        cursor.close();
+        return link;
+    }
     private void showSuccess(){
         pojoList.clear();
         Cursor cursor = helper.getSuccessfulTransactions();
@@ -656,13 +665,11 @@ public class MainContentFragment extends Fragment {
     }
     private void initViews(View view) {
         txtStoreName = view.findViewById(R.id.txtDashStoreName);
-        txtPhoneNumber = view.findViewById(R.id.txtDashPhoneNumber);
         txtLink = view.findViewById(R.id.txtDashLink);
         txtTillNumber = view.findViewById(R.id.txtDashTillNumber);
         txtTotal = view.findViewById(R.id.txtDashTotalTransactions);
         txtSuccess = view.findViewById(R.id.txtDashSuccessfulTransactions);
         txtFailed = view.findViewById(R.id.txtDashFailedTransactions);
-        txtAmount = view.findViewById(R.id.txtDashAmountTotal);
         txtAirtime = view.findViewById(R.id.txtDashAirtimeBalance);
         txtOffers = view.findViewById(R.id.txtDashOffers);
         txtRenewals = view.findViewById(R.id.txtDashRenewals);
