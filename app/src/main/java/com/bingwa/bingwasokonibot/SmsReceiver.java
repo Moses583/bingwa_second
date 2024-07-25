@@ -158,15 +158,12 @@ public class SmsReceiver extends BroadcastReceiver {
         public void didFetch(CheckTransactionApiResponse response, String message) {
             if (response.status.contains("No transaction found")){
                 phoneNumber = smsNumber;
-
             }
             else {
                 phoneNumber = response.Phone;
             }
             getOffer(mContext,dbHelper,sub,matchedAmount);
             insert(mContext,dbHelper,messageBody,globalTimestamp);
-
-
         }
 
         @Override

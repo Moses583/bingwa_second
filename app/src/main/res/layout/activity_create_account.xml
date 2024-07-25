@@ -82,14 +82,14 @@
                 android:inputType="text"/>
 
         </com.google.android.material.textfield.TextInputLayout>
-        <Button
+        <com.google.android.material.button.MaterialButton
             android:layout_width="100dp"
             android:layout_height="wrap_content"
             android:layout_gravity="end"
             android:layout_margin="10dp"
             android:text="Next"
             android:textAllCaps="false"
-            android:background="@drawable/button_custom_one"
+            style="@style/Theme.MeisterBot"
             android:id="@+id/btnCreatePersona1"/>
     </LinearLayout>
 

@@ -6,5 +6,7 @@
         <item name="android:fontFamily">@font/oxygen_regular</item>
     </style>
 
-    <style name="Theme.MeisterBot" parent="Base.Theme.MeisterBot" />
+    <style name="Theme.MeisterBot" parent="Base.Theme.MeisterBot" >
+
+    </style>
 </resources>

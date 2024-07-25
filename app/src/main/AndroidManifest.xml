@@ -9,7 +9,6 @@
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.READ_SMS" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
-    <uses-permission android:name="android.permission.RECEIVE_SMS" />
     <uses-permission android:name="android.permission.CALL_PHONE" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
@@ -31,64 +30,62 @@
             android:exported="false" />
         <activity
             android:name=".EditOfferActivity"
-            android:exported="false" />
+            android:exported="false"/>
         <activity
             android:name=".CreateRenewalActivity"
             android:exported="false" />
         <activity
             android:name=".DeleteAccountActivity"
-            android:exported="false" />
+            android:exported="false"/>
         <activity
             android:name=".TermsAndConditionsActivity"
-            android:exported="false" />
+            android:exported="false"/>
         <activity
             android:name=".PrivacyPolicyActivity"
-            android:exported="false" />
+            android:exported="false"/>
         <activity
             android:name=".RequestTokenActivity"
-            android:exported="false" />
+            android:exported="false"/>
         <activity
             android:name=".EnableServiceActivity"
-            android:exported="false" />
+            android:exported="false"/>
         <activity
             android:name=".CreatePasswordActivity"
-            android:exported="false" />
+            android:exported="false"/>
         <activity
             android:name=".LoginActivity"
-            android:exported="false" />
+            android:exported="false"/>
         <activity
             android:name=".CreateAccountActivity"
-            android:exported="false" />
+            android:exported="true"/>
         <activity
             android:name=".AboutAppActivity"
-            android:exported="false" />
+            android:exported="false"/>
         <activity
             android:name=".BingwaLinkActivity"
             android:exported="false" />
         <activity
             android:name=".PaymentPlanActivity"
-            android:exported="false" />
+            android:exported="false"/>
         <activity
             android:name=".CreateOfferActivity"
-            android:exported="false" />
+            android:exported="false"/>
         <activity
             android:name=".EditAccountActivity"
-            android:exported="false" />
+            android:exported="false"/>
         <activity
             android:name=".SettingsActivity"
-            android:exported="false" />
+            android:exported="false"/>
         <activity
             android:name=".HelpActivity"
-            android:exported="false" />
+            android:exported="false"/>
         <activity
             android:name=".HomeActivity"
             android:exported="false"
-            android:launchMode="singleTop"
-            android:theme="@style/Base.Theme.MeisterBot" />
+            android:launchMode="singleTop"/>
         <activity
             android:name=".MainActivity"
-            android:exported="true"
-            android:theme="@style/Base.Theme.MeisterBot">
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

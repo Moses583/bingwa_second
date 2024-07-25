@@ -167,7 +167,7 @@ public class HomeActivity extends AppCompatActivity{
             toolbar.setTitle("Inbox");
             return true;
         }
-        return true;
+        return false;
     }
 };
 
