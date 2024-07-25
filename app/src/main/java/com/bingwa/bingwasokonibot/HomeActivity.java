@@ -63,7 +63,6 @@ public class HomeActivity extends AppCompatActivity{
             android.Manifest.permission.SEND_SMS,
             android.Manifest.permission.READ_PHONE_STATE,
             android.Manifest.permission.RECEIVE_SMS,
-            Manifest.permission.READ_SMS,
             Manifest.permission.POST_NOTIFICATIONS,
             Manifest.permission.RECEIVE_SMS
     };
@@ -123,8 +122,7 @@ public class HomeActivity extends AppCompatActivity{
         if (hasPermissions()){
             Toast.makeText(this, "All permissions granted", Toast.LENGTH_SHORT).show();
         }else{
-            if (      shouldShowRequestPermissionRationale(Manifest.permission.READ_SMS)
-                    ||shouldShowRequestPermissionRationale(Manifest.permission.READ_PHONE_STATE)
+            if (      shouldShowRequestPermissionRationale(Manifest.permission.READ_PHONE_STATE)
                     ||shouldShowRequestPermissionRationale(Manifest.permission.RECEIVE_SMS)
                     ||shouldShowRequestPermissionRationale(Manifest.permission.CALL_PHONE)
                     ||shouldShowRequestPermissionRationale(Manifest.permission.POST_NOTIFICATIONS)
@@ -165,8 +163,8 @@ public class HomeActivity extends AppCompatActivity{
     });
 
     private boolean hasPermissions(){
-        return checkSelfPermission(Manifest.permission.READ_SMS) == PackageManager.PERMISSION_GRANTED
-                && checkSelfPermission(Manifest.permission.CALL_PHONE) == PackageManager.PERMISSION_GRANTED
+        return
+                 checkSelfPermission(Manifest.permission.CALL_PHONE) == PackageManager.PERMISSION_GRANTED
                 && checkSelfPermission(Manifest.permission.READ_PHONE_STATE) == PackageManager.PERMISSION_GRANTED
                 && checkSelfPermission(Manifest.permission.POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED
                 && checkSelfPermission(Manifest.permission.FOREGROUND_SERVICE) == PackageManager.PERMISSION_GRANTED
