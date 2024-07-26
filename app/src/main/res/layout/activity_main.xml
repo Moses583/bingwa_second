@@ -8,24 +8,6 @@
     tools:context=".MainActivity"
     android:orientation="vertical">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/appName"
-        android:textSize="40sp"
-        android:layout_above="@id/txtAppDesc"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="10dp"
-        android:id="@+id/txtAppName"/>
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/LogoDescription"
-        android:textSize="18sp"
-        android:layout_above="@id/imgAppIcon"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="35dp"
-        android:id="@+id/txtAppDesc"/>
     <ImageView
         android:layout_width="100dp"
         android:layout_height="100dp"
@@ -33,6 +15,16 @@
         android:src="@drawable/logo_light"
         android:layout_centerInParent="true"
         android:id="@+id/imgAppIcon"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:layout_above="@id/imgAppIcon"
+        android:text="Bingwa Bot"
+        android:textSize="20sp"
+        android:fontFamily="@font/oxygen_bold"
+        android:textColor="@color/black"
+        android:layout_margin="5dp"/>
 
 
 

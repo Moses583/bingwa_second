@@ -16,7 +16,9 @@
             android:layout_marginStart="15dp"
             android:layout_marginEnd="15dp"
             android:layout_marginBottom="15dp"
-            app:cardCornerRadius="20dp">
+            android:layout_marginTop="15dp"
+            app:cardCornerRadius="20dp"
+            app:cardBackgroundColor="@color/green9">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -26,7 +28,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="20sp"
-                    android:textColor="@color/green2"
+                    android:textColor="@color/black"
                     android:fontFamily="@font/oxygen_bold"
                     android:layout_gravity="center"
                     android:padding="8dp"
@@ -43,11 +45,12 @@
                         android:textColor="@color/black"
                         android:text="Link"
                         android:padding="5dp"
-                        android:layout_margin="5dp"/>
+                        android:layout_margin="5dp"
+                        android:fontFamily="@font/oxygen_bold"/>
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textColor="@color/green2"
+                        android:textColor="@color/green1"
                         android:id="@+id/txtDashLink"
                         android:layout_margin="5dp"
                         android:padding="5dp"
@@ -63,11 +66,12 @@
                         android:textColor="@color/black"
                         android:text="Till number"
                         android:padding="5dp"
-                        android:layout_margin="5dp"/>
+                        android:layout_margin="5dp"
+                        android:fontFamily="@font/oxygen_bold"/>
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textColor="@color/green2"
+                        android:textColor="@color/green1"
                         android:id="@+id/txtDashTillNumber"
                         android:layout_margin="5dp"
                         android:padding="5dp"
@@ -81,7 +85,8 @@
             app:cardCornerRadius="20dp"
             android:layout_marginStart="15dp"
             android:layout_marginEnd="15dp"
-            android:layout_marginBottom="15dp">
+            android:layout_marginBottom="15dp"
+            app:cardBackgroundColor="@color/green9">
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -90,12 +95,13 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="20sp"
-                    android:textColor="@color/green2"
+                    android:textColor="@color/black"
                     android:fontFamily="@font/oxygen_bold"
                     android:layout_gravity="center"
                     android:padding="8dp"
                     android:text="Statistics"
-                    android:layout_margin="5dp"/>
+                    android:layout_margin="5dp"
+                    />
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -107,7 +113,8 @@
                         android:text="Transactions"
                         android:padding="5dp"
                         android:layout_margin="5dp"
-                        android:layout_gravity="center"/>
+                        android:layout_gravity="center"
+                        android:fontFamily="@font/oxygen_bold"/>
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -126,7 +133,8 @@
                                 android:layout_gravity="center"
                                 android:text="Total"
                                 android:textColor="@color/black"
-                                android:id="@+id/dummyTextOne"/>
+                                android:id="@+id/dummyTextOne"
+                                android:fontFamily="@font/oxygen_bold"/>
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
@@ -134,7 +142,7 @@
                                 android:layout_margin="5dp"
                                 android:layout_gravity="center"
                                 android:text="-"
-                                android:textColor="@color/green2"
+                                android:textColor="@color/green1"
                                 android:id="@+id/txtDashTotalTransactions"/>
                         </LinearLayout>
                         <LinearLayout
@@ -150,7 +158,8 @@
                                 android:layout_gravity="center"
                                 android:text="Successful"
                                 android:textColor="@color/black"
-                                android:id="@+id/dummyTextTwo" />
+                                android:id="@+id/dummyTextTwo"
+                                android:fontFamily="@font/oxygen_bold"/>
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
@@ -158,7 +167,7 @@
                                 android:layout_margin="5dp"
                                 android:layout_gravity="center"
                                 android:text="-"
-                                android:textColor="@color/green2"
+                                android:textColor="@color/green1"
                                 android:id="@+id/txtDashSuccessfulTransactions" />
                         </LinearLayout>
                         <LinearLayout
@@ -173,6 +182,7 @@
                                 android:layout_margin="5dp"
                                 android:padding="5dp"
                                 android:text="Failed"
+                                android:fontFamily="@font/oxygen_bold"
                                 android:textColor="@color/black"
                                 android:id="@+id/dummyTextThree"/>
 
@@ -183,7 +193,7 @@
                                 android:padding="5dp"
                                 android:layout_gravity="center"
                                 android:text="-"
-                                android:textColor="@color/green2"
+                                android:textColor="@color/green1"
                                 android:id="@+id/txtDashFailedTransactions"/>
                         </LinearLayout>
                     </LinearLayout>
@@ -195,7 +205,11 @@
                         android:layout_gravity="center"
                         android:textColor="@color/black"
                         android:text="Refresh airtime balance"
-                        android:id="@+id/refreshAirtime"/>
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:foreground="?android:attr/selectableItemBackground"
+                        android:id="@+id/refreshAirtime"
+                        android:fontFamily="@font/oxygen_bold"/>
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -223,7 +237,8 @@
                                 android:layout_gravity="center"
                                 android:text="Offers"
                                 android:textColor="@color/black"
-                                android:id="@+id/dummyTextFour"/>
+                                android:id="@+id/dummyTextFour"
+                                android:fontFamily="@font/oxygen_bold"/>
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
@@ -231,7 +246,7 @@
                                 android:layout_margin="5dp"
                                 android:layout_gravity="center"
                                 android:text="-"
-                                android:textColor="@color/green2"
+                                android:textColor="@color/green1"
                                 android:id="@+id/txtDashOffers"/>
                         </LinearLayout>
                         <LinearLayout
@@ -247,7 +262,8 @@
                                 android:layout_gravity="center"
                                 android:text="Renewals"
                                 android:textColor="@color/black"
-                                android:id="@+id/dummyTextFive" />
+                                android:id="@+id/dummyTextFive"
+                                android:fontFamily="@font/oxygen_bold"/>
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
@@ -255,7 +271,7 @@
                                 android:layout_margin="5dp"
                                 android:layout_gravity="center"
                                 android:text="-"
-                                android:textColor="@color/green2"
+                                android:textColor="@color/green1"
                                 android:id="@+id/txtDashRenewals" />
                         </LinearLayout>
                         <LinearLayout
@@ -271,7 +287,8 @@
                                 android:padding="5dp"
                                 android:text="Messages"
                                 android:textColor="@color/black"
-                                android:id="@+id/dummyTextSix"/>
+                                android:id="@+id/dummyTextSix"
+                                android:fontFamily="@font/oxygen_bold"/>
 
                             <TextView
                                 android:layout_width="wrap_content"
@@ -280,7 +297,7 @@
                                 android:padding="5dp"
                                 android:layout_gravity="center"
                                 android:text="-"
-                                android:textColor="@color/green2"
+                                android:textColor="@color/green1"
                                 android:id="@+id/txtDashMessages"/>
                         </LinearLayout>
                     </LinearLayout>

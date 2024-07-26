@@ -62,13 +62,7 @@ public class PaymentPlanActivity extends AppCompatActivity implements View.OnCli
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        EdgeToEdge.enable(this);
         setContentView(R.layout.activity_payment_plan);
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-            return insets;
-        });
         initViews();
 
         manager = new RequestManager(this);
@@ -123,7 +117,7 @@ public class PaymentPlanActivity extends AppCompatActivity implements View.OnCli
         progressDialog.getWindow().setLayout(widthInPx, ViewGroup.LayoutParams.WRAP_CONTENT);
         progressDialog.getWindow().setBackgroundDrawable(getDrawable(R.drawable.dialog_background));
         progressDialog.setCancelable(false);
-        txtLoading2.setText("Payment in progress...");
+        txtLoading2.setText("Loading...");
         progressDialog.show();
     }
 
@@ -281,7 +275,7 @@ public class PaymentPlanActivity extends AppCompatActivity implements View.OnCli
         dialog2.getWindow().setLayout(widthInPx, ViewGroup.LayoutParams.WRAP_CONTENT);
         dialog2.getWindow().setBackgroundDrawable(getDrawable(R.drawable.dialog_background));
         dialog2.setCancelable(false);
-        txtLoading.setText("Loading...");
+        txtLoading.setText("Payment in progress...");
     }
 
     private void callPaymentApi(String till) {

@@ -256,7 +256,7 @@ public class AutorenewalsFragment extends Fragment {
 
             // If successfully scheduled, log this thing
             if (result == JobScheduler.RESULT_SUCCESS) {
-                Toast.makeText(getActivity(), "Job scheduled successfully", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), "Renewal offer set.", Toast.LENGTH_SHORT).show();
             }
         }
 

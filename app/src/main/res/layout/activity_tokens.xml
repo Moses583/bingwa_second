@@ -33,7 +33,7 @@
             android:layout_marginBottom="5dp"
             android:layout_toEndOf="@id/txtsts"
             android:id="@+id/txtBingwaLink"
-            android:textColor="@color/green2"
+            android:textColor="@color/green1"
             android:layout_marginStart="5dp"
             android:clickable="true"
             android:focusable="true"

@@ -10,10 +10,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="My auto renewed offers"
-        android:textColor="@color/green2"
+        android:textColor="@color/black"
         android:textAlignment="center"
         android:layout_centerHorizontal="true"
-        android:layout_margin="10dp"/>
+        android:layout_margin="10dp"
+        android:fontFamily="@font/oxygen_bold"/>
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:layout_width="match_parent"

@@ -5,7 +5,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     app:cardCornerRadius="16dp"
-    app:cardElevation="20dp">
+    app:cardElevation="20dp"
+    app:cardBackgroundColor="@color/green10">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -16,7 +17,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:text="Choose sim for dialing"
-            android:textColor="@color/green2"
+            android:textColor="@color/black"
             android:fontFamily="@font/oxygen_bold"
             android:padding="8dp"
             android:layout_margin="5dp"/>
@@ -35,17 +36,19 @@
             android:orientation="horizontal"
             android:layout_gravity="center">
             <Button
-                android:layout_width="wrap_content"
+                android:layout_width="100dp"
                 android:layout_height="wrap_content"
                 android:id="@+id/airtimeCancel"
                 android:text="Cancel"
+                android:background="@drawable/button_custom_one"
                 android:layout_margin="20dp"/>
             <Button
-                android:layout_width="wrap_content"
+                android:layout_width="100dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:id="@+id/airtimeOkay"
                 android:text="Check"
+                android:background="@drawable/button_custom_one"
                 android:layout_margin="20dp"/>
         </LinearLayout>
     </LinearLayout>

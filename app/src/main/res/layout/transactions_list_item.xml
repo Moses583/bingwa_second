@@ -5,8 +5,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/transactionCardView"
     android:layout_margin="5dp"
-    app:cardCornerRadius="10dp"
-    android:orientation="vertical">
+    app:cardCornerRadius="20dp"
+    android:orientation="vertical"
+    app:cardBackgroundColor="@color/green9">
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -28,7 +29,6 @@
                     android:text="Status"
                     android:textAlignment="viewStart"
                     android:layout_margin="3dp"
-                    android:textSize="20sp"
                     android:textColor="@color/black"
                     android:fontFamily="@font/oxygen_bold"
                     android:id="@+id/txtTransactionStatus"/>
@@ -47,7 +47,8 @@
                     android:visibility="gone"
                     android:fontFamily="@font/oxygen_bold"
                     android:layout_margin="3dp"
-                    android:textAlignment="viewStart"/>
+                    android:textAlignment="viewStart"
+                    android:textColor="@color/black"/>
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -55,7 +56,7 @@
                     android:textAlignment="viewStart"
                     android:layout_margin="3dp"
                     android:id="@+id/txtTransactionRecepient"
-                    android:textColor="@color/green2"
+                    android:textColor="@color/green1"
                     android:clickable="true"
                     android:focusable="true"
                     android:foreground="?android:attr/selectableItemBackground"/>
@@ -92,14 +93,16 @@
                 android:fontFamily="@font/oxygen_bold"
                 android:layout_margin="3dp"
                 android:id="@+id/dummyOne"
-                android:textAlignment="viewStart"/>
+                android:textAlignment="viewStart"
+                android:textColor="@color/black"/>
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="USSD response"
                 android:textAlignment="viewStart"
                 android:layout_margin="3dp"
-                android:id="@+id/txtUssdResponse"/>
+                android:id="@+id/txtUssdResponse"
+                android:textColor="@color/black"/>
 
         </LinearLayout>
         <LinearLayout
@@ -115,14 +118,16 @@
                 android:fontFamily="@font/oxygen_bold"
                 android:layout_alignParentStart="true"
                 android:layout_margin="3dp"
-                android:id="@+id/dummyTwo"/>
+                android:id="@+id/dummyTwo"
+                android:textColor="@color/black"/>
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Transaction amount"
                 android:textAlignment="viewStart"
                 android:layout_margin="3dp"
-                android:id="@+id/txtTransactionAmount"/>
+                android:id="@+id/txtTransactionAmount"
+                android:textColor="@color/black"/>
         </LinearLayout>
         <LinearLayout
             android:layout_width="match_parent"
@@ -137,14 +142,16 @@
                 android:fontFamily="@font/oxygen_bold"
                 android:layout_alignParentStart="true"
                 android:layout_margin="3dp"
-                android:id="@+id/dummyThree"/>
+                android:id="@+id/dummyThree"
+                android:textColor="@color/black"/>
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Transaction amount"
                 android:textAlignment="viewStart"
                 android:layout_margin="3dp"
-                android:id="@+id/txtTransactionTimeStamp"/>
+                android:id="@+id/txtTransactionTimeStamp"
+                android:textColor="@color/black"/>
         </LinearLayout>
     </LinearLayout>
 

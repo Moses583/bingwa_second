@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -68,8 +69,6 @@ public class ItemListAdapter extends RecyclerView.Adapter<OfferViewHolder> {
                 intent.putExtra("name",name);
                 intent.putExtra("amount",amount);
                 intent.putExtra("ussd",ussd);
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 context.startActivity(intent);
             }
         });
@@ -137,7 +136,8 @@ public class ItemListAdapter extends RecyclerView.Adapter<OfferViewHolder> {
 class OfferViewHolder extends RecyclerView.ViewHolder {
     TextView amount, dial, ussdCode, paySim, till,name,amountDummy;
     CardView selectOffer;
-    ImageView btnEdit,btnDeleteOffer,offerDropDown,offerDropUp;
+    Button btnEdit,btnDeleteOffer;
+    ImageView offerDropDown,offerDropUp;
     LinearLayout ussdLayout,paymentLayout,dialLayout,tillLayout,mainOfferLayout;
     public OfferViewHolder(@NonNull View itemView) {
         super(itemView);

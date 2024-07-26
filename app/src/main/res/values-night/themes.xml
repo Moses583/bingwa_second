@@ -2,15 +2,25 @@
     <!-- Base application theme. -->
     <style name="Base.Theme.MeisterBot" parent="Theme.Material3.Light.NoActionBar">
         <!-- Customize your light theme here. -->
-        <item name="colorPrimary">@color/green2</item>
-        <item name="colorOnPrimary">@color/white</item>
+        <item name="colorPrimary">@color/green1</item>
+        <item name="colorOnPrimary">@color/black</item>
         <item name="colorPrimaryDark">@color/green1</item>
-        <item name="colorSecondary">@color/green6</item>
-        <item name="colorOnSecondary">@color/white</item>
+        <item name="colorPrimaryContainer">@color/green4</item>
+        <item name="colorOnPrimaryContainer">@color/black</item>
+
+        <item name="colorSecondary">@color/green1</item>
+        <item name="colorOnSecondary">@color/black</item>
+        <item name="colorSecondaryContainer">@color/green4</item>
+        <item name="colorOnSecondaryContainer">@color/black</item>
+
+        <item name="colorTertiary">@color/green1</item>
+        <item name="colorOnTertiary">@color/black</item>
+        <item name="colorTertiaryContainer">@color/green4</item>
+        <item name="colorOnTertiaryContainer">@color/black</item>
+
         <item name="android:colorBackground">@color/green10</item>
         <item name="colorOnBackground">@color/black</item>
-        <item name="colorSurface">@color/green7</item>
-        <item name="colorOnSurface">@color/black</item>
+
 
         <item name="android:fontFamily">@font/oxygen_regular</item>
     </style>

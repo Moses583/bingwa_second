@@ -17,81 +17,91 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:text="Already have an account? Log in..."
-        android:textColor="@color/green2"
+        android:textColor="@color/green1"
         android:layout_margin="10dp"
         android:id="@+id/txtGoToLogin"
         android:clickable="true"
         android:focusable="true"
         android:foreground="?android:attr/selectableItemBackground"/>
-    <LinearLayout
+    <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/enterPhoneNumber1"
+        app:cardCornerRadius="20dp"
+        android:layout_margin="15dp"
+        app:cardBackgroundColor="@color/green9">
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            app:endIconMode="clear_text"
-            app:helperTextEnabled="true"
-            app:helperText="This will be used as contact info"
-            app:counterEnabled="true"
-            app:counterMaxLength="10"
-            app:errorEnabled="true"
-            app:startIconDrawable="@drawable/ic_phone_number">
-            <com.google.android.material.textfield.TextInputEditText
+            android:orientation="vertical">
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/enterPhoneNumber1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="07 *** or 01 ***"
-                android:inputType="phone"/>
+                android:layout_margin="10dp"
+                app:endIconMode="clear_text"
+                app:helperTextEnabled="true"
+                app:helperText="This will be used as contact info"
+                app:helperTextTextColor="@color/black"
+                app:counterEnabled="true"
+                app:counterMaxLength="10"
+                app:errorEnabled="true"
+                app:startIconDrawable="@drawable/ic_phone_number">
+                <com.google.android.material.textfield.TextInputEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="07 *** or 01 ***"
+                    android:inputType="phone"/>
 
-        </com.google.android.material.textfield.TextInputLayout>
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/enterTillNumber1"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            app:endIconMode="clear_text"
-            app:helperTextEnabled="true"
-            app:helperText="Till number for payment transactions"
-            app:counterEnabled="true"
-            app:counterMaxLength="7"
-            app:errorEnabled="true"
-            app:startIconDrawable="@drawable/ic_till">
-            <com.google.android.material.textfield.TextInputEditText
+            </com.google.android.material.textfield.TextInputLayout>
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/enterTillNumber1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Enter your till number"
-                android:inputType="number"/>
+                android:layout_margin="10dp"
+                app:endIconMode="clear_text"
+                app:helperTextEnabled="true"
+                app:helperText="Till number for payment transactions"
+                app:counterEnabled="true"
+                app:counterMaxLength="7"
+                app:errorEnabled="true"
+                app:helperTextTextColor="@color/black"
+                app:startIconDrawable="@drawable/ic_till">
+                <com.google.android.material.textfield.TextInputEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Enter your till number"
+                    android:inputType="number"/>
 
-        </com.google.android.material.textfield.TextInputLayout>
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/enterStoreNumber1"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            app:endIconMode="clear_text"
-            app:helperTextEnabled="true"
-            app:helperText="This is the name of your store"
-            app:errorEnabled="true"
-            app:startIconDrawable="@drawable/ic_store">
-            <com.google.android.material.textfield.TextInputEditText
+            </com.google.android.material.textfield.TextInputLayout>
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/enterStoreNumber1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Enter your store name"
-                android:inputType="text"/>
+                android:layout_margin="10dp"
+                app:endIconMode="clear_text"
+                app:helperTextEnabled="true"
+                app:helperText="This is the name of your store"
+                app:errorEnabled="true"
+                app:helperTextTextColor="@color/black"
+                app:startIconDrawable="@drawable/ic_store">
+                <com.google.android.material.textfield.TextInputEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Enter your store name"
+                    android:inputType="text"/>
 
-        </com.google.android.material.textfield.TextInputLayout>
-        <com.google.android.material.button.MaterialButton
-            android:layout_width="100dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="end"
-            android:layout_margin="10dp"
-            android:text="Next"
-            android:textAllCaps="false"
-            style="@style/Theme.MeisterBot"
-            android:id="@+id/btnCreatePersona1"/>
-    </LinearLayout>
+            </com.google.android.material.textfield.TextInputLayout>
+            <com.google.android.material.button.MaterialButton
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_margin="10dp"
+                android:text="Next"
+                android:textAllCaps="false"
+                android:background="@drawable/button_custom_one"
+                android:id="@+id/btnCreatePersona1"/>
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
 
 
 </LinearLayout>

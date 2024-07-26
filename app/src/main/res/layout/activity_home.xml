@@ -21,7 +21,7 @@
             android:layout_height="wrap_content"
             app:menu="@menu/menu"
             app:title="Bingwa"
-            app:titleTextColor="@color/black" />
+            android:background="@color/green10"/>
     </LinearLayout>
 
 
@@ -46,7 +46,7 @@
             android:layout_height="wrap_content"
             android:paddingBottom="0dp"
             android:background="@color/green10"
-            app:menu="@menu/bottom_nav_menu" />
+            app:menu="@menu/bottom_nav_menu"/>
     </RelativeLayout>
 </RelativeLayout>
 

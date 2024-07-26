@@ -12,78 +12,96 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:title="About app"
-        android:layout_alignParentTop="true"/>
-    <TextView
+        android:layout_alignParentTop="true"
+        android:background="@color/green10"
+        app:titleTextColor="@color/black"/>
+    <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/AboutAppText"
-        android:textColor="@color/black"
-        android:textAlignment="viewStart"
-        android:layout_margin="10dp"/>
+        app:cardCornerRadius="20dp"
+        android:layout_margin="15dp"
+        app:cardBackgroundColor="@color/green9">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/AboutAppText"
+                android:textColor="@color/black"
+                android:textAlignment="viewStart"
+                android:layout_margin="10dp"
+                android:textSize="20sp"
+                android:fontFamily="@font/oxygen_bold"/>
 
-    <TextView
-        android:id="@+id/aboutTxtOne"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="10dp"
+            <TextView
+                android:id="@+id/aboutTxtOne"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:text="Contact us at:"
+                android:textColor="@color/black"
+                android:fontFamily="@font/oxygen_bold"/>
 
-        android:text="Contact us at:"
-        android:textColor="@color/black" />
+            <TextView
+                android:id="@+id/aboutTxtEmail"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:text="support@ujuzicraft.com"
+                android:textColor="@color/green1"
+                android:clickable="true"
+                android:focusable="true"
+                android:foreground="?android:attr/selectableItemBackground"/>
 
-    <TextView
-        android:id="@+id/aboutTxtEmail"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="10dp"
-        android:text="support@ujuzicraft.com"
-        android:textColor="@color/green2"
-        android:clickable="true"
-        android:focusable="true"
-        android:foreground="?android:attr/selectableItemBackground"/>
+            <TextView
+                android:id="@+id/aboutTxtNumber"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:layout_marginStart="16dp"
+                android:text="+254 796 888 444"
+                android:textColor="@color/green2"
+                android:clickable="true"
+                android:focusable="true"
+                android:foreground="?android:attr/selectableItemBackground"/>
 
-    <TextView
-        android:id="@+id/aboutTxtNumber"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="10dp"
-        android:layout_marginStart="16dp"
-        android:text="+254 796 888 444"
-        android:textColor="@color/green2"
-        android:clickable="true"
-        android:focusable="true"
-        android:foreground="?android:attr/selectableItemBackground"/>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Dear user, take a moment to review our Privacy Policy and Terms and Conditions"
+                android:textColor="@color/black"
+                android:textAlignment="viewStart"
+                android:layout_margin="10dp"
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Dear user, take a moment to review our Privacy Policy and Terms and Conditions"
-        android:textColor="@color/black"
-        android:textAlignment="viewStart"
-        android:layout_margin="10dp"/>
+                android:fontFamily="@font/oxygen_bold"/>
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Privacy policy"
-        android:textColor="@color/green2"
-        android:textAlignment="viewStart"
-        android:layout_margin="10dp"
-        android:clickable="true"
-        android:focusable="true"
-        android:foreground="?android:attr/selectableItemBackground"
-        android:id="@+id/txtPrivacyPolicy"/>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Privacy policy"
+                android:textColor="@color/green1"
+                android:textAlignment="viewStart"
+                android:layout_margin="10dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:foreground="?android:attr/selectableItemBackground"
+                android:id="@+id/txtPrivacyPolicy"/>
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Terms and conditions"
-        android:textColor="@color/green2"
-        android:textAlignment="viewStart"
-        android:layout_margin="10dp"
-        android:clickable="true"
-        android:focusable="true"
-        android:foreground="?android:attr/selectableItemBackground"
-        android:id="@+id/txtTermsAndConditions"/>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Terms and conditions"
+                android:textColor="@color/green1"
+                android:textAlignment="viewStart"
+                android:layout_margin="10dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:foreground="?android:attr/selectableItemBackground"
+                android:id="@+id/txtTermsAndConditions"/>
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
 
 
 </LinearLayout>

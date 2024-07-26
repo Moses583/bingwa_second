@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -68,8 +69,6 @@ public class RenewalsListAdapter extends RecyclerView.Adapter<RenewalsViewHolder
                 intent.putExtra("ussdCode",ussdCode);
                 intent.putExtra("period",period);
                 intent.putExtra("money",money);
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 context.startActivity(intent);
             }
         });
@@ -135,7 +134,8 @@ public class RenewalsListAdapter extends RecyclerView.Adapter<RenewalsViewHolder
 class RenewalsViewHolder extends RecyclerView.ViewHolder {
     TextView frequency, ussdCode, period,till,time,money,startDate,endDate,ussdDummy;
     CardView selectOffer;
-    ImageView btnEdit,renewalUp,renewalDown,btnDelete;
+    Button btnEdit,btnDelete;
+    ImageView renewalUp,renewalDown;
     LinearLayout mainLay,perLay,tillLay,dialLay,moneyLay,startLay,endLay;
     public RenewalsViewHolder(@NonNull View itemView) {
         super(itemView);

@@ -13,8 +13,9 @@
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:layout_margin="15dp"
-            app:cardCornerRadius="5dp"
-            app:cardElevation="5dp">
+            app:cardCornerRadius="20dp"
+            app:cardElevation="5dp"
+            app:cardBackgroundColor="@color/green9">
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
@@ -23,7 +24,6 @@
                     android:layout_height="match_parent"
                     android:queryHint="Enter phone number..."
                     android:iconifiedByDefault="false"
-                    android:background="@drawable/searchview_background"
                     android:id="@+id/searchSuccessful"/>
             </RelativeLayout>
         </androidx.cardview.widget.CardView>

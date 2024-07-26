@@ -5,8 +5,9 @@
     android:layout_height="wrap_content"
     android:id="@+id/selectOffer"
     android:layout_margin="5dp"
-    app:cardCornerRadius="10dp"
-    android:orientation="vertical">
+    app:cardCornerRadius="20dp"
+    android:orientation="vertical"
+    app:cardBackgroundColor="@color/green9">
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -28,7 +29,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="TextView"
-                    android:textSize="20sp"
                     android:fontFamily="@font/oxygen_bold"
                     android:textColor="@color/black"
                     android:layout_margin="3dp"/>
@@ -47,6 +47,7 @@
                     android:id="@+id/offerAmountDummy"
                     android:fontFamily="@font/oxygen_bold"
                     android:layout_margin="3dp"
+                    android:textColor="@color/black"
                     android:visibility="gone"/>
 
                 <TextView
@@ -55,7 +56,7 @@
                     android:layout_height="wrap_content"
                     android:text="TextView"
                     android:layout_margin="3dp"
-                    android:textColor="@color/green2"/>
+                    android:textColor="@color/green1"/>
 
             </LinearLayout>
             <ImageView
@@ -89,14 +90,16 @@
                 android:layout_height="wrap_content"
                 android:text="USSD code:"
                 android:fontFamily="@font/oxygen_bold"
-                android:layout_margin="3dp"/>
+                android:layout_margin="3dp"
+                android:textColor="@color/black"/>
 
             <TextView
                 android:id="@+id/recyclerUssdCode"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="TextView"
-                android:layout_margin="3dp" />
+                android:layout_margin="3dp"
+                android:textColor="@color/black"/>
 
         </LinearLayout>
         <LinearLayout
@@ -111,14 +114,16 @@
                 android:layout_height="wrap_content"
                 android:text="Payment Sim:"
                 android:fontFamily="@font/oxygen_bold"
-                android:layout_margin="3dp"/>
+                android:layout_margin="3dp"
+                android:textColor="@color/black"/>
 
             <TextView
                 android:id="@+id/recyclerPaySim"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="TextView"
-                android:layout_margin="3dp"/>
+                android:layout_margin="3dp"
+                android:textColor="@color/black"/>
 
         </LinearLayout>
         <LinearLayout
@@ -133,14 +138,16 @@
                 android:layout_height="wrap_content"
                 android:text="Dial Sim:"
                 android:fontFamily="@font/oxygen_bold"
-                android:layout_margin="3dp" />
+                android:layout_margin="3dp"
+                android:textColor="@color/black"/>
 
             <TextView
                 android:id="@+id/recyclerDialSim"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="TextView"
-                android:layout_margin="3dp" />
+                android:layout_margin="3dp"
+                android:textColor="@color/black"/>
 
         </LinearLayout>
         <LinearLayout
@@ -155,34 +162,38 @@
                 android:layout_height="wrap_content"
                 android:text="Till number:"
                 android:fontFamily="@font/oxygen_bold"
-                android:layout_margin="3dp" />
+                android:layout_margin="3dp"
+                android:textColor="@color/black"/>
 
             <TextView
                 android:id="@+id/recyclerDialTill"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="TextView"
-                android:layout_margin="3dp"/>
+                android:layout_margin="3dp"
+                android:textColor="@color/black"/>
 
         </LinearLayout>
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
-            <ImageView
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:src="@drawable/ic_edit_offer"
+            <Button
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:background="@drawable/button_custom_one"
+                android:text="Edit"
                 android:id="@+id/btnEditOffer"
-                android:layout_marginStart="3dp"
+                android:layout_margin="10dp"
                 android:layout_alignParentStart="true"
                 android:visibility="gone"/>
-            <ImageView
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:src="@drawable/ic_delete"
+            <Button
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
                 android:id="@+id/btnDeleteOffer"
-                android:layout_marginStart="10dp"
-                android:layout_toEndOf="@id/btnEditOffer"
+                android:text="Delete"
+                android:background="@drawable/button_custom_one"
+                android:layout_margin="10dp"
+                android:layout_alignParentEnd="true"
                 android:visibility="gone"/>
         </RelativeLayout>
     </LinearLayout>

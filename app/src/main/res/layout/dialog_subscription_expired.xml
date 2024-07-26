@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     app:cardCornerRadius="16dp"
-    app:cardElevation="20dp">
+    app:cardElevation="20dp"
+    app:cardBackgroundColor="@color/green10">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -15,9 +16,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Services unavailable, subscription expired!"
-                android:layout_gravity="start"
-                android:textAlignment="viewStart"
-                android:textColor="@color/green2"
+                android:layout_gravity="center"
+                android:textAlignment="center"
+                android:textColor="@color/black"
                 android:textSize="20sp"
                 android:fontFamily="@font/oxygen_bold"
                 android:layout_margin="8dp"/>
@@ -31,10 +32,11 @@
                 android:layout_margin="8dp"/>
 
             <Button
-                android:layout_width="wrap_content"
+                android:layout_width="100dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:text="Renew plan"
+                android:text="Renew"
+                android:background="@drawable/button_custom_one"
                 android:id="@+id/btnRenewPlan"
                 android:layout_margin="8dp"/>
         </LinearLayout>

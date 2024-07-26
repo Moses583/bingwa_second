@@ -11,8 +11,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:tabMode="fixed"
+        android:background="@color/green10"
         app:tabGravity="fill"
-        android:id="@+id/transactionTabs"/>
+        android:id="@+id/transactionTabs"
+        app:tabTextColor="@color/black"/>
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"

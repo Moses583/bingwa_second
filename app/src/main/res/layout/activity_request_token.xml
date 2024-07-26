@@ -11,35 +11,49 @@
     <androidx.appcompat.widget.Toolbar
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:title="Request Authentication Token"/>
+        app:title="Request Authentication Token"
+        app:titleTextColor="@color/black"/>
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/edtRequestPhoneNumber"
+    <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="10dp"
-        app:endIconMode="clear_text"
-        app:helperTextEnabled="true"
-        app:helperText="Enter the till number you signed up with"
-        app:counterEnabled="true"
-        app:counterMaxLength="10"
-        app:errorEnabled="true"
-        app:startIconDrawable="@drawable/ic_phone_number">
-
-        <com.google.android.material.textfield.TextInputEditText
+        app:cardBackgroundColor="@color/green9"
+        app:cardCornerRadius="20dp"
+        android:layout_margin="15dp">
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Till number"
-            android:inputType="number"/>
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/edtRequestPhoneNumber"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                app:endIconMode="clear_text"
+                app:helperTextEnabled="true"
+                app:helperText="Enter the till number you signed up with"
+                app:counterEnabled="true"
+                app:counterMaxLength="10"
+                app:errorEnabled="true"
+                app:startIconDrawable="@drawable/ic_phone_number">
 
-    </com.google.android.material.textfield.TextInputLayout>
+                <com.google.android.material.textfield.TextInputEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Till number"
+                    android:inputType="number"/>
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_margin="10dp"
-        android:text="Request token"
-        android:id="@+id/btnGoToResetPassword"/>
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <Button
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_margin="10dp"
+                android:text="Send"
+                android:background="@drawable/button_custom_one"
+                android:id="@+id/btnGoToResetPassword"/>
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
 
 </LinearLayout>

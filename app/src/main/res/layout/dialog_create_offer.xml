@@ -5,7 +5,8 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     app:cardCornerRadius="16dp"
-    app:cardElevation="20dp">
+    app:cardElevation="20dp"
+    app:cardBackgroundColor="@color/green10">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -14,12 +15,12 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="start"
+            android:layout_gravity="center"
             android:text="Recommendation services unavailable!"
             android:textSize="20sp"
-            android:textColor="@color/green2"
+            android:textColor="@color/black"
             android:fontFamily="@font/oxygen_bold"
-            android:textAlignment="viewStart"
+            android:textAlignment="center"
             android:layout_margin="8dp"/>
         <TextView
             android:layout_width="wrap_content"
@@ -31,11 +32,12 @@
             android:layout_margin="8dp"/>
 
         <Button
-            android:layout_width="200dp"
+            android:layout_width="100dp"
             android:layout_height="wrap_content"
             android:id="@+id/btnNavigateToCreateOffer"
             android:text="Okay"
             android:layout_gravity="center"
+            android:background="@drawable/button_custom_one"
             android:layout_marginBottom="20dp"/>
     </LinearLayout>
 
