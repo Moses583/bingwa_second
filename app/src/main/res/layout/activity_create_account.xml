@@ -17,7 +17,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:text="Already have an account? Log in..."
-        android:textColor="@color/green"
+        android:textColor="@color/green2"
         android:layout_margin="10dp"
         android:id="@+id/txtGoToLogin"
         android:clickable="true"

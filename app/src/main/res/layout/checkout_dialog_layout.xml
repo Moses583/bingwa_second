@@ -31,7 +31,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Till number: "
-            android:textColor="@color/green"
+            android:textColor="@color/green2"
             android:fontFamily="@font/oxygen_bold"
             android:layout_margin="8dp"/>
 

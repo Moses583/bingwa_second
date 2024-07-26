@@ -16,7 +16,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:text="Choose sim for dialing"
-            android:textColor="@color/green"
+            android:textColor="@color/green2"
             android:fontFamily="@font/oxygen_bold"
             android:padding="8dp"
             android:layout_margin="5dp"/>

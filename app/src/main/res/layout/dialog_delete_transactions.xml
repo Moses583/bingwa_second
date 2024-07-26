@@ -15,7 +15,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:text="Confirm deletion"
-            android:textColor="@color/green"
+            android:textColor="@color/green2"
             android:textSize="20sp"
             android:padding="8dp"/>
         <TextView

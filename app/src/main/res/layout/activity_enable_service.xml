@@ -12,7 +12,6 @@
         android:layout_height="wrap_content"
         android:text="@string/appName"
         android:textSize="20sp"
-        android:textColor="@color/green"
         android:fontFamily="@font/oxygen_bold"
         android:layout_centerHorizontal="true"
         android:layout_above="@id/startText"

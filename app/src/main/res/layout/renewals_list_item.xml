@@ -58,7 +58,7 @@
                     android:layout_height="wrap_content"
                     android:text="TextView"
                     android:layout_margin="3dp"
-                    android:textColor="@color/green"/>
+                    android:textColor="@color/green2"/>
 
             </LinearLayout>
             <ImageView

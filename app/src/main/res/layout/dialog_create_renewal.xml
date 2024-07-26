@@ -17,7 +17,7 @@
             android:layout_gravity="start"
             android:text="Recommendation services unavailable!"
             android:textSize="20sp"
-            android:textColor="@color/green"
+            android:textColor="@color/green2"
             android:fontFamily="@font/oxygen_bold"
             android:textAlignment="viewStart"
             android:layout_margin="8dp"/>

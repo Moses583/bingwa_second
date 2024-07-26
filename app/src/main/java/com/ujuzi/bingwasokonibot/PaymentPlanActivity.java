@@ -134,7 +134,7 @@ public class PaymentPlanActivity extends AppCompatActivity implements View.OnCli
             if (checkPayment1.isChecked()){
                 checkPayment2.setChecked(false);
                 checkPayment3.setChecked(false);
-                txtPlanOne.setTextColor(getResources().getColor(R.color.green));
+                txtPlanOne.setTextColor(getResources().getColor(R.color.green2));
                 txtPlanTwo.setTextColor(getResources().getColor(R.color.black));
                 txtPlanThree.setTextColor(getResources().getColor(R.color.black));
                 amount = amount1;
@@ -143,7 +143,7 @@ public class PaymentPlanActivity extends AppCompatActivity implements View.OnCli
             if (checkPayment2.isChecked()){
                 checkPayment1.setChecked(false);
                 checkPayment3.setChecked(false);
-                txtPlanTwo.setTextColor(getResources().getColor(R.color.green));
+                txtPlanTwo.setTextColor(getResources().getColor(R.color.green2));
                 txtPlanOne.setTextColor(getResources().getColor(R.color.black));
                 txtPlanThree.setTextColor(getResources().getColor(R.color.black));
                 amount = amount2;
@@ -152,7 +152,7 @@ public class PaymentPlanActivity extends AppCompatActivity implements View.OnCli
             if (checkPayment3.isChecked()){
                 checkPayment1.setChecked(false);
                 checkPayment2.setChecked(false);
-                txtPlanThree.setTextColor(getResources().getColor(R.color.green));
+                txtPlanThree.setTextColor(getResources().getColor(R.color.green2));
                 txtPlanOne.setTextColor(getResources().getColor(R.color.black));
                 txtPlanTwo.setTextColor(getResources().getColor(R.color.black));
                 amount = amount3;

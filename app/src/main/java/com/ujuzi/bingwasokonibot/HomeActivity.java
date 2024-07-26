@@ -46,10 +46,7 @@ public class HomeActivity extends AppCompatActivity{
     private Toolbar toolbar;
 
 
-    private String till;
-    private RequestManager manager;
-    private DBHelper helper;
-    private FloatingActionButton button;
+
     private ExtendedFloatingActionButton start,stop;
     public CountDownTimer countDownTimer;
     private Dialog permissionsDialog;
@@ -60,7 +57,8 @@ public class HomeActivity extends AppCompatActivity{
             android.Manifest.permission.READ_PHONE_STATE,
             android.Manifest.permission.RECEIVE_SMS,
             Manifest.permission.POST_NOTIFICATIONS,
-            Manifest.permission.RECEIVE_SMS
+            Manifest.permission.RECEIVE_SMS,
+            Manifest.permission.RECEIVE_BOOT_COMPLETED
     };
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,10 +72,6 @@ public class HomeActivity extends AppCompatActivity{
         });
         initViews();
         setSupportActionBar(toolbar);
-
-        helper = new DBHelper(this);
-
-        manager = new RequestManager(this);
 
 
 
@@ -123,7 +117,8 @@ public class HomeActivity extends AppCompatActivity{
                     ||shouldShowRequestPermissionRationale(Manifest.permission.CALL_PHONE)
                     ||shouldShowRequestPermissionRationale(Manifest.permission.POST_NOTIFICATIONS)
                     ||shouldShowRequestPermissionRationale(Manifest.permission.FOREGROUND_SERVICE)
-                    ||shouldShowRequestPermissionRationale(Manifest.permission.FOREGROUND_SERVICE_SPECIAL_USE)){
+                    ||shouldShowRequestPermissionRationale(Manifest.permission.FOREGROUND_SERVICE_SPECIAL_USE)
+            ||shouldShowRequestPermissionRationale(Manifest.permission.RECEIVE_BOOT_COMPLETED)){
                 showRationaleDialog();
             }else {
                 requestPermissionLauncher.launch(permissions);
@@ -165,6 +160,7 @@ public class HomeActivity extends AppCompatActivity{
                 && checkSelfPermission(Manifest.permission.POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED
                 && checkSelfPermission(Manifest.permission.FOREGROUND_SERVICE) == PackageManager.PERMISSION_GRANTED
                 && checkSelfPermission(Manifest.permission.FOREGROUND_SERVICE_SPECIAL_USE) == PackageManager.PERMISSION_GRANTED
+                         && checkSelfPermission(Manifest.permission.RECEIVE_BOOT_COMPLETED) == PackageManager.PERMISSION_GRANTED
                 && checkSelfPermission(Manifest.permission.RECEIVE_SMS) == PackageManager.PERMISSION_GRANTED;
 
     }

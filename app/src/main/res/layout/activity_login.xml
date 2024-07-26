@@ -33,7 +33,7 @@
         android:id="@+id/edtTxtLoginPassword"
         android:hint="Enter password"
         app:helperTextEnabled="false"
-        app:helperTextTextColor="@color/red"
+        app:helperTextTextColor="@color/green2"
         android:layout_margin="10dp"
         app:endIconMode="password_toggle"
         app:startIconDrawable="@drawable/ic_password">
@@ -50,7 +50,7 @@
         android:id="@+id/txtForgotPassword"
         android:text="Forgot password"
         android:layout_margin="10dp"
-        android:textColor="@color/green"
+        android:textColor="@color/green2"
         android:layout_gravity="center"
         android:clickable="true"
         android:focusable="true"

@@ -55,7 +55,7 @@
                     android:textAlignment="viewStart"
                     android:layout_margin="3dp"
                     android:id="@+id/txtTransactionRecepient"
-                    android:textColor="@color/green"
+                    android:textColor="@color/green2"
                     android:clickable="true"
                     android:focusable="true"
                     android:foreground="?android:attr/selectableItemBackground"/>

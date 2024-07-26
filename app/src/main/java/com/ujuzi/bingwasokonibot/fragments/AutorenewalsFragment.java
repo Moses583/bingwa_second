@@ -270,8 +270,7 @@ public class AutorenewalsFragment extends Fragment {
         final JobInfo jobInfo;
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            jobInfo = new JobInfo.Builder(id, name)
-                    .setPersisted(true).build();
+            jobInfo = new JobInfo.Builder(id, name).build();
         } else {
             jobInfo = new JobInfo.Builder(id, name).setPersisted(true).build();
         }
