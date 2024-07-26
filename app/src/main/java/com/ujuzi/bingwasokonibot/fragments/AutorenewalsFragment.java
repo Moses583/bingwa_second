@@ -134,7 +134,7 @@ public class AutorenewalsFragment extends Fragment {
         offerCreationDialog.setContentView(view);
         offerCreationDialog.getWindow().setLayout(ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT);
         offerCreationDialog.getWindow().setBackgroundDrawable(getDrawable(getActivity(),R.drawable.dialog_background));
-        offerCreationDialog.setCancelable(false);
+        offerCreationDialog.setCancelable(true);
         navigateToCreateOffer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
