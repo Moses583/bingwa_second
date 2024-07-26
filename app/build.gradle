@@ -3,11 +3,11 @@ plugins {
 }
 
 android {
-    namespace 'com.bingwa.bingwasokonibot'
+    namespace 'com.ujuzi.bingwasokonibot'
     compileSdk 34
 
     defaultConfig {
-        applicationId "com.bingwa.bingwasokonibot"
+        applicationId "com.ujuzi.bingwasokonibot"
         minSdk 24
         targetSdk 34
         versionCode 28
