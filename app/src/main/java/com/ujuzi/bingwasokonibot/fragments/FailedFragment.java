@@ -19,6 +19,7 @@ import android.view.ViewGroup;
 import android.widget.SearchView;
 import android.widget.Toast;
 
+import com.ujuzi.bingwasokonibot.Adapters.FailedAdapter;
 import com.ujuzi.bingwasokonibot.Adapters.TransactionAdapter;
 import com.ujuzi.bingwasokonibot.DBHelper;
 import com.ujuzi.bingwasokonibot.R;
@@ -35,7 +36,7 @@ public class FailedFragment extends Fragment {
     private SwipeRefreshLayout swipeRefreshLayout;
     private List<TransactionPOJO> pojoList;
     private DBHelper helper;
-    private TransactionAdapter adapter;
+    private FailedAdapter adapter;
     private SearchView searchView;
     private FloatingActionButton retry;
 
@@ -56,7 +57,7 @@ public class FailedFragment extends Fragment {
         initViews(view);
         pojoList = new ArrayList<>();
         helper = new DBHelper(getActivity());
-        adapter = new TransactionAdapter(getActivity());
+        adapter = new FailedAdapter(getActivity());
         showFailed();
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override

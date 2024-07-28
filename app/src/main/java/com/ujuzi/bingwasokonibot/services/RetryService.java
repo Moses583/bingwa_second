@@ -220,12 +220,7 @@ public class RetryService extends Service {
                 public void onReceiveUssdResponseFailed(TelephonyManager telephonyManager, String request, int failureCode) {
                     super.onReceiveUssdResponseFailed(telephonyManager, request, failureCode);
                     response1 = String.valueOf(failureCode);
-
-                    long currentTimeMillis = System.currentTimeMillis();
-                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
-                    transactionTimeStamp = sdf.format(currentTimeMillis);
-                    insertFailed(context,dbHelper,response1,matchedAmount,transactionTimeStamp,phoneNumber,till,"0",subscriptionId,ussdCode,messageFull);
-                    Toast.makeText(context, String.valueOf(failureCode), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, "Retrial failed", Toast.LENGTH_SHORT).show();
                 }
             };
         }
@@ -247,7 +242,7 @@ public class RetryService extends Service {
     public void insertSuccess(Context context,DBHelper helper,String ussdResponse, String amount, String transactionTimeStamp, String recipient,int till, String status,int subId,String ussd,String messageFull){
         boolean checkInsertData = helper.insertSuccess(ussdResponse,amount,transactionTimeStamp,recipient,status,subId,ussd,till,messageFull);
         if (checkInsertData){
-            Toast.makeText(context, "Transaction recorded", Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, "Retrial successful", Toast.LENGTH_SHORT).show();
             postTransaction(context,Double.parseDouble(amount),recipient,till,messageFull);
         }
         else{
@@ -272,7 +267,7 @@ public class RetryService extends Service {
         final PostTransactionListener listener = new PostTransactionListener() {
             @Override
             public void didFetch(TransactionApiResponse response, String message) {
-                Toast.makeText(context, response.message, Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, "Retrial uploaded", Toast.LENGTH_SHORT).show();
             }
 
             @Override

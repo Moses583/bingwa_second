@@ -236,6 +236,11 @@ public class DBHelper extends SQLiteOpenHelper {
         long result = DB.delete("Offers", "ussdCode=?", new String[]{ussdCode});
         return result != -1;
     }
+    public Boolean deleteSpecificTransaction (String ussdCode) {
+        SQLiteDatabase DB = this.getWritableDatabase();
+        long result = DB.delete("FailedTransactions", "ussdCode=?", new String[]{ussdCode});
+        return result != -1;
+    }
     public Boolean deleteRenewal (String ussdCode) {
         SQLiteDatabase DB = this.getWritableDatabase();
         long result = DB.delete("Renewals", "codeUssd=?", new String[]{ussdCode});

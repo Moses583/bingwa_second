@@ -168,6 +168,17 @@ public class MainContentFragment extends Fragment {
         txtRenewals.setText(String.valueOf(pojos2.size()));
         txtMessages.setText(String.valueOf(inboxListPOJOList.size()));
         txtStoreName.setText(storeName());
+        txtLink.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent sendIntent = new Intent();
+                sendIntent.setAction(Intent.ACTION_SEND);
+                sendIntent.putExtra(Intent.EXTRA_TEXT, txtLink.getText().toString());
+                sendIntent.setType("text/plain");
+                Intent shareIntent = Intent.createChooser(sendIntent, null);
+                startActivity(shareIntent);
+            }
+        });
     }
     private void showAlertDialog() {
         dialog = new Dialog(getActivity());
