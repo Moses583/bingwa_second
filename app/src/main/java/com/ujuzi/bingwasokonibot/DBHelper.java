@@ -238,7 +238,7 @@ public class DBHelper extends SQLiteOpenHelper {
     }
     public Boolean deleteSpecificTransaction (String ussdCode) {
         SQLiteDatabase DB = this.getWritableDatabase();
-        long result = DB.delete("FailedTransactions", "ussdCode=?", new String[]{ussdCode});
+        long result = DB.delete("FailedTransactions", "ussd=?", new String[]{ussdCode});
         return result != -1;
     }
     public Boolean deleteRenewal (String ussdCode) {

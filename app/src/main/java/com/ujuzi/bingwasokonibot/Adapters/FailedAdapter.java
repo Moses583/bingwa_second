@@ -110,7 +110,7 @@ public class FailedAdapter extends RecyclerView.Adapter<FailedViewHolder>{
     }
     public void delete(int itemId, String code){
         DBHelper helper = new DBHelper(context);
-        boolean checkDelete = helper.deleteData(code);
+        boolean checkDelete = helper.deleteSpecificTransaction(code);
         if (checkDelete){
             Toast.makeText(context, "Transaction deleted successfully", Toast.LENGTH_SHORT).show();
         }

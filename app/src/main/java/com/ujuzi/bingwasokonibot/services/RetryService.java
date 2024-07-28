@@ -178,8 +178,8 @@ public class RetryService extends Service {
         return queue1;
     }
 
-    private void deleteData(){
-        boolean deleteData = dbHelper.deleteTransaction();
+    private void deleteData(String ussdCode){
+        boolean deleteData = dbHelper.deleteSpecificTransaction(ussdCode);
         if (deleteData){
             Log.d(TAG,"Data deleted");
         }
@@ -203,12 +203,16 @@ public class RetryService extends Service {
 
                     if (response1.contains("Kindly wait as we process")){
                         insertSuccess(context,dbHelper,response1,matchedAmount,transactionTimeStamp,phoneNumber,till,"1",subscriptionId,ussdCode,messageFull);
+                        deleteData(ussdCode);
                     } else if (response1.contains("You have successfully purchased")) {
                         insertSuccess(context,dbHelper,response1,matchedAmount,transactionTimeStamp,phoneNumber,till,"1",subscriptionId,ussdCode,messageFull);
+                        deleteData(ussdCode);
                     }else if (response1.contains("You have transferred")) {
                         insertSuccess(context,dbHelper,response1,matchedAmount,transactionTimeStamp,phoneNumber,till,"1",subscriptionId,ussdCode,messageFull);
+                        deleteData(ussdCode);
                     }else if (response1.contains("Message has been sent successfully")) {
                         insertSuccess(context,dbHelper,response1,matchedAmount,transactionTimeStamp,phoneNumber,till,"1",subscriptionId,ussdCode,messageFull);
+                        deleteData(ussdCode);
                     }else{
                         insertFailed(context,dbHelper,response1,matchedAmount,transactionTimeStamp,phoneNumber,till,"0",subscriptionId,ussdCode,messageFull);
                     }

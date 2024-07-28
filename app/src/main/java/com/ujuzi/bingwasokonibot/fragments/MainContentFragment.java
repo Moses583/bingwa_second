@@ -159,6 +159,7 @@ public class MainContentFragment extends Fragment {
 
     private void showDashStatistics(){
         txtTillNumber.setText(till);
+        txtLink.setSelected(true);
         txtLink.setText(link());
         txtSuccess.setText(String.valueOf(pojoList.size()));
         txtFailed.setText(String.valueOf(pojoList2.size()));
