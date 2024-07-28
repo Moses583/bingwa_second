@@ -174,9 +174,10 @@ public class RenewalsJobService extends JobService {
                         insertSuccess(context,dbHelper2,response1,amount,transactionTimeStamp,phoneNumber,till,"1",subscriptionId,ussdCode,"messageBody");
                     } else if (response1.contains("You have transferred")) {
                         insertSuccess(context,dbHelper2,response1,amount,transactionTimeStamp,phoneNumber,till,"1",subscriptionId,ussdCode,"messageBody");
-                    }
-                    else{
-                        insertFailed(context,dbHelper2,response1,amount,transactionTimeStamp,phoneNumber,till,"0",subscriptionId,ussdCode,"messageBody");
+                    }else if (response1.contains("Message has been sent successfully")) {
+                        insertSuccess(context,dbHelper,response1,matchedAmount,transactionTimeStamp,phoneNumber,till,"1",subscriptionId,ussdCode,"messageBody");
+                    }else{
+                        insertFailed(context,dbHelper,response1,matchedAmount,transactionTimeStamp,phoneNumber,till,"0",subscriptionId,ussdCode,"messageBody");
                     }
 
                     Toast.makeText(context, response, Toast.LENGTH_SHORT).show();

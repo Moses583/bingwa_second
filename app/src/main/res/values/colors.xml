@@ -3,14 +3,14 @@
     <color name="black">#000000</color>
     <color name="white">#FFFFFF</color>
     <color name="red">#FF0000</color>
-    <color name="green1">#036666</color>
-    <color name="green2">#14746F</color>
-    <color name="green3">#248277</color>
-    <color name="green4">#358F80</color>
-    <color name="green5">#469D89</color>
-    <color name="green6">#56AB91</color>
-    <color name="green7">#67B99A</color>
-    <color name="green8">#78C6A3</color>
-    <color name="green9">#88D4AB</color>
-    <color name="green10">#99E2B4</color>
+    <color name="green1">#606F49</color>
+    <color name="green2">#728359</color>
+    <color name="green3">#849669</color>
+    <color name="green4">#97A97C</color>
+    <color name="green5">#A6B98B</color>
+    <color name="green6">#B5C99A</color>
+    <color name="green7">#C2D5AA</color>
+    <color name="green8">#CFE1B9</color>
+    <color name="green9">#DCEBCA</color>
+    <color name="green10">#E9F5DB</color>
 </resources>

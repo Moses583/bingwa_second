@@ -9,6 +9,7 @@ import com.ujuzi.bingwasokonibot.fragments.AutorenewalsFragment;
 import com.ujuzi.bingwasokonibot.fragments.InboxFragment;
 import com.ujuzi.bingwasokonibot.fragments.MainContentFragment;
 import com.ujuzi.bingwasokonibot.fragments.MakeOfferFragment;
+import com.ujuzi.bingwasokonibot.fragments.OffersFragment;
 import com.ujuzi.bingwasokonibot.fragments.TransactionsFragment;
 
 public class ViewPagerAdapter extends FragmentStateAdapter {
@@ -22,15 +23,11 @@ public class ViewPagerAdapter extends FragmentStateAdapter {
     @Override
     public Fragment createFragment(int position) {
         switch (position){
-            case 0:
-                return new MainContentFragment();
             case 1:
                 return new TransactionsFragment();
             case 2:
-                return new MakeOfferFragment();
+                return new OffersFragment();
             case 3:
-                return new AutorenewalsFragment();
-            case 4:
                 return new InboxFragment();
             default:
                 return new MainContentFragment();
@@ -39,6 +36,6 @@ public class ViewPagerAdapter extends FragmentStateAdapter {
 
     @Override
     public int getItemCount() {
-        return 5;
+        return 4;
     }
 }

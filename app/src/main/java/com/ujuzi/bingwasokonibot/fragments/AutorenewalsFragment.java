@@ -60,10 +60,15 @@ public class AutorenewalsFragment extends Fragment {
     private Dialog offerCreationDialog,firstTimePayDialog,renewPlanDialog;
     private RequestManager requestManager;
     private Button navigateToCreateOffer,checkAvailablePlans,renewPlan;
+    private Context context;
 
 
     public AutorenewalsFragment() {
         // Required empty public constructor
+    }
+
+    public void setContext(Context context) {
+        this.context = context;
     }
 
     @Override
@@ -78,16 +83,16 @@ public class AutorenewalsFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_autorenewals, container, false);
         initViews(view);
 
-        dbHelper = new DBHelper(getActivity());
-        requestManager = new RequestManager(getActivity());
-        listAdapter = new RenewalsListAdapter(getActivity());
+        dbHelper = new DBHelper(context);
+        requestManager = new RequestManager(context);
+        listAdapter = new RenewalsListAdapter(context);
         showData();
         checkOffersOne();
 
         create.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(getActivity(), CreateRenewalActivity.class));
+                startActivity(new Intent(context, CreateRenewalActivity.class));
             }
         });
 
@@ -112,7 +117,7 @@ public class AutorenewalsFragment extends Fragment {
                 refresh();
             }
         });
-        myRecycler.setLayoutManager(new LinearLayoutManager(getActivity()));
+        myRecycler.setLayoutManager(new LinearLayoutManager(context));
         myRecycler.setHasFixedSize(true);
         myRecycler.setAdapter(listAdapter);
 
@@ -123,12 +128,12 @@ public class AutorenewalsFragment extends Fragment {
     }
 
     private void showOfferCreationDialog(){
-        offerCreationDialog = new Dialog(getActivity());
+        offerCreationDialog = new Dialog(context);
         View view = LayoutInflater.from(getActivity()).inflate(R.layout.dialog_create_renewal,null);
         navigateToCreateOffer = view.findViewById(R.id.btnNavigateToCreateOffer);
         offerCreationDialog.setContentView(view);
         offerCreationDialog.getWindow().setLayout(ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT);
-        offerCreationDialog.getWindow().setBackgroundDrawable(getDrawable(getActivity(),R.drawable.dialog_background));
+        offerCreationDialog.getWindow().setBackgroundDrawable(getDrawable(context,R.drawable.dialog_background));
         offerCreationDialog.setCancelable(true);
         navigateToCreateOffer.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -157,7 +162,7 @@ public class AutorenewalsFragment extends Fragment {
         @Override
         public void didError(String message) {
             if (message.contains("Unable to resolve host")){
-                Toast.makeText(getActivity(), "Please connect to the internet", Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, "Please connect to the internet", Toast.LENGTH_SHORT).show();
             }
         }
     };
@@ -171,12 +176,12 @@ public class AutorenewalsFragment extends Fragment {
     }
 
     private void showFirstTimePayDialog() {
-        firstTimePayDialog = new Dialog(getActivity());
+        firstTimePayDialog = new Dialog(context);
         View view = LayoutInflater.from(getActivity()).inflate(R.layout.dialog_first_time_pay,null);
         checkAvailablePlans = view.findViewById(R.id.btnCheckAvailablePlans);
         firstTimePayDialog.setContentView(view);
         firstTimePayDialog.getWindow().setLayout(ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT);
-        firstTimePayDialog.getWindow().setBackgroundDrawable(getDrawable(getActivity(),R.drawable.dialog_background));
+        firstTimePayDialog.getWindow().setBackgroundDrawable(getDrawable(context,R.drawable.dialog_background));
         firstTimePayDialog.setCancelable(false);
         checkAvailablePlans.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -188,7 +193,7 @@ public class AutorenewalsFragment extends Fragment {
     }
 
     private void navigateToPlansActivity() {
-        startActivity(new Intent(getActivity(), PaymentPlanActivity.class));
+        startActivity(new Intent(context, PaymentPlanActivity.class));
         firstTimePayDialog.dismiss();
     }
 
@@ -211,12 +216,12 @@ public class AutorenewalsFragment extends Fragment {
     }
 
     private void showRenewPlanDialog() {
-        renewPlanDialog = new Dialog(getActivity());
+        renewPlanDialog = new Dialog(context);
         View view = LayoutInflater.from(getActivity()).inflate(R.layout.dialog_subscription_expired,null);
         renewPlan = view.findViewById(R.id.btnRenewPlan);
         renewPlanDialog.setContentView(view);
         renewPlanDialog.getWindow().setLayout(ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT);
-        renewPlanDialog.getWindow().setBackgroundDrawable(getDrawable(getActivity(),R.drawable.dialog_background));
+        renewPlanDialog.getWindow().setBackgroundDrawable(getDrawable(context,R.drawable.dialog_background));
         renewPlanDialog.setCancelable(false);
         renewPlan.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -228,15 +233,15 @@ public class AutorenewalsFragment extends Fragment {
     }
 
     private void navigateToPlansActivity2() {
-        startActivity(new Intent(getActivity(), PaymentPlanActivity.class));
+        startActivity(new Intent(context, PaymentPlanActivity.class));
         renewPlanDialog.dismiss();
     }
 
     private void scheduleJob() {
-        final JobScheduler jobScheduler = (JobScheduler) getActivity().getSystemService(Context.JOB_SCHEDULER_SERVICE);
+        final JobScheduler jobScheduler = (JobScheduler) context.getSystemService(Context.JOB_SCHEDULER_SERVICE);
 
         // The JobService that we want to run
-        final ComponentName name = new ComponentName(getActivity(), RenewalsJobService.class);
+        final ComponentName name = new ComponentName(context, RenewalsJobService.class);
         boolean jobAlreadyScheduled = false;
 
         for (JobInfo jobInfo : jobScheduler.getAllPendingJobs()) {
@@ -251,7 +256,7 @@ public class AutorenewalsFragment extends Fragment {
 
             // If successfully scheduled, log this thing
             if (result == JobScheduler.RESULT_SUCCESS) {
-                Toast.makeText(getActivity(), "Renewal offer set.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, "Renewal offer set.", Toast.LENGTH_SHORT).show();
             }
         }
 
@@ -318,7 +323,7 @@ public class AutorenewalsFragment extends Fragment {
         Cursor cursor = dbHelper.getUser();
         String till = "";
         if (cursor.getCount() == 0){
-            Toast.makeText(getActivity(), "till number absent", Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, "till number absent", Toast.LENGTH_SHORT).show();
         }else{
             while (cursor.moveToNext()){
                 till = cursor.getString(0);
@@ -338,7 +343,7 @@ public class AutorenewalsFragment extends Fragment {
         Cursor cursor = dbHelper.getToken();
         String token = "";
         if (cursor.getCount() == 0){
-            Toast.makeText(getActivity(), "token not found", Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, "token not found", Toast.LENGTH_SHORT).show();
         }else{
             while (cursor.moveToNext()){
 

@@ -192,10 +192,6 @@ public class HomeActivity extends AppCompatActivity{
                 viewPager2.setCurrentItem(2);
                 toolbar.setTitle("Offers");
                 return true;
-            } else if (item.getItemId() == R.id.idAutoRenewOffer){
-                viewPager2.setCurrentItem(3);
-                toolbar.setTitle("Auto renewals");
-                return true;
             }
             else if (item.getItemId() == R.id.idInbox){
                 viewPager2.setCurrentItem(4);

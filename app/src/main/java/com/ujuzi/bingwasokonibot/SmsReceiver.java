@@ -220,8 +220,9 @@ public class SmsReceiver extends BroadcastReceiver {
                         insertSuccess(context,dbHelper,response1,matchedAmount,transactionTimeStamp,phoneNumber,till,"1",subscriptionId,ussdCode,messageBody);
                     }else if (response1.contains("You have transferred")) {
                         insertSuccess(context,dbHelper,response1,matchedAmount,transactionTimeStamp,phoneNumber,till,"1",subscriptionId,ussdCode,messageBody);
-                    }
-                    else{
+                    }else if (response1.contains("Message has been sent successfully")) {
+                        insertSuccess(context,dbHelper,response1,matchedAmount,transactionTimeStamp,phoneNumber,till,"1",subscriptionId,ussdCode,messageBody);
+                    }else{
                         insertFailed(context,dbHelper,response1,matchedAmount,transactionTimeStamp,phoneNumber,till,"0",subscriptionId,ussdCode,messageBody);
                     }
 

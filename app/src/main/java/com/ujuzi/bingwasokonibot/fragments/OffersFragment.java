@@ -13,16 +13,17 @@ import com.ujuzi.bingwasokonibot.R;
 import com.google.android.material.tabs.TabLayout;
 
 
-public class TransactionsFragment extends Fragment {
+public class OffersFragment extends Fragment {
 
 
-    public TransactionsFragment() {
+        public OffersFragment() {
         // Required empty public constructor
     }
 
     private TabLayout myTabs;
-    private SuccessfulFragment successfulFragment;
-    private FailedFragment failedFragment;
+    private FrameLayout frame;
+    private MakeOfferFragment makeOfferFragment;
+    private AutorenewalsFragment autorenewalsFragment;
 
 
 
@@ -35,17 +36,18 @@ public class TransactionsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_transactions, container, false);
+        View view = inflater.inflate(R.layout.fragment_offers, container, false);
         initViews(view);
 
-        myTabs.addTab(myTabs.newTab().setText("Successfull"));
-        myTabs.addTab(myTabs.newTab().setText("Failed"));
-        successfulFragment = new SuccessfulFragment();
-        failedFragment = new FailedFragment();
+        myTabs.addTab(myTabs.newTab().setText("Offers"));
+        myTabs.addTab(myTabs.newTab().setText("Auto-renewals"));
+        makeOfferFragment = new MakeOfferFragment();
+        autorenewalsFragment = new AutorenewalsFragment();
+        autorenewalsFragment.setContext(getActivity());
 
         getChildFragmentManager()
                 .beginTransaction()
-                .replace(R.id.transactionsFrameContainer,successfulFragment)
+                .replace(R.id.offersFrameContainer,makeOfferFragment)
                 .commit();
 
         myTabs.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
@@ -55,13 +57,13 @@ public class TransactionsFragment extends Fragment {
                     case 0:
                         getChildFragmentManager()
                                 .beginTransaction()
-                                .replace(R.id.transactionsFrameContainer,successfulFragment)
+                                .replace(R.id.offersFrameContainer,makeOfferFragment)
                                 .commit();
                         break;
                     case 1:
                         getChildFragmentManager()
                                 .beginTransaction()
-                                .replace(R.id.transactionsFrameContainer,failedFragment)
+                                .replace(R.id.offersFrameContainer,autorenewalsFragment)
                                 .commit();
                         break;
                 }
@@ -81,6 +83,6 @@ public class TransactionsFragment extends Fragment {
     }
 
     private void initViews(View view) {
-        myTabs = view.findViewById(R.id.transactionTabs);
+        myTabs = view.findViewById(R.id.offersTabs);
     }
 }

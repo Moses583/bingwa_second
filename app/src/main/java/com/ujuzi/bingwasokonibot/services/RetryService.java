@@ -78,7 +78,6 @@ public class RetryService extends Service {
                         if (queue.isEmpty()){
                             isRunning = false;
                             Log.d(TAG,"queue is empty");
-                            deleteData();
                             stopSelf();
                         }
                         else{
@@ -208,6 +207,10 @@ public class RetryService extends Service {
                         insertSuccess(context,dbHelper,response1,matchedAmount,transactionTimeStamp,phoneNumber,till,"1",subscriptionId,ussdCode,messageFull);
                     }else if (response1.contains("You have transferred")) {
                         insertSuccess(context,dbHelper,response1,matchedAmount,transactionTimeStamp,phoneNumber,till,"1",subscriptionId,ussdCode,messageFull);
+                    }else if (response1.contains("Message has been sent successfully")) {
+                        insertSuccess(context,dbHelper,response1,matchedAmount,transactionTimeStamp,phoneNumber,till,"1",subscriptionId,ussdCode,messageFull);
+                    }else{
+                        insertFailed(context,dbHelper,response1,matchedAmount,transactionTimeStamp,phoneNumber,till,"0",subscriptionId,ussdCode,messageFull);
                     }
 
                     Toast.makeText(context, response, Toast.LENGTH_SHORT).show();
@@ -221,6 +224,7 @@ public class RetryService extends Service {
                     long currentTimeMillis = System.currentTimeMillis();
                     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
                     transactionTimeStamp = sdf.format(currentTimeMillis);
+                    insertFailed(context,dbHelper,response1,matchedAmount,transactionTimeStamp,phoneNumber,till,"0",subscriptionId,ussdCode,messageFull);
                     Toast.makeText(context, String.valueOf(failureCode), Toast.LENGTH_SHORT).show();
                 }
             };
