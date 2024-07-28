@@ -145,7 +145,7 @@ public class CreateRenewalActivity extends AppCompatActivity {
                         fetchData().getDateCreation(),fetchData().getDateExpiry()
                 );
                 if (checkInsertData){
-                    Toast.makeText(CreateRenewalActivity.this, "data inserted", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(CreateRenewalActivity.this, "Auto renewal offer created successfully.", Toast.LENGTH_SHORT).show();
                 }else {
                     Toast.makeText(CreateRenewalActivity.this, "data not inserted", Toast.LENGTH_SHORT).show();
                 }

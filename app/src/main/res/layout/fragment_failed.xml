@@ -27,7 +27,7 @@
                     android:queryHint="Enter phone number..."
                     android:iconifiedByDefault="false"
                     android:id="@+id/searchFailed"
-                    android:background="@drawable/searchview_background"/>
+                    />
             </RelativeLayout>
         </androidx.cardview.widget.CardView>
 

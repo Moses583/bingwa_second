@@ -119,12 +119,7 @@ public class AutorenewalsFragment extends Fragment {
         return view;
     }
     public void checkOffersOne(){
-        Cursor cursor = dbHelper.getRenewals();
-        if(cursor.getCount() == 0){
-            showOfferCreationDialog();
-        }else{
-            callPaymentApi(tillNumber());
-        }
+        callPaymentApi(tillNumber());
     }
 
     private void showOfferCreationDialog(){
@@ -263,30 +258,29 @@ public class AutorenewalsFragment extends Fragment {
     }
 
     private JobInfo getJobInfo(final int id, final long hour, final ComponentName name) {
-        final long interval =  24 * 60 * 60 * 1000; // run every 15 mins
+        final long interval =  24 * 60 * 60 * 1000;
         final boolean isPersistent = true; // persist through boot
         final int networkType = JobInfo.NETWORK_TYPE_ANY; // Requires some sort of connectivity
 
         final JobInfo jobInfo;
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            jobInfo = new JobInfo.Builder(id, name).build();
+            jobInfo = new JobInfo.Builder(id, name)
+                    .setRequiresDeviceIdle(false)
+                    .setRequiresCharging(false)
+                    .setPersisted(true)
+                    .setMinimumLatency(interval)
+                    .build();
         } else {
-            jobInfo = new JobInfo.Builder(id, name).setPersisted(true).build();
+            jobInfo = new JobInfo.Builder(id, name)
+                    .setRequiresDeviceIdle(false)
+                    .setRequiresCharging(false)
+                    .setPersisted(true)
+                    .setPeriodic(interval)
+                    .build();
         }
 
         return jobInfo;
-    }
-
-    public boolean myService(Context context){
-        ActivityManager manager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
-        for (ActivityManager.RunningServiceInfo info :
-                manager.getRunningServices(Integer.MAX_VALUE)) {
-            if (RenewalsService.class.getName().equalsIgnoreCase(info.service.getClassName())){
-                return true;
-            }
-        }
-        return false;
     }
 
     private void refresh() {

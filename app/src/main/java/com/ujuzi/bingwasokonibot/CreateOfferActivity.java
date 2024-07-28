@@ -128,7 +128,7 @@ public class CreateOfferActivity extends AppCompatActivity {
                         fetchData().getPaymentSimId(),
                         fetchData().getOfferTill());
                 if (checkInsertData){
-                    Toast.makeText(CreateOfferActivity.this, "Success!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(CreateOfferActivity.this, "Offer created successfully.", Toast.LENGTH_SHORT).show();
                 }else {
                     Toast.makeText(CreateOfferActivity.this, "data not inserted", Toast.LENGTH_SHORT).show();
                 }

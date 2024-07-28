@@ -45,9 +45,9 @@ dependencies {
 
     implementation libs.fragments
     implementation libs.navigation.fragment
-    libs.navigation.ui
+    implementation libs.navigation.ui
 
-    libs.swipe.to.refresh
-    libs.worker
+    implementation libs.swipe.to.refresh
+    implementation libs.worker
 
 }

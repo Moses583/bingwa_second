@@ -77,8 +77,8 @@ public class TransactionsFragment extends Fragment {
         failedFragment = new FailedFragment();
 
         getChildFragmentManager()
-                        .beginTransaction()
-                                .replace(R.id.transactionsFrameContainer,successfulFragment)
+                .beginTransaction()
+                .replace(R.id.transactionsFrameContainer,successfulFragment)
                 .commit();
 
         myTabs.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {

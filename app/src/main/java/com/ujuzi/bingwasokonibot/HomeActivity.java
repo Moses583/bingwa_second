@@ -1,3 +1,4 @@
+
 package com.ujuzi.bingwasokonibot;
 
 
@@ -112,7 +113,7 @@ public class HomeActivity extends AppCompatActivity{
                     ||shouldShowRequestPermissionRationale(Manifest.permission.POST_NOTIFICATIONS)
                     ||shouldShowRequestPermissionRationale(Manifest.permission.FOREGROUND_SERVICE)
                     ||shouldShowRequestPermissionRationale(Manifest.permission.FOREGROUND_SERVICE_SPECIAL_USE)
-            ||shouldShowRequestPermissionRationale(Manifest.permission.RECEIVE_BOOT_COMPLETED)){
+                    ||shouldShowRequestPermissionRationale(Manifest.permission.RECEIVE_BOOT_COMPLETED)){
                 showRationaleDialog();
             }else {
                 requestPermissionLauncher.launch(permissions);
@@ -149,13 +150,13 @@ public class HomeActivity extends AppCompatActivity{
 
     private boolean hasPermissions(){
         return
-                 checkSelfPermission(Manifest.permission.CALL_PHONE) == PackageManager.PERMISSION_GRANTED
-                && checkSelfPermission(Manifest.permission.READ_PHONE_STATE) == PackageManager.PERMISSION_GRANTED
-                && checkSelfPermission(Manifest.permission.POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED
-                && checkSelfPermission(Manifest.permission.FOREGROUND_SERVICE) == PackageManager.PERMISSION_GRANTED
-                && checkSelfPermission(Manifest.permission.FOREGROUND_SERVICE_SPECIAL_USE) == PackageManager.PERMISSION_GRANTED
-                         && checkSelfPermission(Manifest.permission.RECEIVE_BOOT_COMPLETED) == PackageManager.PERMISSION_GRANTED
-                && checkSelfPermission(Manifest.permission.RECEIVE_SMS) == PackageManager.PERMISSION_GRANTED;
+                checkSelfPermission(Manifest.permission.CALL_PHONE) == PackageManager.PERMISSION_GRANTED
+                        && checkSelfPermission(Manifest.permission.READ_PHONE_STATE) == PackageManager.PERMISSION_GRANTED
+                        && checkSelfPermission(Manifest.permission.POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED
+                        && checkSelfPermission(Manifest.permission.FOREGROUND_SERVICE) == PackageManager.PERMISSION_GRANTED
+                        && checkSelfPermission(Manifest.permission.FOREGROUND_SERVICE_SPECIAL_USE) == PackageManager.PERMISSION_GRANTED
+                        && checkSelfPermission(Manifest.permission.RECEIVE_BOOT_COMPLETED) == PackageManager.PERMISSION_GRANTED
+                        && checkSelfPermission(Manifest.permission.RECEIVE_SMS) == PackageManager.PERMISSION_GRANTED;
 
     }
 
@@ -176,34 +177,34 @@ public class HomeActivity extends AppCompatActivity{
     }
 
     private final NavigationBarView.OnItemSelectedListener listener = new NavigationBarView.OnItemSelectedListener() {
-    @Override
-    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-        if (item.getItemId() == R.id.idHome){
-            viewPager2.setCurrentItem(0);
-            toolbar.setTitle("Bingwa");
-            return true;
-        } else if (item.getItemId() == R.id.idTransactions){
-            viewPager2.setCurrentItem(1);
-            toolbar.setTitle("Transactions");
-            return true;
+        @Override
+        public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+            if (item.getItemId() == R.id.idHome){
+                viewPager2.setCurrentItem(0);
+                toolbar.setTitle("Bingwa");
+                return true;
+            } else if (item.getItemId() == R.id.idTransactions){
+                viewPager2.setCurrentItem(1);
+                toolbar.setTitle("Transactions");
+                return true;
+            }
+            else if (item.getItemId() == R.id.idCreateOffer){
+                viewPager2.setCurrentItem(2);
+                toolbar.setTitle("Offers");
+                return true;
+            } else if (item.getItemId() == R.id.idAutoRenewOffer){
+                viewPager2.setCurrentItem(3);
+                toolbar.setTitle("Auto renewals");
+                return true;
+            }
+            else if (item.getItemId() == R.id.idInbox){
+                viewPager2.setCurrentItem(4);
+                toolbar.setTitle("Inbox");
+                return true;
+            }
+            return false;
         }
-        else if (item.getItemId() == R.id.idCreateOffer){
-            viewPager2.setCurrentItem(2);
-            toolbar.setTitle("Offers");
-            return true;
-        } else if (item.getItemId() == R.id.idAutoRenewOffer){
-            viewPager2.setCurrentItem(3);
-            toolbar.setTitle("Auto renewals");
-            return true;
-        }
-        else if (item.getItemId() == R.id.idInbox){
-            viewPager2.setCurrentItem(4);
-            toolbar.setTitle("Inbox");
-            return true;
-        }
-        return false;
-    }
-};
+    };
 
     private void initViews(){
         bottomNavigationView = findViewById(R.id.bottomNavigationView);

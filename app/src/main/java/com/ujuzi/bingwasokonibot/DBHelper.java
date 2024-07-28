@@ -13,7 +13,7 @@ import java.util.List;
 public class DBHelper extends SQLiteOpenHelper {
 
     public DBHelper( Context context) {
-        super(context, "RealDbEighteen.db",null,1);
+        super(context, "RealDbNineteen.db",null,1);
     }
 
     @Override
@@ -180,11 +180,6 @@ public class DBHelper extends SQLiteOpenHelper {
         return result != -1;
     }
 
-    public void updateRenewals() {
-        SQLiteDatabase database = this.getWritableDatabase();
-        database.execSQL("UPDATE Renewals SET period = period - 1 WHERE period > 0");
-    }
-
     public Cursor getToken(){
         SQLiteDatabase database = this.getWritableDatabase();
         return database.rawQuery("Select * from AuthenticationToken",null);
@@ -208,11 +203,11 @@ public class DBHelper extends SQLiteOpenHelper {
     }
     public Cursor getOffers(){
         SQLiteDatabase database = this.getWritableDatabase();
-        return database.rawQuery("Select * from Offers ORDER BY id DESC",null);
+        return database.rawQuery("Select * from Offers ORDER BY amount ASC",null);
     }
     public Cursor getRenewals(){
         SQLiteDatabase database = this.getWritableDatabase();
-        return database.rawQuery("Select * from Renewals ORDER BY id DESC",null);
+        return database.rawQuery("Select * from Renewals ORDER BY money ASC",null);
     }
     public Cursor getSuccessfulTransactions(){
         SQLiteDatabase database = this.getWritableDatabase();
