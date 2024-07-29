@@ -371,7 +371,7 @@ public class MainContentFragment extends Fragment {
         offerContinuationDialog.setContentView(view);
         offerContinuationDialog.getWindow().setLayout(ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT);
         offerContinuationDialog.getWindow().setBackgroundDrawable(getDrawable(getActivity(),R.drawable.dialog_background));
-        offerContinuationDialog.setCancelable(false);
+        offerContinuationDialog.setCancelable(true);
     }
     private void showProgressDialog() {
         progressDialog = new Dialog(getActivity());
@@ -422,7 +422,7 @@ public class MainContentFragment extends Fragment {
         firstTimePayDialog.setContentView(view);
         firstTimePayDialog.getWindow().setLayout(ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT);
         firstTimePayDialog.getWindow().setBackgroundDrawable(getDrawable(getActivity(),R.drawable.dialog_background));
-        firstTimePayDialog.setCancelable(false);
+        firstTimePayDialog.setCancelable(true);
         checkAvailablePlans.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -460,7 +460,7 @@ public class MainContentFragment extends Fragment {
         renewPlanDialog.setContentView(view);
         renewPlanDialog.getWindow().setLayout(ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT);
         renewPlanDialog.getWindow().setBackgroundDrawable(getDrawable(getActivity(),R.drawable.dialog_background));
-        renewPlanDialog.setCancelable(false);
+        renewPlanDialog.setCancelable(true);
         renewPlan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
