@@ -244,13 +244,14 @@
                 android:id="@+id/btnOfferEdit"
                 android:layout_margin="20dp"
                 android:background="@drawable/button_custom_one"/>
+
             <Button
+                android:id="@+id/btnOfferOkay"
                 android:layout_width="100dp"
                 android:layout_height="wrap_content"
-                android:text="Okay"
+                android:layout_margin="20dp"
                 android:background="@drawable/button_custom_one"
-                android:id="@+id/btnOfferOkay"
-                android:layout_margin="20dp"/>
+                android:text="Okay" />
         </LinearLayout>
     </LinearLayout>
 
