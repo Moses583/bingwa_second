@@ -7,23 +7,23 @@
 
     <fragment
         android:id="@+id/mainContentFragment"
-        android:name="com.ujuzi.bingwasokonibot.fragments.MainContentFragment"
+        android:name="com.ujuzi.moses.fragments.MainContentFragment"
         android:label="Home" />
     <fragment
         android:id="@+id/TransactionsFragment"
-        android:name="com.ujuzi.bingwasokonibot.fragments.TransactionsFragment"
+        android:name="com.ujuzi.moses.fragments.TransactionsFragment"
         android:label="Transactions" />
     <fragment
         android:id="@+id/makeOfferFragment"
-        android:name="com.ujuzi.bingwasokonibot.fragments.MakeOfferFragment"
+        android:name="com.ujuzi.moses.fragments.MakeOfferFragment"
         android:label="Offers" />
     <fragment
         android:id="@+id/autoRenewalsFragment"
-        android:name="com.ujuzi.bingwasokonibot.fragments.AutorenewalsFragment"
+        android:name="com.ujuzi.moses.fragments.AutorenewalsFragment"
         android:label="Renewals" />
     <fragment
         android:id="@+id/inboxFragment"
-        android:name="com.ujuzi.bingwasokonibot.fragments.InboxFragment"
+        android:name="com.ujuzi.moses.fragments.InboxFragment"
         android:label="Inbox" />
 
 </navigation>
