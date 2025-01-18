@@ -82,18 +82,17 @@ public class SmsReceiver extends BroadcastReceiver {
             if (messageSender.equals(SENDER_ID)){
                 if (messageBody.contains("received Ksh")){
                     extract(context,messageBody);
-                    checkTransaction(dbHelper,context, smsNumber);
+                    getOffer(mContext,dbHelper,sub,matchedAmount);
                     insert(context,dbHelper,messageBody,timeStamp);
                 }
                 else if(messageBody.contains("AMKsh")){
                     extract2(context,messageBody);
-                    checkTransaction(dbHelper,context, smsNumber);
+                    getOffer(mContext,dbHelper,sub,matchedAmount);
                     insert(context,dbHelper,messageBody,timeStamp);
                 }
                 else if(messageBody.contains("PMKsh")){
                     extract3(context,messageBody);
-                    insert(mContext,dbHelper,messageBody,globalTimestamp);
-                    checkTransaction(dbHelper,context, smsNumber);
+                    getOffer(mContext,dbHelper,sub,matchedAmount);
                     insert(context,dbHelper,messageBody,timeStamp);
                 }
                 else{
@@ -145,30 +144,6 @@ public class SmsReceiver extends BroadcastReceiver {
 
     }
 
-    public void checkTransaction(DBHelper helper,Context context,String phoneNumber){
-        requestManager2 = new RequestManager(context);
-        requestManager2.checkTransactions(listener,phoneNumber,token());
-    }
-
-    private final CheckTransactionListener listener = new CheckTransactionListener() {
-        @Override
-        public void didFetch(CheckTransactionApiResponse response, String message) {
-            if (response.status.contains("No transaction found")){
-                phoneNumber = smsNumber;
-            }
-            else {
-                phoneNumber = response.Phone;
-            }
-            getOffer(mContext,dbHelper,sub,matchedAmount);
-            insert(mContext,dbHelper,messageBody,globalTimestamp);
-        }
-
-        @Override
-        public void didError(String message) {
-            Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
-        }
-    };
-
     public void getOffer(Context context,DBHelper helper,String sub, String amount){
         String code = "";
         String newCode = "";
@@ -195,7 +170,7 @@ public class SmsReceiver extends BroadcastReceiver {
             subscriptionId = Integer.parseInt(pojo.getSubscriptionId());
             till = Integer.parseInt(pojo.getOfferTill());
             if (code.contains("pppp")){
-                newCode = code.replace("pppp",phoneNumber);
+                newCode = code.replace("pppp",smsNumber);
             }
             dialUssdCode(context,subscriptionId,newCode,till);
         }
@@ -215,15 +190,15 @@ public class SmsReceiver extends BroadcastReceiver {
                     transactionTimeStamp = sdf.format(currentTimeMillis);
 
                     if (response1.contains("Kindly wait as we process")){
-                        insertSuccess(context,dbHelper,response1,matchedAmount,transactionTimeStamp,phoneNumber,till,"1",subscriptionId,ussdCode,messageBody);
+                        insertSuccess(context,dbHelper,response1,matchedAmount,transactionTimeStamp,smsNumber,till,"1",subscriptionId,ussdCode,messageBody);
                     } else if (response1.contains("You have successfully purchased")) {
-                        insertSuccess(context,dbHelper,response1,matchedAmount,transactionTimeStamp,phoneNumber,till,"1",subscriptionId,ussdCode,messageBody);
+                        insertSuccess(context,dbHelper,response1,matchedAmount,transactionTimeStamp,smsNumber,till,"1",subscriptionId,ussdCode,messageBody);
                     }else if (response1.contains("You have transferred")) {
-                        insertSuccess(context,dbHelper,response1,matchedAmount,transactionTimeStamp,phoneNumber,till,"1",subscriptionId,ussdCode,messageBody);
+                        insertSuccess(context,dbHelper,response1,matchedAmount,transactionTimeStamp,smsNumber,till,"1",subscriptionId,ussdCode,messageBody);
                     }else if (response1.contains("Message has been sent successfully")) {
-                        insertSuccess(context,dbHelper,response1,matchedAmount,transactionTimeStamp,phoneNumber,till,"1",subscriptionId,ussdCode,messageBody);
+                        insertSuccess(context,dbHelper,response1,matchedAmount,transactionTimeStamp,smsNumber,till,"1",subscriptionId,ussdCode,messageBody);
                     }else{
-                        insertFailed(context,dbHelper,response1,matchedAmount,transactionTimeStamp,phoneNumber,till,"0",subscriptionId,ussdCode,messageBody);
+                        insertFailed(context,dbHelper,response1,matchedAmount,transactionTimeStamp,smsNumber,till,"0",subscriptionId,ussdCode,messageBody);
                     }
 
                     Toast.makeText(context, response, Toast.LENGTH_SHORT).show();
@@ -236,7 +211,7 @@ public class SmsReceiver extends BroadcastReceiver {
                     long currentTimeMillis = System.currentTimeMillis();
                     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
                     transactionTimeStamp = sdf.format(currentTimeMillis);
-                    insertFailed(context,dbHelper,response1,matchedAmount,transactionTimeStamp,phoneNumber,till,"0",subscriptionId,ussdCode,messageBody);
+                    insertFailed(context,dbHelper,response1,matchedAmount,transactionTimeStamp,smsNumber,till,"0",subscriptionId,ussdCode,messageBody);
                     Log.d("TAG",String.valueOf(failureCode));
                 }
             };
@@ -260,60 +235,24 @@ public class SmsReceiver extends BroadcastReceiver {
         boolean checkInsertData = helper.insertSuccess(ussdResponse,amount,transactionTimeStamp,recipient,status,subId,ussd,till,messageFull);
         if (checkInsertData){
             Toast.makeText(context, "Transaction recorded", Toast.LENGTH_SHORT).show();
-            postTransaction(context,Double.parseDouble(matchedAmount),phoneNumber,till,messageBody);
         }
         else{
             Toast.makeText(context, "Transaction not recorded", Toast.LENGTH_SHORT).show();
         }
 
     }
-    public void insertFailed(Context context,DBHelper helper,String ussdResponse, String amount, String transactionTimeStamp, String recipient,int till, String status,int subId,String ussd, String messageFull){
-        boolean checkInsertData = helper.insertFailed(ussdResponse,amount,transactionTimeStamp,recipient,status,subId,ussd,till,messageFull);
-        if (checkInsertData){
+    public void insertFailed(Context context,DBHelper helper,String ussdResponse, String amount, String transactionTimeStamp, String recipient,int till, String status,int subId,String ussd, String messageFull) {
+        boolean checkInsertData = helper.insertFailed(ussdResponse, amount, transactionTimeStamp, recipient, status, subId, ussd, till, messageFull);
+        if (checkInsertData) {
             Toast.makeText(context, "Transaction recorded", Toast.LENGTH_SHORT).show();
-            postTransaction(context,Double.parseDouble(matchedAmount),phoneNumber,till,messageBody);
-        }
-        else{
+        } else {
             Toast.makeText(context, "Transaction not recorded", Toast.LENGTH_SHORT).show();
         }
 
-    }
-    public void postTransaction(Context context, double amount, String number,int till,String message){
-        Transaction transaction = new Transaction(message,number,amount,till);
-        requestManager = new RequestManager(context);
-        final PostTransactionListener listener = new PostTransactionListener() {
-            @Override
-            public void didFetch(TransactionApiResponse response, String message) {
-                Toast.makeText(context, "Transaction uploaded", Toast.LENGTH_SHORT).show();
-            }
-
-            @Override
-            public void didError(String message) {
-                Toast.makeText(context, "Please connect to the internet", Toast.LENGTH_SHORT).show();
-            }
-        };
-
-        requestManager.postTransaction(listener, transaction,token());
     }
 
     public void insert(Context context,DBHelper helper, String message, String time){
         boolean checkInsertData = helper.insertData(message, time, messageSender);
     }
-    public String token(){
-        helper2 = new DBHelper(zContext);
-        Cursor cursor = helper2.getToken();
-        String token = "";
-        if (cursor.getCount() == 0){
-            Toast.makeText(mContext, "token not found", Toast.LENGTH_SHORT).show();
-        }else{
-            while (cursor.moveToNext()){
-                token = cursor.getString(0);
-            }
-        }
-        cursor.close();
-        return "Bearer "+token;
-    }
-
-
 
 }

@@ -62,11 +62,6 @@ public class HomeActivity extends AppCompatActivity{
         setContentView(R.layout.activity_home);
         initViews();
         setSupportActionBar(toolbar);
-
-
-
-//        myAlarmManager = new MyAlarmManager(this);
-//        myAlarmManager.setAlarm(11,31);
         countDownTimer = new CountDownTimer(5000,1000) {
             @Override
             public void onTick(long millisUntilFinished) {
@@ -77,14 +72,6 @@ public class HomeActivity extends AppCompatActivity{
             public void onFinish() {
             }
         };
-
-        SharedPreferences prefs = getSharedPreferences("app_name", Context.MODE_PRIVATE);
-        boolean hasAccount = prefs.getBoolean("hasAccount", false);
-
-        if (!hasAccount){
-            startActivity(new Intent(this, CreateAccountActivity.class));
-            finish();
-        }
 
         viewPager2.setAdapter(new ViewPagerAdapter(this));
         viewPager2.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
@@ -189,7 +176,7 @@ public class HomeActivity extends AppCompatActivity{
                 return true;
             }
             else if (item.getItemId() == R.id.idInbox){
-                viewPager2.setCurrentItem(4);
+                viewPager2.setCurrentItem(3);
                 toolbar.setTitle("Inbox");
                 return true;
             }

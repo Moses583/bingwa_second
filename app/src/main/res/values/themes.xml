@@ -20,8 +20,6 @@
         <item name="colorTertiaryContainer">@color/green4</item>
         <item name="colorOnTertiaryContainer">@color/black</item>
 
-
-
         <item name="android:colorBackground">@color/green10</item>
         <item name="colorOnBackground">@color/black</item>
 

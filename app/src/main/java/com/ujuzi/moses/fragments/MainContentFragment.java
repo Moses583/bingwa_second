@@ -8,10 +8,8 @@ import android.Manifest;
 import android.app.Activity;
 import android.app.ActivityManager;
 import android.app.Dialog;
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.os.Build;
@@ -20,6 +18,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
+import androidx.work.impl.model.Preference;
 
 import android.os.Handler;
 import android.os.Looper;
@@ -33,54 +32,42 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.ujuzi.moses.CreateOfferActivity;
 import com.ujuzi.moses.DBHelper;
-import com.ujuzi.moses.PaymentPlanActivity;
 import com.ujuzi.moses.R;
 import com.ujuzi.moses.RequestManager;
-import com.ujuzi.moses.listeners.GetOffersListener;
-import com.ujuzi.moses.listeners.PaymentListener;
-import com.ujuzi.moses.models.GetOffersBody;
-import com.ujuzi.moses.models.GetOffersResponse;
 import com.ujuzi.moses.models.InboxListPOJO;
 import com.ujuzi.moses.models.OfferPOJO;
-import com.ujuzi.moses.models.Payment;
 import com.ujuzi.moses.models.RenewalPOJO;
 import com.ujuzi.moses.models.TransactionPOJO;
 import com.ujuzi.moses.services.MyService;
+import com.ujuzi.moses.utilities.Constants;
+import com.ujuzi.moses.utilities.PreferenceManager;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 public class MainContentFragment extends Fragment {
 
-    private DBHelper helper,helper2;
+    private DBHelper helper;
     List<TransactionPOJO> pojoList = new ArrayList<>();
     List<TransactionPOJO> pojoList2 = new ArrayList<>();
     List<OfferPOJO> pojos = new ArrayList<>();
     List<RenewalPOJO> pojos2 = new ArrayList<>();
     List<InboxListPOJO> inboxListPOJOList = new ArrayList<>();
 
-    private TextView txtStoreName,txtPhoneNumber,txtLink,txtTillNumber,txtTotal,txtSuccess,txtFailed,txtAmount,txtAirtime,txtOffers,txtRenewals,txtMessages,txtLoading,refreshAirtimeBalance;
-    private Button cancel, okay,btnContinue;
+    private TextView txtStoreName,txtLink,txtTillNumber,txtTotal,txtSuccess,txtFailed,txtAirtime,txtOffers,txtRenewals,txtMessages,refreshAirtimeBalance;
+    private Button cancel, okay;
     Spinner spinner;
 
-    private Button deleteTransaction,navigateToCreateOffer,checkAvailablePlans,renewPlan,loadExistingOffers;
-
-    private ImageView img;
+    private Button navigateToCreateOffer;
 
     private Map<Integer, Integer> simMap;
     private ArrayList<String> simNames;
@@ -90,12 +77,10 @@ public class MainContentFragment extends Fragment {
     private Handler handler;
 
     private RequestManager requestManager;
+    private PreferenceManager preferenceManager;
 
-    String till = "";
-    private Dialog offerCreationDialog,firstTimePayDialog,renewPlanDialog,dialog,progressDialog,offerContinuationDialog;
-    private BroadcastReceiver dateBroadCast;
-    private Dialog confirmDeletionDialog;
-    private ProgressBar progressBar;
+    String till = "12345678";
+    private Dialog offerCreationDialog,dialog;
 
 
     public MainContentFragment() {
@@ -116,42 +101,23 @@ public class MainContentFragment extends Fragment {
         initViews(view);
         helper = new DBHelper(getActivity());
         requestManager = new RequestManager(getActivity());
+        preferenceManager = new PreferenceManager(requireActivity());
         simMap = new HashMap<>();
         simNames = new ArrayList<>();
         slotIndex = new ArrayList<>();
-        till = tillNumber();
 
-        showProgressDialog();
         checkOffersOne();
-        showContinueDialog();
         showSuccess();
         showFailed();
         getOffers();
         getRenewals();
         getMessages();
-
-        btnContinue.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                checkOffersOne();
-                offerContinuationDialog.dismiss();
-            }
-        });
-//        showAlertDialog();
         refreshAirtimeBalance.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 showAlertDialog();
             }
         });
-        dateBroadCast = new BroadcastReceiver() {
-            @Override
-            public void onReceive(Context context, Intent intent) {
-                if (intent.getAction().equals(Intent.ACTION_DATE_CHANGED)){
-                    pojoList.clear();
-                }
-            }
-        };
 
         showDashStatistics();
         return view;
@@ -160,7 +126,7 @@ public class MainContentFragment extends Fragment {
     private void showDashStatistics(){
         txtTillNumber.setText(till);
         txtLink.setSelected(true);
-        txtLink.setText(link());
+        txtLink.setText("www.ravemaster.ra.ke");
         txtSuccess.setText(String.valueOf(pojoList.size()));
         txtFailed.setText(String.valueOf(pojoList2.size()));
         int total = pojoList.size()+pojoList2.size();
@@ -168,7 +134,7 @@ public class MainContentFragment extends Fragment {
         txtOffers.setText(String.valueOf(pojos.size()));
         txtRenewals.setText(String.valueOf(pojos2.size()));
         txtMessages.setText(String.valueOf(inboxListPOJOList.size()));
-        txtStoreName.setText(storeName());
+        txtStoreName.setText("Ravemaster");
         txtLink.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -290,23 +256,33 @@ public class MainContentFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        getActivity().registerReceiver(dateBroadCast, new IntentFilter(Intent.ACTION_DATE_CHANGED));
-
+        checkOffersOne();
     }
     @Override
     public void onPause() {
         super.onPause();
-        getActivity().registerReceiver(dateBroadCast, new IntentFilter(Intent.ACTION_DATE_CHANGED));
+        checkOffersOne();
     }
 
     public void checkOffersOne(){
         Cursor cursor = helper.getOffers();
         if(cursor.getCount() == 0){
-            callGetOffersApi();
+            stopServiceOne();
+            showOfferCreationDialog();
         }else{
-            callPaymentApi(till);
+            checkPause();
         }
     }
+
+    private void checkPause() {
+        boolean isAppPaused = preferenceManager.getBoolean(Constants.KEY_IS_APP_PAUSED);
+        if (isAppPaused){
+            Toast.makeText(requireActivity(), "App is paused", Toast.LENGTH_SHORT).show();
+        } else {
+            startService();
+        }
+    }
+
     private void showOfferCreationDialog(){
         offerCreationDialog = new Dialog(getActivity());
         View view = LayoutInflater.from(getActivity()).inflate(R.layout.dialog_create_offer,null);
@@ -319,165 +295,19 @@ public class MainContentFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 offerCreationDialog.dismiss();
-                callPaymentApi(till);
+                navigateToCreateOfferActivity();
             }
         });
         offerCreationDialog.show();
     }
-    private void callGetOffersApi() {
-        progressDialog.show();
-        requestManager.getOffers(getOffersListener,new GetOffersBody(tillNumber()),token());
-    }
-    private final GetOffersListener getOffersListener = new GetOffersListener() {
-        @Override
-        public void didFetch(List<GetOffersResponse> responses, String message) {
-            progressDialog.dismiss();
-            createOffersFromList(responses);
-        }
-
-        @Override
-        public void didError(String message) {
-            progressDialog.dismiss();
-            callPaymentApi(till);
-            Toast.makeText(getActivity(),"Offers unavailable, you'll need to create your offers later on...",Toast.LENGTH_SHORT).show();
-
-        }
-    };
-    private void createOffersFromList(List<GetOffersResponse> responses) {
-        boolean checkInsertOffer = true;
-        for (GetOffersResponse response :
-                responses) {
-            checkInsertOffer = helper.insertOffer(
-                    response.offer,
-                    response.cost,
-                    response.ussd,
-                    response.dialSim,
-                    response.subscriptionId,
-                    response.paymentSim,
-                    response.paymentSimId,
-                    response.offerTill
-            );
-        }
-        if (checkInsertOffer){
-            offerContinuationDialog.show();
-        }else{
-            checkOffersOne();
-        }
-    }
-    private void showContinueDialog() {
-        offerContinuationDialog = new Dialog(getActivity());
-        View view = LayoutInflater.from(getActivity()).inflate(R.layout.dialog_offer_continue,null);
-        btnContinue = view.findViewById(R.id.btnOfferProceed);
-        offerContinuationDialog.setContentView(view);
-        offerContinuationDialog.getWindow().setLayout(ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT);
-        offerContinuationDialog.getWindow().setBackgroundDrawable(getDrawable(getActivity(),R.drawable.dialog_background));
-        offerContinuationDialog.setCancelable(true);
-    }
-    private void showProgressDialog() {
-        progressDialog = new Dialog(getActivity());
-        View view = LayoutInflater.from(getActivity()).inflate(R.layout.dialog_progress_layout,null);
-        progressBar = view.findViewById(R.id.myProgressBar);
-        txtLoading = view.findViewById(R.id.txtProgress);
-        progressDialog.setContentView(view);
-        int widthInDp = 250;
-
-        final float scale = getResources().getDisplayMetrics().density;
-        int widthInPx = (int) (widthInDp * scale + 0.5f);
-
-        progressDialog.getWindow().setLayout(widthInPx, ViewGroup.LayoutParams.WRAP_CONTENT);
-        progressDialog.getWindow().setBackgroundDrawable(getDrawable(getActivity(),R.drawable.dialog_background));
-        progressDialog.setCancelable(false);
-        txtLoading.setText("Loading offers...");
-    }
     private void navigateToCreateOfferActivity() {
         startActivity(new Intent(getActivity(), CreateOfferActivity.class));
-    }
-    private void callPaymentApi(String till) {
-        requestManager.getPaymentStatus(paymentListener,till,token());
-    }
-    private final PaymentListener paymentListener = new PaymentListener() {
-        @Override
-        public void didFetch(Payment payment, String message) {
-            confirm1(payment);
-        }
-        @Override
-        public void didError(String message) {
-            stopServiceOne();
-            if (message.contains("Unable to resolve host")){
-                Toast.makeText(getActivity(), "Please connect to the internet", Toast.LENGTH_SHORT).show();
-            }
-        }
-    };
-    public void confirm1(Payment payment){
-        if (payment.status.equalsIgnoreCase("error")){
-            showFirstTimePayDialog();
-        }else if (payment.status.equals("success")){
-            compareDates(payment.data.timestamp);
-        }
-    }
-    private void showFirstTimePayDialog() {
-        firstTimePayDialog = new Dialog(getActivity());
-        View view = LayoutInflater.from(getActivity()).inflate(R.layout.dialog_first_time_pay,null);
-        checkAvailablePlans = view.findViewById(R.id.btnCheckAvailablePlans);
-        firstTimePayDialog.setContentView(view);
-        firstTimePayDialog.getWindow().setLayout(ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT);
-        firstTimePayDialog.getWindow().setBackgroundDrawable(getDrawable(getActivity(),R.drawable.dialog_background));
-        firstTimePayDialog.setCancelable(true);
-        checkAvailablePlans.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                navigateToPlansActivity();
-            }
-        });
-        firstTimePayDialog.show();
-    }
-    private void navigateToPlansActivity() {
-        startActivity(new Intent(getActivity(), PaymentPlanActivity.class));
-        firstTimePayDialog.dismiss();
-    }
-    public void compareDates(String two){
-        long currentTimeMillis = System.currentTimeMillis();
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
-        String time = sdf.format(currentTimeMillis);
-        Date current, expiry;
-        try {
-            current =  sdf.parse(time);
-            expiry = sdf.parse(two);
-            if (current.compareTo(expiry) > 0) {
-                stopServiceOne();
-                showRenewPlanDialog();
-            } else if (current.compareTo(expiry) < 0) {
-                startService();
-            }
-        } catch (ParseException e) {
-            throw new RuntimeException(e);
-        }
-    }
-    private void showRenewPlanDialog() {
-        renewPlanDialog = new Dialog(getActivity());
-        View view = LayoutInflater.from(getActivity()).inflate(R.layout.dialog_subscription_expired,null);
-        renewPlan = view.findViewById(R.id.btnRenewPlan);
-        renewPlanDialog.setContentView(view);
-        renewPlanDialog.getWindow().setLayout(ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT);
-        renewPlanDialog.getWindow().setBackgroundDrawable(getDrawable(getActivity(),R.drawable.dialog_background));
-        renewPlanDialog.setCancelable(true);
-        renewPlan.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                navigateToPlansActivity2();
-            }
-        });
-        renewPlanDialog.show();
-    }
-    private void navigateToPlansActivity2() {
-        startActivity(new Intent(getActivity(), PaymentPlanActivity.class));
-        renewPlanDialog.dismiss();
     }
     public void stopServiceOne() {
         if (myService2()){
             Intent intent = new Intent(getActivity(), MyService.class);
             getActivity().stopService(intent);
-            Toast.makeText(getActivity(), "App paused, you need to check your subscription", Toast.LENGTH_LONG).show();
+            Toast.makeText(getActivity(), "App paused, you need to check your offers list", Toast.LENGTH_LONG).show();
         }
     }
     public void startService(){
@@ -500,60 +330,6 @@ public class MainContentFragment extends Fragment {
             }
         }
         return false;
-    }
-    public String tillNumber(){
-        Cursor cursor = helper.getUser();
-        String till = "";
-        if (cursor.getCount() == 0){
-            Log.d("TILL","Till number absent");
-        }else{
-            while (cursor.moveToNext()){
-                till = cursor.getString(0);
-            }
-        }
-        cursor.close();
-        return till;
-    }
-    public String token(){
-        helper2 = new DBHelper(getActivity());
-        Cursor cursor = helper2.getToken();
-        String token = "";
-        if (cursor.getCount() == 0){
-            Toast.makeText(getActivity(), "token not found", Toast.LENGTH_SHORT).show();
-        }else{
-            while (cursor.moveToNext()){
-
-                token = cursor.getString(0);
-            }
-        }
-        cursor.close();
-        return "Bearer "+token;
-    }
-    public String link(){
-        Cursor cursor = helper.getLink();
-        String link = "";
-        if (cursor.getCount() == 0){
-            Log.d("TAG","Till number not found");
-        }else{
-            while (cursor.moveToNext()){
-                link = cursor.getString(0);
-            }
-        }
-        cursor.close();
-        return link;
-    }
-    public String storeName(){
-        Cursor cursor = helper.getStoreName();
-        String link = "";
-        if (cursor.getCount() == 0){
-            Log.d("TAG","Till number not found");
-        }else{
-            while (cursor.moveToNext()){
-                link = cursor.getString(0);
-            }
-        }
-        cursor.close();
-        return link;
     }
     private void showSuccess(){
         pojoList.clear();

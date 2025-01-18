@@ -91,7 +91,6 @@ public class RetryService extends Service {
                             String ussd = pojo.getUssd();
                             int till = pojo.getTill();
                             String message = pojo.getMessageFull();
-//                            checkTransaction(RetryService.this,number);
                             dialUssdCode(getApplicationContext(),subId,ussd,till,amount,number,message);
                             Log.d(TAG,"Executing...");
                         }
@@ -133,28 +132,6 @@ public class RetryService extends Service {
         }
         return queue;
     }
-    public void checkTransaction(Context context,String phoneNumber){
-        requestManager2 = new RequestManager(context);
-        requestManager2.checkTransactions(listener,phoneNumber,token());
-    }
-
-    private final CheckTransactionListener listener = new CheckTransactionListener() {
-        @Override
-        public void didFetch(CheckTransactionApiResponse response, String message) {
-            if (response.status.contains("Transaction already made")){
-                Toast.makeText(RetryService.this, response.status, Toast.LENGTH_SHORT).show();
-            }
-            else {
-                Toast.makeText(RetryService.this, "A similar transaction already took place", Toast.LENGTH_SHORT).show();
-            }
-        }
-
-        @Override
-        public void didError(String message) {
-            Toast.makeText(RetryService.this, "Please check your internet connection", Toast.LENGTH_SHORT).show();
-        }
-    };
-
     private Queue<TransactionPOJO> getFailedTransactions(){
         Cursor cursor = dbHelper.getFailedTransactions();
         Queue<TransactionPOJO> queue1 = new LinkedList<>();
@@ -247,7 +224,6 @@ public class RetryService extends Service {
         boolean checkInsertData = helper.insertSuccess(ussdResponse,amount,transactionTimeStamp,recipient,status,subId,ussd,till,messageFull);
         if (checkInsertData){
             Toast.makeText(context, "Retrial successful", Toast.LENGTH_SHORT).show();
-            postTransaction(context,Double.parseDouble(amount),recipient,till,messageFull);
         }
         else{
             Toast.makeText(context, "Transaction not recorded", Toast.LENGTH_SHORT).show();
@@ -258,43 +234,11 @@ public class RetryService extends Service {
         boolean checkInsertData = helper.insertFailed(ussdResponse,amount,transactionTimeStamp,recipient,status,subId,ussd,till,messageFull);
         if (checkInsertData){
             Toast.makeText(context, "Transaction recorded", Toast.LENGTH_SHORT).show();
-            postTransaction(context,Double.parseDouble(amount),recipient,till,messageFull);
         }
         else{
             Toast.makeText(context, "Transaction not recorded", Toast.LENGTH_SHORT).show();
         }
 
-    }
-    public void postTransaction(Context context, double amount, String number,int till,String message){
-        Transaction transaction = new Transaction(message,number,amount,till);
-        requestManager = new RequestManager(context);
-        final PostTransactionListener listener = new PostTransactionListener() {
-            @Override
-            public void didFetch(TransactionApiResponse response, String message) {
-                Toast.makeText(context, "Retrial uploaded", Toast.LENGTH_SHORT).show();
-            }
-
-            @Override
-            public void didError(String message) {
-                Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
-            }
-        };
-
-        requestManager.postTransaction(listener, transaction, token());
-    }
-    public String token(){
-        helper2 = new DBHelper(this);
-        Cursor cursor = helper2.getToken();
-        String token = "";
-        if (cursor.getCount() == 0){
-            Toast.makeText(this, "token not found", Toast.LENGTH_SHORT).show();
-        }else{
-            while (cursor.moveToNext()){
-                token = cursor.getString(0);
-            }
-        }
-        cursor.close();
-        return "Bearer "+token;
     }
 
     @Nullable

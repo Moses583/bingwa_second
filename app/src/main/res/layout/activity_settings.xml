@@ -277,7 +277,7 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="60dp"
         android:layout_margin="5dp">
@@ -288,37 +288,21 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:text="Enable/Disable app"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="@+id/guideLine11"
-            app:layout_constraintTop_toTopOf="parent"
-            android:textColor="@color/black"/>
+            android:textColor="@color/black"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="25dp"/>
 
-        <Switch
+        <com.google.android.material.materialswitch.MaterialSwitch
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/switchOnOffApp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/guideLine11"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:layout_marginEnd="25dp"/>
 
 
-
-        <androidx.constraintlayout.widget.Guideline
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/guideLine11"
-            android:orientation="vertical"
-            app:layout_constraintGuide_percent="0.2"/>
-        <androidx.constraintlayout.widget.Guideline
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/guideLine12"
-            android:orientation="vertical"
-            app:layout_constraintGuide_percent="0.8"/>
-
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    </RelativeLayout>
     <com.google.android.material.divider.MaterialDivider
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

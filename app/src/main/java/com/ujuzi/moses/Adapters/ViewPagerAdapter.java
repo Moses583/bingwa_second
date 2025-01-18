@@ -7,6 +7,7 @@ import androidx.viewpager2.adapter.FragmentStateAdapter;
 
 import com.ujuzi.moses.fragments.InboxFragment;
 import com.ujuzi.moses.fragments.MainContentFragment;
+import com.ujuzi.moses.fragments.MakeOfferFragment;
 import com.ujuzi.moses.fragments.OffersFragment;
 import com.ujuzi.moses.fragments.TransactionsFragment;
 
@@ -24,7 +25,7 @@ public class ViewPagerAdapter extends FragmentStateAdapter {
             case 1:
                 return new TransactionsFragment();
             case 2:
-                return new OffersFragment();
+                return new MakeOfferFragment();
             case 3:
                 return new InboxFragment();
             default:

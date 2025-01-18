@@ -104,7 +104,6 @@ public class MakeOfferFragment extends Fragment {
         String id = Build.ID;
         dbHelper = new DBHelper(getActivity());
         listAdapter = new ItemListAdapter(getActivity());
-        callPostOfferApi();
 
 
 
@@ -112,13 +111,6 @@ public class MakeOfferFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 getActivity().startActivity(new Intent(getActivity(), CreateOfferActivity.class));
-            }
-        });
-        fab2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                callPostOfferApi();
-                Toast.makeText(getActivity(), "Offers uploaded", Toast.LENGTH_SHORT).show();
             }
         });
         actions.setOnClickListener(new View.OnClickListener() {
@@ -153,36 +145,9 @@ public class MakeOfferFragment extends Fragment {
 
     private void refresh() {
         showData();
-        callPostOfferApi();
     }
 
-    private void callPostOfferApi(){
-        manager.postOffer(listener2, postOffers(),token());
-    }
 
-    private final PostOfferListener listener2 = new PostOfferListener() {
-        @Override
-        public void didFetch(PostOfferApiResponse response, String message) {
-        }
-
-        @Override
-        public void didError(String message) {
-            if (message.contains("Unable to resolve host")){
-                Toast.makeText(getActivity(), "Please connect to the internet", Toast.LENGTH_SHORT).show();
-            }
-        }
-    };
-
-    private PostOfferOne postOffers(){
-        String till = tillNumber();
-        List<PostOfferTwo> list = new ArrayList<>();
-        for (OfferPOJO pojo :
-                pojos) {
-            list.add(new PostOfferTwo(pojo.getName(),pojo.getAmount(),pojo.getUssd(), pojo.getDialSim(), pojo.getDeviceId(),
-                    pojo.getSubscriptionId(),pojo.getPaymentSim(),pojo.getPaymentSimId(),pojo.getOfferTill()));
-        }
-        return new PostOfferOne(till, list);
-    }
 
 
     private void showData() {
@@ -228,21 +193,6 @@ public class MakeOfferFragment extends Fragment {
     public void onResume() {
         super.onResume();
         showData();
-        callPostOfferApi();
-    }
-    public String token(){
-        helper2 = new DBHelper(getActivity());
-        Cursor cursor = helper2.getToken();
-        String token = "";
-        if (cursor.getCount() == 0){
-            Toast.makeText(getActivity(), "token not found", Toast.LENGTH_SHORT).show();
-        }else{
-            while (cursor.moveToNext()){
-                token = cursor.getString(0);
-            }
-        }
-        cursor.close();
-        return "Bearer "+token;
     }
 
     private void initViews(View view) {

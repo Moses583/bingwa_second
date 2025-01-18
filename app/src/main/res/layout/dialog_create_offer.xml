@@ -16,19 +16,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:text="Recommendation services unavailable!"
+            android:text="Create offers to start app!"
             android:textSize="20sp"
             android:textColor="@color/black"
             android:fontFamily="@font/oxygen_bold"
             android:textAlignment="center"
-            android:layout_margin="8dp"/>
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="start"
-            android:text="Dear user, your list of offers is empty. You will need to create them later."
-            android:textColor="@color/black"
-            android:textAlignment="viewStart"
             android:layout_margin="8dp"/>
 
         <Button
